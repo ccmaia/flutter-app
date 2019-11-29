@@ -6,14 +6,16 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
     return Scaffold(
+
         appBar: AppBar(
+
           title: Text(
             '关于我们',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.lightBlue,
           centerTitle: true,
         ),
         body: ListView(

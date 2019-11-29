@@ -77,7 +77,9 @@ class _LoginPageState extends State<LoginPage> {
                         fontSize: ScreenUtil().setSp(30)),
                     textAlign: TextAlign.center,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Application.router.navigateTo(context, "/forgetPassPage");
+                  },
                 ),
                 Container(
                   width: 2.0,
@@ -278,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                       hintText: "输入验证码",
                       icon: Icon(
-                        Icons.lock_outline,
+                        Icons.assignment_turned_in,
                         color: Color(0xff477BFF),
                       )),
                   // 验证码
@@ -305,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         _getSms();
                       },
-                      child: Text('获取验证码'),
+                      child: Text('获取验证码',style: TextStyle(color: Color(0xFF477BFF)),),
                     ),
                   ),
                 )

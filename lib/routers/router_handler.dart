@@ -6,6 +6,10 @@ import '../pages/user/login.dart';
 import '../pages/user/user_msg.dart';
 import '../pages/user/about_us.dart';
 import '../pages/user/feed_back.dart';
+import '../pages/user/invite_friend.dart';
+import '../pages//user/forget_pass.dart';
+import '../pages//user/choose_password.dart';
+import '../pages/user/choose_phone.dart';
 
 Handler AboutUsPageHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -37,5 +41,26 @@ Handler userMsgPageHanderl =Handler(
       print(params);
       Map data = params;
       return UserMsgPage(data);
+    }
+);
+Handler InviteFriendPageHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return InviteFriendPage();
+    }
+);
+Handler forgetPassHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return ForgetPassword();
+    }
+);
+Handler choosePassHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      String data = params['phone'].first;
+      return ChoosePass(data);
+    }
+);
+Handler choosePhoneHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return ChoosePhone();
     }
 );

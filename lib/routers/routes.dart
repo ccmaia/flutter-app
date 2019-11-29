@@ -10,11 +10,15 @@ class Routes{
   static String userMsgPage = '/userMsgPage';
   static String aboutUsPage = '/aboutUsPage';
   static String feedBackPage = '/feedBackPage';
+  static String inviteFriendPage = '/inviteFriendPage';
+  static String forgetPassword = "/forgetPassPage";
+  static String choosePassword = "/choosePassPage";
+  static String choosePhone = "/choosePhonePage";
 
   static void configureRoutes(Router router){
     router.notFoundHandler= new Handler(
       handlerFunc: (BuildContext context,Map<String,List<String>> params){
-        print('ERROR====>ROUTE WAS NOT FONUND!!!');
+        print('错误===>未找到路由!!!');
       }
     );
 
@@ -24,6 +28,11 @@ class Routes{
     router.define(userMsgPage, handler: userMsgPageHanderl);
     router.define(aboutUsPage, handler: AboutUsPageHanderl);
     router.define(feedBackPage, handler: FeedBackPageHanderl);
+    router.define(inviteFriendPage, handler: InviteFriendPageHanderl);
+    router.define(forgetPassword, handler: forgetPassHanderl);
+    router.define(choosePassword, handler: choosePassHanderl);
+    router.define("/choosePhonePage", handler: choosePhoneHanderl);
+
   }
 
 }

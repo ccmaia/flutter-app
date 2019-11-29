@@ -26,8 +26,8 @@ class _MyPage extends State<MyPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -46,9 +46,9 @@ class _MyPage extends State<MyPage> {
       if (isLogin) {
         getNet('getUserMsg').then((res) {
           if (res['result'] == 1) {
-            setState((){
+            setState(() {
               usermsg = res['data'];
-            }) ;
+            });
           }
         });
       }
@@ -63,49 +63,151 @@ class _MyPage extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+    ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
 
     return Scaffold(
-      body: Stack(
-        overflow: Overflow.visible,
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            child: UserTop(isLogin, usermsg),
-          ),
-//            margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(20.0)),
-          Positioned(
-            child: _btnGroup(),
-            top: ScreenUtil().setHeight(350),
-          ),
-          Positioned(
-            child: Container(
-              width: ScreenUtil().setWidth(750),
-              height: ScreenUtil().setHeight(170),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/image/invite.png'),
-                      fit: BoxFit.cover)),
-            ),
-            top: ScreenUtil().setHeight(560),
-          ),
-          Positioned(
-            top: ScreenUtil().setHeight(740.0),
-            child: Container(
-              width: ScreenUtil().setWidth(750),
-              child: Column(
-                children: <Widget>[
-                  _pageStrip('user_znc', '/aboutUsPage', '关于我们'),
-                  _pageStrip('user_write', '/feedBackPage', '意见反馈'),
-                  _pageStrip('user_up', '/aboutUs', '版本更新'),
-                  _pageStrip('user_manage', '/aboutUs', '退出登录'),
-                ],
+        body: ListView(
+      children: <Widget>[
+        Container(
+          width: ScreenUtil().setWidth(720.0),
+          height: ScreenUtil().setHeight(500.0),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: ScreenUtil().setWidth(720.0),
+                height: ScreenUtil().setHeight(383.0),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/image/user_bg.png'),
+                        fit: BoxFit.cover)),
+                child: Container(
+                  height: ScreenUtil().setHeight(117.0),
+                  padding: EdgeInsets.only(left: ScreenUtil().setWidth(38.0)),
+                  child: Center(
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: ScreenUtil().setWidth(117),
+                          height: ScreenUtil().setHeight(117),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  ScreenUtil().setWidth(60.0)),
+                              image: DecorationImage(
+                                  image: isLogin
+                                      ? usermsg['head_img'] != null
+                                          ? NetworkImage(usermsg['head_img'])
+                                          : AssetImage(
+                                              'assets/image/not_login.png')
+                                      : AssetImage(
+                                          'assets/image/not_login.png'),
+                                  fit: BoxFit.cover)),
+                        ),
+                        Expanded(
+                            child: InkWell(
+                                onTap: () {
+                                  if (isLogin) {
+//                          Application.router.navigateTo(context,
+//                              '/userMsgPage?userMsg=${Uri.encodeComponent(widget.userMsg.toString())}');
+                                  } else {
+                                    print('jump');
+                                    Application.router
+                                        .navigateTo(context, '/loginPage');
+                                  }
+                                },
+                                child: Container(
+                                  height: ScreenUtil().setHeight(135.0),
+                                  margin: EdgeInsets.only(
+                                      left: ScreenUtil().setWidth(20.0)),
+                                  padding: EdgeInsets.only(
+                                      top: ScreenUtil().setHeight(10.0),
+                                      bottom: ScreenUtil().setHeight(10.0)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        isLogin
+                                            ? usermsg['name'] == null
+                                                ? '指南车'
+                                                : usermsg['name']
+                                            : '登录/注册',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(38.0)),
+                                      ),
+                                      Text(
+                                          isLogin
+                                              ? usermsg['phone'] == null
+                                                  ? '手机号码'
+                                                  : usermsg['phone']
+                                              : '请先登录或注册',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                                  ScreenUtil().setSp(32.0)))
+                                    ],
+                                  ),
+                                ))),
+                        Container(
+                          child: Text(
+                            '邀请好友',
+                            style: TextStyle(
+                                color: Color(0xFFB48403),
+                                fontSize: ScreenUtil().setSp(28.0)),
+                          ),
+                          padding: EdgeInsets.fromLTRB(
+                            ScreenUtil().setWidth(24.0),
+                            ScreenUtil().setHeight(8.0),
+                            ScreenUtil().setHeight(24.0),
+                            ScreenUtil().setHeight(8.0),
+                          ),
+                          // height: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              bottomLeft: Radius.circular(25.0),
+                            ),
+                            gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFFFFF26E), Color(0xFFFFD025)]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-    );
+              Positioned(
+                child: _btnGroup(),
+                top: ScreenUtil().setHeight(304),
+              )
+            ],
+          ),
+        ),
+        Container(
+          height: ScreenUtil().setHeight(157.0),
+          margin: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+          child: Image.asset(
+            'assets/image/invite.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(30.0)),
+          child: Column(
+            children: <Widget>[
+              _pageStrip('user_znc', '/aboutUsPage', '关于我们'),
+              _pageStrip('user_write', '/feedBackPage', '意见反馈'),
+              _pageStrip('user_up', '/aboutUs', '版本更新'),
+              _pageStrip('user_manage', '/aboutUs', '退出登录'),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 
 //拼装按钮栏
@@ -118,7 +220,7 @@ class _MyPage extends State<MyPage> {
         color: Colors.white,
       ),
       width: ScreenUtil().setWidth(700.0),
-//      height: ScreenUtil().setHeight(350),
+//      height: ScreenUtil().setHeight(190),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -134,18 +236,19 @@ class _MyPage extends State<MyPage> {
   // 按钮栏
   Container _buttonIcon(String route, String img, String label) {
     return Container(
-      width: ScreenUtil().setWidth(150.0),
+//      width: ScreenUtil().setWidth(150.0),
       child: InkWell(
           onTap: () {
             print('click');
-            dynamic  userDtat = {
-              "id":usermsg["id"],
+            dynamic userDtat = {
+              "id": usermsg["id"],
               "header_img": usermsg['head_img'],
-              "name":usermsg["name"],
-              "sex":usermsg['sex'],
-              "phone":usermsg['phone']
+              "name": usermsg["name"],
+              "sex": usermsg['sex'],
+              "phone": usermsg['phone']
             };
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UserMsgPage(userDtat)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => UserMsgPage(userDtat)));
 //            Application.router.navigateTo(context,
 //                '/userMsgPage?userMsg=${userDtat}');
           },
@@ -177,15 +280,13 @@ class _MyPage extends State<MyPage> {
       child: InkWell(
         onTap: () {
           print('jump');
-          Application.router.navigateTo(context, router);
           print(router);
           if (label == '退出登录') {
             if (isLogin) {
               showLogoutDialog();
-
             }
           } else {
-
+            Application.router.navigateTo(context, router);
           }
         },
         child: Row(children: <Widget>[
@@ -269,38 +370,37 @@ class UserTop extends StatefulWidget {
   _UserTopState createState() => _UserTopState();
 }
 
-
 //构建个人信息  消息中心。。
 class _UserTopState extends State<UserTop> {
   @override
   Widget build(BuildContext context) {
 //    print(widget.userMsg);
     return Container(
-      width: ScreenUtil().setWidth(750.0),
+      width: ScreenUtil().setWidth(720.0),
       height: ScreenUtil().setHeight(450.0),
       decoration: BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/image/user_bg.png'),
               fit: BoxFit.cover)),
       child: Container(
-        height: ScreenUtil().setHeight(135.0),
+        height: ScreenUtil().setHeight(150.0),
         padding: EdgeInsets.only(left: ScreenUtil().setWidth(38.0)),
         child: Center(
           child: Row(
             children: <Widget>[
               Container(
-                width: ScreenUtil().setWidth(135.0),
-                height: ScreenUtil().setHeight(135.0),
+                width: 75,
+                height: 75,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(65.0),
+                    borderRadius:
+                        BorderRadius.circular(ScreenUtil().setWidth(70.0)),
                     image: DecorationImage(
                         image: widget.isLogin
                             ? widget.userMsg['head_img'] != null
                                 ? NetworkImage(widget.userMsg['head_img'])
                                 : AssetImage('assets/image/not_login.png')
                             : AssetImage('assets/image/not_login.png'),
-                        fit: BoxFit.cover)
-                ),
+                        fit: BoxFit.cover)),
               ),
               Expanded(
                   child: InkWell(
@@ -309,8 +409,8 @@ class _UserTopState extends State<UserTop> {
 //                          Application.router.navigateTo(context,
 //                              '/userMsgPage?userMsg=${Uri.encodeComponent(widget.userMsg.toString())}');
                         } else {
-                        print('jump');
-                        Application.router.navigateTo(context, '/loginPage');
+                          print('jump');
+                          Application.router.navigateTo(context, '/loginPage');
                         }
                       },
                       child: Container(
@@ -325,14 +425,20 @@ class _UserTopState extends State<UserTop> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              widget.isLogin ? widget.userMsg['name']==null?'指南车':widget.userMsg['name'] : '登录/注册',
+                              widget.isLogin
+                                  ? widget.userMsg['name'] == null
+                                      ? '指南车'
+                                      : widget.userMsg['name']
+                                  : '登录/注册',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(38.0)),
                             ),
                             Text(
                                 widget.isLogin
-                                    ? widget.userMsg['phone']==null?'手机号码':widget.userMsg['phone']
+                                    ? widget.userMsg['phone'] == null
+                                        ? '手机号码'
+                                        : widget.userMsg['phone']
                                     : '请先登录或注册',
                                 style: TextStyle(
                                     color: Colors.white,
