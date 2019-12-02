@@ -14,6 +14,7 @@ class Routes{
   static String forgetPassword = "/forgetPassPage";
   static String choosePassword = "/choosePassPage";
   static String choosePhone = "/choosePhonePage";
+  static String updatePage = "/updatePage";
 
   static void configureRoutes(Router router){
     router.notFoundHandler= new Handler(
@@ -32,6 +33,9 @@ class Routes{
     router.define(forgetPassword, handler: forgetPassHanderl);
     router.define(choosePassword, handler: choosePassHanderl);
     router.define("/choosePhonePage", handler: choosePhoneHanderl);
+    router.define("/newsCenterPage", handler: newsCenterHanderl);
+    router.define(updatePage,handler:updatePageHanderl);
+
 
   }
 

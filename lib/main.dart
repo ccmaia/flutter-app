@@ -78,12 +78,8 @@ runRealApp() async {
   runApp(MyApp());
 }
 
-
-
 class MyApp extends StatelessWidget {
-
   var token ;
-
   void _getLoginInfo() async{
     if(SpUtil.getSp()!=null){
       token = SpUtil.getSp().get('token');
@@ -96,11 +92,8 @@ class MyApp extends StatelessWidget {
     final router = Router();
     Routes.configureRoutes(router);
     Application.router = router;
-
     _getLoginInfo();
-
     print('build start');
-
     return OKToast(
       child: MultiProvider(
         providers: [
@@ -112,7 +105,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: '指南车',
           onGenerateRoute: Application.router.generator,
-          theme: ThemeData.light(),
+          theme: ThemeData(
+            primaryColor: Colors.grey[100],
+            accentColor: Color(0xFF333333),
+            indicatorColor: Color(0xFFCCCCCC),
+            buttonColor: Colors.transparent,
+
+          ),
           home: token==null?LoginPage():ZncIndexPage(),
           routes: <String,WidgetBuilder>{
             'homePage':(BuildContext context) => new Community(),//社区

@@ -8,8 +8,6 @@ import 'screen/put_work.dart';
 import 'screen/community.dart';
 import 'screen/my.dart';
 
-import 'screen/baseWidget.dart';
-
 class ZncIndexPage extends StatefulWidget {
   _IndexPageWidgetState createState() => _IndexPageWidgetState();
 }
@@ -21,7 +19,7 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
   final _bottomNavigationIconColor = Colors.grey; // 导航默认图标颜色
   final _bottomNavigationActiveIconColor = Colors.blue; // 导航选中图标颜色
   var currentPage;
-  List<BaseWidget> PageList = [
+  List<StatefulWidget> PageList = [
     Course(),
     PutWork(),
     Community(),
@@ -105,7 +103,7 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
             elevation: 0,
             highlightElevation: 0,
             backgroundColor: Colors.transparent,
-//            splashColor: Colors.transparent,
+            splashColor: Colors.transparent,
             onPressed: () {
               setState(() {
                 _currentIndex = 2;
@@ -125,9 +123,6 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
         currentIndex: _currentIndex,
         onTap: (int index) {
           setState(() {
-            if(index!=_currentIndex){
-              PageList.elementAt(index).createState().onTabSelected(true);
-            }
             _currentIndex = index;
             currentPage = PageList[_currentIndex];
           });

@@ -1,25 +1,32 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_test/public/httpUtils.dart';
-import 'package:flutter_app_test/service/service_url.dart';
 import '../routers/application.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../provider/base_list_provider.dart'; //状态管理器
 import 'package:shared_preferences/shared_preferences.dart';
+import '../service/http.dart';
+import '../service/api.dart';
 import '../index-page.dart';
+import 'dart:convert';
 import '../service/service_method.dart';
 import '../pages/user/user_msg.dart';
 
-import 'baseState.dart';
-import 'baseWidget.dart';
-
-class MyPage extends BaseWidget {
+class MyPage extends StatefulWidget {
   _MyPage createState() => _MyPage();
 }
 
-class _MyPage extends BaseState<MyPage> {
+class _MyPage extends State<MyPage> {
   var token = null;
   bool isLogin = false;
   var usermsg;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -48,18 +55,10 @@ class _MyPage extends BaseState<MyPage> {
     });
   }
 
- @override
-  void onTabSelected(bool selected) {
-    super.onTabSelected(selected);
-    print('_MyPage--onTabSelected');
-    HttpUtils.get('getUserMsg', this);
-  }
-
   @override
-  void callback(bool success, Object obj, {Object type}) {
-    super.callback(success, obj,type: type);
-    print('callback:type:'+type);
-    print('callback:'+obj.toString());
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
   }
 
   @override
@@ -191,9 +190,14 @@ class _MyPage extends BaseState<MyPage> {
         Container(
           height: ScreenUtil().setHeight(157.0),
           margin: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-          child: Image.asset(
-            'assets/image/invite.png',
-            fit: BoxFit.cover,
+          child: InkWell(
+            onTap:(){
+              Application.router.navigateTo(context, '/inviteFriendPage');
+            },
+            child: Image.asset(
+              'assets/image/invite.png',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Container(
@@ -202,7 +206,7 @@ class _MyPage extends BaseState<MyPage> {
             children: <Widget>[
               _pageStrip('user_znc', '/aboutUsPage', '关于我们'),
               _pageStrip('user_write', '/feedBackPage', '意见反馈'),
-              _pageStrip('user_up', '/aboutUs', '版本更新'),
+              _pageStrip('user_up', '/updatePage', '版本更新'),
               _pageStrip('user_manage', '/aboutUs', '退出登录'),
             ],
           ),
@@ -226,8 +230,8 @@ class _MyPage extends BaseState<MyPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           _buttonIcon('/userMsgPage', 'assets/image/user_massage.png', '个人信息'),
-          _buttonIcon('aa', 'assets/image/massage_center.png', '消息中心'),
-          _buttonIcon('aa', 'assets/image/my_visite.png', '我的邀请'),
+          _buttonIcon('/newsCenterPage', 'assets/image/massage_center.png', '消息中心'),
+          _buttonIcon('/inviteFriendPage', 'assets/image/my_visite.png', '我的邀请'),
           _buttonIcon('aa', 'assets/image/my_cert.png', '我的认证'),
         ],
       ),
@@ -241,17 +245,22 @@ class _MyPage extends BaseState<MyPage> {
       child: InkWell(
           onTap: () {
             print('click');
-            dynamic userDtat = {
-              "id": usermsg["id"],
-              "header_img": usermsg['head_img'],
-              "name": usermsg["name"],
-              "sex": usermsg['sex'],
-              "phone": usermsg['phone']
-            };
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UserMsgPage(userDtat)));
-//            Application.router.navigateTo(context,
-//                '/userMsgPage?userMsg=${userDtat}');
+            if (route == "/userMsgPage") {
+              dynamic userDtat = {
+                "id": usermsg["id"],
+                "header_img": usermsg['head_img'],
+                "name": usermsg["name"],
+                "sex": usermsg['sex'],
+                "phone": usermsg['phone']
+              };
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserMsgPage(userDtat)));
+            }else {
+              Application.router.navigateTo(context, route);
+            }
+
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

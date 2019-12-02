@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'baseState.dart';
-import 'baseWidget.dart';
-
-class PutWork extends BaseWidget{
+class PutWork extends StatefulWidget{
   _PutWork createState() => _PutWork();
 }
 
-class _PutWork extends BaseState<PutWork>{
+class _PutWork extends State<PutWork>{
   @override
   Widget build(BuildContext context) {
     return SafeArea(

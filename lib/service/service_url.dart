@@ -11,5 +11,8 @@ const servicePath = {
   "chooseUserMsg" : baseUrl + "/zhinanche-service-c/user",      // 修改用户信息   put
   "forgertPass": baseUrl+ "/zhinanche-main/user/password/re",    //忘记密码找回   put
   "choosePass" : baseUrl + "/zhinanche-main/user/password",  //修改密码   put
-  "choosePhone": baseUrl + "/zhinanche-main/user/username"   //修改手机号码   put
+  "choosePhone": baseUrl + "/zhinanche-main/user/username",   //修改手机号码   put
+  "getbannerList": baseUrl+"/common/banner/20",    //获取社区banner图  get
+  "getthreadList": baseUrl+"/thread",               //获取帖子列表    get
+
 };

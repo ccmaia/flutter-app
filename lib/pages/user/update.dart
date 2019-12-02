@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class FeedBackPage extends StatefulWidget {
+class UpdatePage extends StatefulWidget {
   @override
-  _FeedBackPageState createState() {
-    return new _FeedBackPageState();
+  _UpdatePageState createState() {
+    return new _UpdatePageState();
   }
 }
 
-class _FeedBackPageState extends State<FeedBackPage> {
+class _UpdatePageState extends State<UpdatePage> {
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '意见反馈',
-          style: TextStyle(),
+          '版本更新',
         ),
         centerTitle: true,
       ),
@@ -28,9 +28,23 @@ class _FeedBackPageState extends State<FeedBackPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-//          color:Color.fromRGBO(218, 76, 36, 1),
-        child: Center(
-          child: LinkView(),
+        child: Column(
+          children: <Widget>[
+            Text(
+              'V1.10',
+              style: TextStyle(fontSize: ScreenUtil().setSp(50.0), height: 4.5),
+            ),
+            Text(
+              '当前版本',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(26.0),
+                color: Colors.black,
+              ),
+            ),
+            Center(
+              child: LinkView(),
+            ),
+          ],
         ),
       ),
     );
@@ -40,7 +54,6 @@ class _FeedBackPageState extends State<FeedBackPage> {
 class LinkView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return new LinkViewState();
   }
 }
@@ -49,16 +62,18 @@ class LinkViewState extends State<LinkView> {
   @override
   Widget build(BuildContext context) {
     return new Container(
+      margin: EdgeInsets.only(top: ScreenUtil().setWidth(570.0)),
       height: 44.0,
       child: Material(
         color: Color.fromRGBO(49, 175, 255, 1),
+//        color: Color.fromRGBO(210, 210, 210, 1), //暂无更新时的按钮颜色
         child: new MaterialButton(
             height: ScreenUtil().setSp(10.0),
             minWidth: ScreenUtil().setWidth(525.0),
             onPressed: _launchPhone,
             textColor: Colors.white,
             child: Text(
-              "联系我们:10086",
+              "发现新版本，立即更新",
               style: TextStyle(fontSize: ScreenUtil().setSp(32.0)),
             )),
         borderRadius: BorderRadius.circular(50.0),
@@ -70,10 +85,10 @@ class LinkViewState extends State<LinkView> {
 }
 
 _launchPhone() async {
-  const url = 'tel:10086';
+  const url = 'https://www.baidu.com/';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    throw 'Could not launch $url';
+    throw '网络错误';
   }
 }
