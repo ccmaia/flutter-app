@@ -27,6 +27,8 @@ class _MyPage extends BaseState<MyPage> {
     // 这里可以进行请求初始化和弹框提示
     print('didChangeDependencies');
     getUserMsg();
+
+
   }
 
   Future getUserMsg() async {
