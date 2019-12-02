@@ -1,32 +1,25 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_test/public/httpUtils.dart';
+import 'package:flutter_app_test/service/service_url.dart';
 import '../routers/application.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import '../provider/base_list_provider.dart'; //状态管理器
 import 'package:shared_preferences/shared_preferences.dart';
-import '../service/http.dart';
-import '../service/api.dart';
 import '../index-page.dart';
-import 'dart:convert';
 import '../service/service_method.dart';
 import '../pages/user/user_msg.dart';
 
-class MyPage extends StatefulWidget {
+import 'baseState.dart';
+import 'baseWidget.dart';
+
+class MyPage extends BaseWidget {
   _MyPage createState() => _MyPage();
 }
 
-class _MyPage extends State<MyPage> {
+class _MyPage extends BaseState<MyPage> {
   var token = null;
   bool isLogin = false;
   var usermsg;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -55,10 +48,18 @@ class _MyPage extends State<MyPage> {
     });
   }
 
+ @override
+  void onTabSelected(bool selected) {
+    super.onTabSelected(selected);
+    print('_MyPage--onTabSelected');
+    HttpUtils.get('getUserMsg', this);
+  }
+
   @override
-  void deactivate() {
-    // TODO: implement deactivate
-    super.deactivate();
+  void callback(bool success, Object obj, {Object type}) {
+    super.callback(success, obj,type: type);
+    print('callback:type:'+type);
+    print('callback:'+obj.toString());
   }
 
   @override

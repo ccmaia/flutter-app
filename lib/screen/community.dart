@@ -9,13 +9,14 @@ import 'package:provider/provider.dart';
 import '../provider/base_list_provider.dart'; //状态管理器
 
 import '../service/httpHeaders.dart';
-import '../service/service_method.dart';
+import 'baseState.dart';
+import 'baseWidget.dart';
 
-class Community extends StatefulWidget {
+class Community extends BaseWidget {
   _HomeScreen createState() => _HomeScreen();
 }
 
-class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
+class _HomeScreen extends BaseState<Community> with AutomaticKeepAliveClientMixin {
   String showText = '还没有请求数据';
 
   @override

@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Course extends StatefulWidget{
+import 'baseState.dart';
+import 'baseWidget.dart';
+
+class Course extends BaseWidget{
   _Course createState() => _Course();
 }
 
-class _Course extends State<Course>{
+class _Course extends BaseState<Course>{
   @override
   Widget build(BuildContext context) {
     return SafeArea(
