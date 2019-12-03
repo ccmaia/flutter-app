@@ -98,8 +98,9 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: ListView(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Container(
+        child: Column(
           children: <Widget>[
             searchWidgrt(),
             FutureBuilder(
@@ -122,25 +123,28 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                 }
               },
             ),
-            Container(
-                height: ScreenUtil().setHeight(1000),
-                padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 90.0),
-                child: EasyRefresh(
-                    onRefresh: _refreshData,
-                    onLoad: _addMoreData,
-                    child: StaggeredGridView.countBuilder(
-                      itemCount: threadList.length,
-                      primary: false,
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      itemBuilder: (context, index) => Container(
-                        child: threadWrap(threadList[index]),
-                      ),
-                      staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-                    ))),
+            Expanded(
+              flex: 1,
+              child: Container(
+                  padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+                  child: EasyRefresh(
+                      onRefresh: _refreshData,
+                      onLoad: _addMoreData,
+                      child: StaggeredGridView.countBuilder(
+                        itemCount: threadList.length,
+                        primary: false,
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
+                        itemBuilder: (context, index) => Container(
+                              child: threadWrap(threadList[index]),
+                            ),
+                        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+                      ))),
+            )
           ],
-        )
+        ),
+      ),
 
 //        ListView(
 //          children: <Widget>[
@@ -185,7 +189,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 //                    ))),
 //          ],
 //        )
-        );
+    );
   }
 
   getBannerInfo() {
@@ -338,6 +342,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
     return new Container(
       width: ScreenUtil().setWidth(720),
       padding: EdgeInsets.all(10.0),
+      margin: EdgeInsets.only(top: 40),
       height: 60.0,
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
