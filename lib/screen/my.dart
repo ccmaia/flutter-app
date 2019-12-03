@@ -87,8 +87,8 @@ class _MyPage extends State<MyPage> {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: ScreenUtil().setWidth(117),
-                          height: ScreenUtil().setHeight(117),
+                          width: ScreenUtil().setWidth(120),
+                          height: ScreenUtil().setWidth(120),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   ScreenUtil().setWidth(60.0)),
@@ -188,15 +188,15 @@ class _MyPage extends State<MyPage> {
           ),
         ),
         Container(
-          height: ScreenUtil().setHeight(157.0),
-          margin: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+//          height: ScreenUtil().setHeight(157.0),
+          margin: EdgeInsets.only(top: ScreenUtil().setHeight(20),bottom: ScreenUtil().setHeight(20)),
           child: InkWell(
             onTap:(){
               Application.router.navigateTo(context, '/inviteFriendPage');
             },
             child: Image.asset(
               'assets/image/invite.png',
-              fit: BoxFit.cover,
+              width: ScreenUtil().setWidth(720),
             ),
           ),
         ),

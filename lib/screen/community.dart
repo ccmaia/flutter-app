@@ -36,7 +36,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
       "groups": "2",
       "tag": ["问答", "ABB"],
       "image":
-          "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
       "data": "",
       "like_count": "32",
       "replay_count": "25",
@@ -50,7 +50,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
       "groups": "1",
       "tag": [],
       "image":
-          "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
       "data": "",
       "like_count": "32",
       "replay_count": "25",
@@ -64,7 +64,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
       "groups": "2",
       "tag": ["兼职"],
       "image":
-          "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
       "data": "",
       "like_count": "32",
       "replay_count": "25",
@@ -81,12 +81,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     print('页面初始化------');
-//
-//    getBannerInfo();
     _scrollController.addListener(() {
-//      print('____');
-//      print(_scrollController.position.pixels);
-//      print(_scrollController.position.maxScrollExtent);
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         print('我监听到底部了!');
@@ -98,98 +93,128 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            searchWidgrt(),
-            FutureBuilder(
-              future: getBannerInfo(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var data = snapshot.data['data']['list'];
-                  List<Map> swiperDataList = (data as List).cast(); // 顶部轮播组件数
-                  return Column(
-                    children: <Widget>[
-                      SwiperDiy(swiperDataList: swiperDataList), //页面顶部轮播组件
-                    ],
-                  );
-                } else {
-                  return Container(
-                      height: ScreenUtil().setHeight(245.0),
-                      child: Center(
-                        child: Text('loding'),
-                      ));
-                }
-              },
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                  child: EasyRefresh(
-                      onRefresh: _refreshData,
-                      onLoad: _addMoreData,
-                      child: StaggeredGridView.countBuilder(
-                        itemCount: threadList.length,
-                        primary: false,
-                        crossAxisCount: 4,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        itemBuilder: (context, index) => Container(
-                              child: threadWrap(threadList[index]),
-                            ),
-                        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-                      ))),
-            )
-          ],
+        floatingActionButton: InkWell(
+          child: Image.asset("assets/image/add.png",
+              width: ScreenUtil().setWidth(120)),
+          onTap: () {
+            Application.router.navigateTo(context, "/choosethreadTypePage");
+          },
         ),
-      ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+//        body: SafeArea(
+//          child: Stack(
+//            children: <Widget>[
+//              Positioned(
+//                top: 0,
+//                left: 0,
+//                right: 0,
+//                child: searchWidgrt(),
+//              ),
+//              Positioned(
+//                top: ScreenUtil().setHeight(120.0),
+//                left: 0,
+//                right: 0,
+//                child: Container(
+//                  padding: EdgeInsets.only(bottom: 10.0),
+//                  color: Colors.white,
+//                  child: FutureBuilder(
+//                    future: getBannerInfo(),
+//                    builder: (context, snapshot) {
+//                      if (snapshot.hasData) {
+//                        var data = snapshot.data['data']['list'];
+//                        List<Map> swiperDataList =
+//                            (data as List).cast(); // 顶部轮播组件数
+//                        return Column(
+//                          children: <Widget>[
+//                            SwiperDiy(swiperDataList: swiperDataList),
+//                            //页面顶部轮播组件
+//                          ],
+//                        );
+//                      } else {
+//                        return Container(
+//                            height: ScreenUtil().setHeight(245.0),
+//                            child: Center(
+//                              child: Text('loding'),
+//                            ));
+//                      }
+//                    },
+//                  ),
+//                ),
+//              ),
+//              Container(
+//                  color: Colors.white,
+//                  height: ScreenUtil().setHeight(905),
+//                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
+//                  margin: EdgeInsets.only(top: ScreenUtil().setHeight(375.0)),
+//                  child: EasyRefresh(
+//                      onRefresh: _refreshData,
+//                      onLoad: _addMoreData,
+//                      child: StaggeredGridView.countBuilder(
+//                        itemCount: threadList.length,
+//                        primary: false,
+//                        crossAxisCount: 4,
+//                        mainAxisSpacing: 10.0,
+//                        crossAxisSpacing: 10.0,
+//                        itemBuilder: (context, index) => Container(
+//                          child: threadWrap(threadList[index]),
+//                        ),
+//                        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+//                      ))),
+//            ],
+//          ),
+//        ));
 
-//        ListView(
-//          children: <Widget>[
-//           ,
-//            FutureBuilder(
-//              future: getBannerInfo(),
-//              builder: (context, snapshot) {
-//                if (snapshot.hasData) {
-//                  var data = snapshot.data['data']['list'];
-//                  List<Map> swiperDataList = (data as List).cast(); // 顶部轮播组件数
-//                  return Column(
-//                    children: <Widget>[
-//                      SwiperDiy(swiperDataList: swiperDataList), //页面顶部轮播组件
-//                    ],
-//                  );
-//                } else {
-//                  return Container(
-//                      height: ScreenUtil().setHeight(245.0),
-//                      child: Center(
-//                        child: Text('loding'),
-//                      ));
-//                }
-//              },
-//            ),
-//            Container(
-//              height: ScreenUtil().setHeight(1000),
-//                padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 90.0),
-//                child: EasyRefresh(
-//                    onRefresh: _refreshData,
-//                    onLoad: _addMoreData,
-//                    child: StaggeredGridView.countBuilder(
-////            controller: _scrollController,
-//                      itemCount: threadList.length,
-//                      primary: false,
-//                      crossAxisCount: 4,
-//                      mainAxisSpacing: 10.0,
-//                      crossAxisSpacing: 10.0,
-//                      itemBuilder: (context, index) => Container(
-//                        child: threadWrap(threadList[index]),
-//                      ),
-//                      staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-//                    ))),
-//          ],
-//        )
-    );
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              searchWidgrt(),
+              Container(
+                color: Colors.white,
+                child: FutureBuilder(
+                  future: getBannerInfo(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var data = snapshot.data['data']['list'];
+                      List<Map> swiperDataList =
+                          (data as List).cast(); // 顶部轮播组件数
+                      return Column(
+                        children: <Widget>[
+                          SwiperDiy(swiperDataList: swiperDataList), //页面顶部轮播组件
+                        ],
+                      );
+                    } else {
+                      return Container(
+                          height: ScreenUtil().setHeight(245.0),
+                          child: Center(
+                            child: Text('loding'),
+                          ));
+                    }
+                  },
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                    padding:
+                        EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+                    child: EasyRefresh(
+                        onRefresh: _refreshData,
+                        onLoad: _addMoreData,
+                        child: StaggeredGridView.countBuilder(
+                          itemCount: threadList.length,
+                          primary: false,
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          itemBuilder: (context, index) => Container(
+                            child: threadWrap(threadList[index]),
+                          ),
+                          staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+                        ))),
+              )
+            ],
+          ),
+        ));
   }
 
   getBannerInfo() {
@@ -200,7 +225,65 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
 //  上拉刷新数据
   Future<Null> _refreshData() async {
-    _page = 0;
+    _page = 1;
+    threadList = [
+      {
+        "id": "1",
+        "title": "ABB机器人常见故障",
+        "groups": "1",
+        "tag": [],
+        "image":
+        "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+        "data": "",
+        "like_count": "32",
+        "replay_count": "25",
+        "logo":
+        "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+        "userName": "张三三"
+      },
+      {
+        "id": "2",
+        "title": "机器人第一次上电机报 警502，这是为什么？",
+        "groups": "2",
+        "tag": ["问答", "ABB"],
+        "image":
+        "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
+        "data": "",
+        "like_count": "32",
+        "replay_count": "25",
+        "logo":
+        "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+        "userName": "张三三"
+      },
+      {
+        "id": "3",
+        "title": "ABB机器人常见故障",
+        "groups": "1",
+        "tag": [],
+        "image":
+        "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
+        "data": "",
+        "like_count": "32",
+        "replay_count": "25",
+        "logo":
+        "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+        "userName": "张三三"
+      },
+      {
+        "id": "3",
+        "title": "ABB机器人常见故障如何解决处理干货 ",
+        "groups": "2",
+        "tag": ["兼职"],
+        "image":
+        "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
+        "data": "",
+        "like_count": "32",
+        "replay_count": "25",
+        "logo":
+        "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+        "userName": "张三三"
+      },
+    ];
     print("刷新");
   }
 
@@ -215,7 +298,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "1",
           "tag": [],
           "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
@@ -229,12 +312,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "2",
           "tag": ["问答", "ABB"],
           "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
           "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webpg",
           "userName": "张三三"
         },
         {
@@ -243,7 +326,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "1",
           "tag": [],
           "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
@@ -257,7 +340,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "2",
           "tag": ["兼职"],
           "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
@@ -271,7 +354,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "1",
           "tag": [],
           "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
@@ -285,7 +368,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "1",
           "tag": [],
           "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
@@ -304,50 +387,15 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  RaisedButton _buildButton(String route, String url, String label) {
-    return RaisedButton(
-      onPressed: () {
-        print(label);
-        Application.router.navigateTo(
-            context, '/eachPage?data=${Uri.encodeComponent(label)}');
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            child: Image.asset(
-              url,
-            ),
-            width: ScreenUtil().setHeight(100),
-            height: ScreenUtil().setHeight(100),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 5),
-            child: Text(
-              label,
-              style: TextStyle(color: Colors.black54),
-            ),
-          )
-        ],
-      ),
-      color: Colors.transparent,
-      elevation: 0.0,
-      highlightElevation: 0.0,
-    );
-  }
-
   //顶部搜索widget
   Widget searchWidgrt() {
     return new Container(
-      width: ScreenUtil().setWidth(720),
       padding: EdgeInsets.all(10.0),
-      margin: EdgeInsets.only(top: 40),
-      height: 60.0,
+      height: ScreenUtil().setHeight(120.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-        borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
-      ),
+          border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
+          borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
+          color: Colors.white),
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -382,7 +430,9 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                   ))),
           new Container(
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Application.router.navigateTo(context, '/newsCenterPage');
+              },
               icon: Image.asset('assets/image/notice.png',
                   width: 30.0, height: 30.0),
               color: Colors.black54,

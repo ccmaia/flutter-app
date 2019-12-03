@@ -12,6 +12,9 @@ import '../pages//user/choose_password.dart';
 import '../pages/user/choose_phone.dart';
 import '../pages/community/news_center.dart';
 import '../pages/user/update.dart';
+import '../pages/community/choose_thread_type.dart';
+import '../pages/community/put_thread.dart';
+import '../pages/community/article_detail.dart';
 
 Handler AboutUsPageHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -74,5 +77,23 @@ Handler newsCenterHanderl =Handler(
 Handler updatePageHanderl =Handler(
     handlerFunc: (BuildContext context,Map<String,List<String>> params){
       return UpdatePage();
+    }
+);
+Handler choosethreadTypePageHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return ChoosethreadType();
+    }
+);
+Handler putthreadPageHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params) {
+      String groups = params['groups'].first.toString();
+      print('data is ${groups}');
+      return PutThread(groups);
+    }
+);
+
+Handler articleDetailHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return ArticleDetailPage();
     }
 );

@@ -16,6 +16,7 @@ class Routes{
   static String choosePhone = "/choosePhonePage";
   static String updatePage = "/updatePage";
 
+
   static void configureRoutes(Router router){
     router.notFoundHandler= new Handler(
       handlerFunc: (BuildContext context,Map<String,List<String>> params){
@@ -35,6 +36,9 @@ class Routes{
     router.define("/choosePhonePage", handler: choosePhoneHanderl);
     router.define("/newsCenterPage", handler: newsCenterHanderl);
     router.define(updatePage,handler:updatePageHanderl);
+    router.define("/choosethreadTypePage",handler:choosethreadTypePageHanderl);
+    router.define("/putThreadPage",handler:putthreadPageHanderl);
+    router.define("/articleDetailPage", handler: articleDetailHanderl);
 
 
   }

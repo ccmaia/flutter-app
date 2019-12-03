@@ -91,12 +91,15 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
 //      currentPage,
       backgroundColor: Colors.white,
       floatingActionButton: Container(
-        height: 60,
-        width: 60,
+        height: 50,
+        width: 50,
         padding: EdgeInsets.all(5),
         // margin: EdgeInsets.only(bottom:5),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(25),
+//          border: Border.all(color: Colors.grey[100],width: 1),
+          color: Colors.white,
+            boxShadow: [BoxShadow(color: Colors.grey[300], offset: Offset(0, -1))]
           // color: Colors.white,
         ),
         child: FloatingActionButton(
@@ -110,15 +113,11 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
               });
             },
             child: Image.asset('assets/image/community.png')
-            // Icon(
-            //   IconData(0xe682, fontFamily: 'MyIcons'),
-            //   color: getColor(2),
-            //   size: 55,
-            // )
             ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         items: _bottomBar,
         currentIndex: _currentIndex,
         onTap: (int index) {

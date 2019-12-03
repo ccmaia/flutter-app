@@ -292,7 +292,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
       return SizedBox(
         height: 100,
         child: ListView.builder(
-          key: const Key('goods_sort'),
+          key: const Key('sex'),
           itemExtent: 48.0,
           itemBuilder: (_, index){
             return InkWell(
