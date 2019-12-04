@@ -51,16 +51,10 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
 
     final List<BottomNavigationBarItem> _bottomBar = [
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: getColor(0),
-          ),
+          icon: Image.asset("assets/image/coursepage.png",width: 25,),
           title: Text('课程', style: TextStyle(color: getColor(0)))),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: getColor(1),
-          ),
+          icon: Image.asset("assets/image/putworkpage.png",width: 25,),
           title: Text('兼职', style: TextStyle(color: getColor(1)))),
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
@@ -70,16 +64,10 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
           ),
           title: Text('社区', style: TextStyle(color: getColor(2)))),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: getColor(3),
-          ),
+          icon: Image.asset("assets/image/fondWorkpage.png",width: 25,),
           title: Text('求职', style: TextStyle(color: getColor(3)))),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: getColor(4),
-          ),
+          icon: Image.asset("assets/image/userpage.png",width: 25,),
           title: Text('我的', style: TextStyle(color: getColor(4)))),
     ];
 

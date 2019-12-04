@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_test/routers/application.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import '../../public/public_select_input.dart';
@@ -6,9 +7,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../service/service_method.dart';
 import '../../public/ToastUtil.dart';
+import './play_video.dart';
 
 class PutThread extends StatefulWidget {
   String groups;
+
   PutThread(this.groups);
 
   @override
@@ -17,18 +20,26 @@ class PutThread extends StatefulWidget {
 
 class _PutThreadState extends State<PutThread> {
   String tag = "0";
-  List mediaList = [
-    "",
-    ""
-  ];
+  List mediaList = ["http://a-image-demo.oss-cn-qingdao.aliyuncs.com/demo.mp4","", ""];
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
+  VideoPlayerController controller;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(widget.groups);
+//    widgetsBinding=WidgetsBinding.instance;
+//    widgetsBinding.addPostFrameCallback((callback){
+//      print("addPostFrameCallback be invoke");
+//    });
+    mediaList.map((item) {});
   }
+
+//  Future getImage async{
+//  String thumb = await Thumbnails.getThumbnail(thumbnailFolder:'[FOLDER PATH TO STORE THUMBNAILS]'
+//// creates the specified path if it doesnt exist videoFile: '[VIDEO PATH HERE]', imageType: ThumbFormat.PNG, quality: 30);
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +98,8 @@ class _PutThreadState extends State<PutThread> {
                         }),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10,right: 10,top: 10),
-                    child:
-                    Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: Container(
                       width: 220,
                       height: 45,
 //                margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
@@ -103,8 +113,7 @@ class _PutThreadState extends State<PutThread> {
                       child: RaisedButton(
                           color: Colors.transparent,
 //                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
-                          child: Text("发布",
-                              style: TextStyle(fontSize: 20)),
+                          child: Text("发布", style: TextStyle(fontSize: 20)),
                           textColor: Colors.white,
                           elevation: 0.0,
                           highlightElevation: 0.0,
@@ -123,7 +132,7 @@ class _PutThreadState extends State<PutThread> {
 
   Widget buildItem(index) {
     print(index);
-    if (index == mediaList.length-2) {
+    if (index == mediaList.length - 2) {
       return Container(
         decoration: BoxDecoration(
             color: Color(0xFFEBEBEB),
@@ -133,14 +142,20 @@ class _PutThreadState extends State<PutThread> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(Icons.add,color: Colors.grey[600],),
-              Text("添加图片",style: TextStyle(fontSize: 10,color: Colors.grey),)
+              Icon(
+                Icons.add,
+                color: Colors.grey[600],
+              ),
+              Text(
+                "添加图片",
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+              )
             ],
           ),
           onTap: getImage,
         ),
       );
-    }else if(index == mediaList.length-1) {
+    } else if (index == mediaList.length - 1) {
       return Container(
         decoration: BoxDecoration(
             color: Color(0xFFEBEBEB),
@@ -150,27 +165,52 @@ class _PutThreadState extends State<PutThread> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(Icons.add,color: Colors.grey[600],),
-              Text("添加视频",style: TextStyle(fontSize: 10,color: Colors.grey),)
+              Icon(
+                Icons.add,
+                color: Colors.grey[600],
+              ),
+              Text(
+                "添加视频",
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+              )
             ],
           ),
           onTap: getVideo,
         ),
       );
-    }else{
+    } else {
       if (mediaList[index].toString().contains("jpg")) {
         return Container(
             child: ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.elliptical(5, 5)),
-              child: Image.network(
-                mediaList[index],
-                fit: BoxFit.fill,
-              ),
-            ));
+          borderRadius: BorderRadius.vertical(top: Radius.elliptical(5, 5)),
+          child: Image.network(
+            mediaList[index],
+            fit: BoxFit.fill,
+          ),
+        ));
+      }  else {
+        return InkWell(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+              return VideoAutoPlayWhenReady(mediaList[index]);
+            }));
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                image: DecorationImage(
+                    image: NetworkImage("${mediaList[index]}?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast"),
+                    fit: BoxFit.fill
+                )
+            ),
+            child:  Center(
+              child: Icon(Icons.play_circle_outline ,color: Colors.grey,size: 35,),
+            ),),
+        );
       }
-
     }
   }
+
   //  上传图片
   Future getImage() async {
     try {
@@ -197,16 +237,14 @@ class _PutThreadState extends State<PutThread> {
   }
 
 //  上传视频
-  Future getVideo() async{
+  Future getVideo() async {
     try {
       var video = await ImagePicker.pickVideo(source: ImageSource.gallery);
       print("选取视频：${video}");
       String path = video.path;
       var fileName = DateTime.now().millisecondsSinceEpoch.toString() + ".mp4";
-      FormData formData = new FormData.from({
-        "file_name": fileName,
-        "file": video
-      });
+      FormData formData =
+          new FormData.from({"file_name": fileName, "file": video});
       postNet('uploadVideo', formData: formData).then((res) {
         print("返回结果${res}");
         if (res['result'] == 1) {
@@ -223,23 +261,23 @@ class _PutThreadState extends State<PutThread> {
   }
 
 //  发布
-  void _saveThread(){
-    if(title.text.isEmpty||content.text.isEmpty){
+  void _saveThread() {
+
+    if (title.text.isEmpty || content.text.isEmpty) {
       Toast.show("请填写标题和内容");
-    }else{
-      FormData formData  = new FormData.from({
-        "title":title,
-        "desc":content,
-        "groups":widget.groups,
-        "tag":"",
-        "image":"",
-        "video":""
+    } else {
+      FormData formData = new FormData.from({
+        "title": title,
+        "desc": content,
+        "groups": widget.groups,
+        "tag": "",
+        "image": "",
+        "video": ""
       });
 //      postNet('upLoadThread')
     }
-  print(title.text.isEmpty);
+    print(title.text.isEmpty);
   }
-
 
   List tagList = [
     {
@@ -259,6 +297,7 @@ class _PutThreadState extends State<PutThread> {
       "tag": "安川",
     },
   ];
+
   void _showBottomSheet() {
     showModalBottomSheet(
         context: context,

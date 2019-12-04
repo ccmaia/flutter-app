@@ -4,7 +4,6 @@ import 'package:fluro/fluro.dart';
 
 class Routes{
   static String root='/';
-  static String eachPage = '/eachPage';
   static String searchPage = '/searchPage';
   static String loginPage = '/loginPage';
   static String userMsgPage = '/userMsgPage';
@@ -24,7 +23,6 @@ class Routes{
       }
     );
 
-    router.define(eachPage,handler:eachPageHanderl);
     router.define(searchPage,handler:searchPageHanderl);
     router.define(loginPage, handler: loginPageHanderl);
     router.define(userMsgPage, handler: userMsgPageHanderl);
