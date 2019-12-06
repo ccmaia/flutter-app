@@ -13,7 +13,10 @@ class Community extends StatefulWidget {
 }
 
 class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
-  ScrollController _scrollController = new ScrollController();
+
+//  GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
+
+
   int _page = 1;
   List<Map> threadList = [
     {
@@ -76,6 +79,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true; //保持页面状态不刷新
+
 
   @override
   void initState() {
@@ -324,7 +328,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   //顶部搜索widget
   Widget searchWidgrt() {
     return new Container(
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.fromLTRB(10.0,10.0,0,10.0),
       height: ScreenUtil().setHeight(120.0),
       decoration: BoxDecoration(
           border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
@@ -336,7 +340,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
               child: Container(
                   decoration: new BoxDecoration(
                     borderRadius:
-                        const BorderRadius.all(const Radius.circular(20.0)),
+                        const BorderRadius.all(const Radius.circular(5.0)),
                     color: GlobalConfig.searchBackgroundColor,
                   ),
                   child: InkWell(
@@ -345,7 +349,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                       Application.router.navigateTo(context, '/searchPage');
                     },
                     child: Container(
-                      height: 30.0,
+                      height: 36.0,
                       padding: EdgeInsets.only(left: 10.0),
                       child: Row(
                         children: <Widget>[
@@ -354,32 +358,25 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                             width: 22.0,
                             height: 20.0,
                           ),
-                          Text(
-                            '请输入您想搜索的内容',
-                            style: TextStyle(color: Colors.black54),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: Text(
+                              '请输入您想搜索的内容',
+                              style: TextStyle(color: Colors.black54),
+                            ),
                           )
                         ],
                       ),
                     ),
                   ))),
-//          new Container(
-//            child: IconButton(
-//              onPressed: () {
-//                Application.router.navigateTo(context, '/newsCenterPage');
-//              },
-//              icon: Image.asset('assets/image/notice.png',
-//                  width: 30.0, height: 30.0),
-//              color: Colors.black54,
-//            ),
-//            // height: 14.0,
-//            width: 40.0,
-//          ),
           new Container(
-              width: 40.0,
+//              width: 45.0,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Application.router.navigateTo(context, '/personalCenterPage');
+                },
                 icon: Image.asset('assets/image/user.png',
-                    width: 40.0,),
+                    height: 36.0,),
                 color: Colors.black54,
               ))
         ],
@@ -391,13 +388,16 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   Widget threadWrap(item) {
     if (item["groups"] == "1") {
       return InkWell(
-        onTap: () {},
+        onTap: () {
+          Application.router.navigateTo(context, '/articleDetailPage');
+        },
         child: Container(
           width: ScreenUtil().setWidth(335),
 //          margin: EdgeInsets.only(bottom: 10.0),
           decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(10.0)),
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,),
           child: Column(
             children: <Widget>[
               ClipRRect(
@@ -482,7 +482,8 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
           decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(10.0)),
+              borderRadius: BorderRadius.circular(10.0),
+            color: Colors.white,),
           child: Column(
             children: <Widget>[
               Row(

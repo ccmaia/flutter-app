@@ -26,42 +26,49 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+    ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
     return Scaffold(
         body: ListView(
       children: <Widget>[
-        Stack(
-          children: <Widget>[
-            Container(
-              width: ScreenUtil().setWidth(750.0),
-              height: ScreenUtil().setHeight(402.0),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/image/login_bg.png'),
-                      fit: BoxFit.cover)),
-            ),
-            Positioned(
-              child: Image.asset(
-                'assets/image/znc_logo.png',
-                width: ScreenUtil().setWidth(334),
-                height: ScreenUtil().setHeight(61),
+        Container(
+          height: ScreenUtil().setHeight(1050.0),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: ScreenUtil().setWidth(720.0),
+                height: ScreenUtil().setHeight(383.0),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/image/login_bg.png'),
+                        fit: BoxFit.cover)),
               ),
-              top: ScreenUtil().setHeight(197),
-              left: ScreenUtil().setWidth(208),
+              Positioned(
+                child: Image.asset(
+                  'assets/image/znc_logo.png',
+                  width: ScreenUtil().setWidth(334),
+                  height: ScreenUtil().setHeight(61),
+                ),
+                top: ScreenUtil().setHeight(160),
+                left: ScreenUtil().setWidth(193),
 //                left: 208,
-            )
-          ],
+              ),
+              Positioned(
+                  top: ScreenUtil().setHeight(304),
+                  left: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.white,
+                    ),
+                    padding: EdgeInsets.all(20),
+//                    margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
+                    width: ScreenUtil().setWidth(640),
+                    child: visible ? loginBuildForm() : registerBuildForm(),
+                  ))
+            ],
+          ),
         ),
         Container(
-//          height: ScreenUtil().setHeight(932),
-            color: Colors.white,
-            padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(68.0),
-                top: ScreenUtil().setHeight(88.0),
-                right: ScreenUtil().setWidth(68.0)),
-            child: visible ? loginBuildForm() : registerBuildForm()),
-        Container(
-            color: Colors.white,
             padding: EdgeInsets.only(
                 top: ScreenUtil().setHeight(80.0),
                 bottom: ScreenUtil().setHeight(30.0)),
@@ -134,8 +141,6 @@ class _LoginPageState extends State<LoginPage> {
               MaterialPageRoute(builder: (context) => ZncIndexPage()),
               (route) => route == null,
             ).then((data) {
-
-
               setState(() {});
             });
           } else {
@@ -218,32 +223,29 @@ class _LoginPageState extends State<LoginPage> {
 //              },
             ),
             Padding(
-              padding: EdgeInsets.only(top: ScreenUtil().setHeight(28.0)),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: ScreenUtil().setWidth(452),
-                    height: ScreenUtil().setHeight(90),
-                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF36A4F2), Color(0xFF2A5CF6)]),
-                    ),
-                    child: RaisedButton(
-                        color: Colors.transparent,
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(50.0)),
+              child: Center(
+                child: Container(
+                  width: ScreenUtil().setWidth(452),
+                  height: ScreenUtil().setHeight(90),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFF36A4F2), Color(0xFF2A5CF6)]),
+                  ),
+                  child: RaisedButton(
+                      color: Colors.transparent,
 //                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
-                        child: Text(btnText,
-                            style: TextStyle(fontSize: ScreenUtil().setSp(32))),
-                        textColor: Colors.white,
-                        elevation: 0.0,
-                        highlightElevation: 0.0,
-                        onPressed: _bottonLogin),
+                      child: Text(btnText,
+                          style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+                      textColor: Colors.white,
+                      elevation: 0.0,
+                      highlightElevation: 0.0,
+                      onPressed: _bottonLogin),
 //                    alignment: Alignment.center,
-                  )
-                ],
+                ),
               ),
             )
           ],
@@ -307,7 +309,10 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         _getSms();
                       },
-                      child: Text('获取验证码',style: TextStyle(color: Color(0xFF477BFF)),),
+                      child: Text(
+                        '获取验证码',
+                        style: TextStyle(color: Color(0xFF477BFF)),
+                      ),
                     ),
                   ),
                 )
@@ -357,12 +362,11 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: EdgeInsets.only(top: ScreenUtil().setHeight(60.0)),
-              child: Row(
-                children: <Widget>[
+              child: Center(
+                child: (
                   Container(
                     width: ScreenUtil().setWidth(452),
                     height: ScreenUtil().setHeight(90),
-                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       gradient: LinearGradient(
@@ -381,7 +385,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: _bottonLogin),
 //                    alignment: Alignment.center,
                   )
-                ],
+    ),
               ),
             )
           ],

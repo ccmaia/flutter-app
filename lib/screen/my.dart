@@ -64,7 +64,6 @@ class _MyPage extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
-
     return Scaffold(
         body: ListView(
       children: <Widget>[
@@ -181,7 +180,10 @@ class _MyPage extends State<MyPage> {
                 ),
               ),
               Positioned(
-                child: _btnGroup(),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  child: _btnGroup(),
+                ),
                 top: ScreenUtil().setHeight(304),
               )
             ],
@@ -189,9 +191,11 @@ class _MyPage extends State<MyPage> {
         ),
         Container(
 //          height: ScreenUtil().setHeight(157.0),
-          margin: EdgeInsets.only(top: ScreenUtil().setHeight(20),bottom: ScreenUtil().setHeight(20)),
+          margin: EdgeInsets.only(
+              top: ScreenUtil().setHeight(20),
+              bottom: ScreenUtil().setHeight(20)),
           child: InkWell(
-            onTap:(){
+            onTap: () {
               Application.router.navigateTo(context, '/inviteFriendPage');
             },
             child: Image.asset(
@@ -219,7 +223,7 @@ class _MyPage extends State<MyPage> {
   Container _btnGroup() {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+//      margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.white,
@@ -230,8 +234,10 @@ class _MyPage extends State<MyPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           _buttonIcon('/userMsgPage', 'assets/image/user_massage.png', '个人信息'),
-          _buttonIcon('/newsCenterPage', 'assets/image/massage_center.png', '消息中心'),
-          _buttonIcon('/inviteFriendPage', 'assets/image/my_visite.png', '我的邀请'),
+          _buttonIcon(
+              '/newsCenterPage', 'assets/image/massage_center.png', '消息中心'),
+          _buttonIcon(
+              '/inviteFriendPage', 'assets/image/my_visite.png', '我的邀请'),
           _buttonIcon('aa', 'assets/image/my_cert.png', '我的认证'),
         ],
       ),
@@ -257,10 +263,9 @@ class _MyPage extends State<MyPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => UserMsgPage(userDtat)));
-            }else {
+            } else {
               Application.router.navigateTo(context, route);
             }
-
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

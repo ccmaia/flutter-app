@@ -37,6 +37,10 @@ class Routes{
     router.define("/choosethreadTypePage",handler:choosethreadTypePageHanderl);
     router.define("/putThreadPage",handler:putthreadPageHanderl);
     router.define("/articleDetailPage", handler: articleDetailHanderl);
+    router.define("/personalCenterPage", handler: personalCenterHanderl);
+    router.define("/myArticlePage", handler: myArticlePageHanderl);
+    router.define("/myReplyPage", handler: myReplyPageHanderl);
+
 
 
   }

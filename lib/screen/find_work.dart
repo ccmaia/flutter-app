@@ -19,11 +19,21 @@ class _FindWork extends State<FindWork>{
   Widget build(BuildContext context) {
     return SafeArea(
       child: WebView(
-        initialUrl: "https://job.zhinanche.com/mobile/#/baseInfo",
+        initialUrl: "http://job.zhinanche.com/mobile/#/baseInfo",
         //JS执行模式 是否允许JS执行
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (controller) {
           _controller = controller;
+        },
+        navigationDelegate: (NavigationRequest request) {
+          print("url is ${request.url}");
+          // 判断URL
+          if (request.url.startsWith('https://www.baidu.com')) {
+            // 做一些事情
+            // 阻止进入登录页面
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
         },
 //        加载完成的回调
         onPageFinished: (url) {

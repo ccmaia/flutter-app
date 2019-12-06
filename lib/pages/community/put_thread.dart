@@ -5,9 +5,11 @@ import 'package:video_player/video_player.dart';
 import '../../public/public_select_input.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:photo_view/photo_view.dart';
 import '../../service/service_method.dart';
 import '../../public/ToastUtil.dart';
-import './play_video.dart';
+import '../../public//play_video.dart';
+import '../../public/photo_view.dart';
 
 class PutThread extends StatefulWidget {
   String groups;
@@ -20,7 +22,7 @@ class PutThread extends StatefulWidget {
 
 class _PutThreadState extends State<PutThread> {
   String tag = "0";
-  List mediaList = ["http://a-image-demo.oss-cn-qingdao.aliyuncs.com/demo.mp4","", ""];
+  List mediaList = ["http://a-image-demo.oss-cn-qingdao.aliyuncs.com/demo.mp4","http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4","https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=239239410,1444805449&fm=15&gp=0.jpg","https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3043523035,3452980811&fm=15&gp=0.jpg","", ""];
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
   VideoPlayerController controller;
@@ -131,7 +133,6 @@ class _PutThreadState extends State<PutThread> {
   }
 
   Widget buildItem(index) {
-    print(index);
     if (index == mediaList.length - 2) {
       return Container(
         decoration: BoxDecoration(
@@ -180,14 +181,32 @@ class _PutThreadState extends State<PutThread> {
       );
     } else {
       if (mediaList[index].toString().contains("jpg")) {
-        return Container(
-            child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.elliptical(5, 5)),
-          child: Image.network(
-            mediaList[index],
-            fit: BoxFit.fill,
-          ),
-        ));
+        return InkWell(
+          child: Container(
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.elliptical(5, 5)),
+                child: Image.network(
+                  mediaList[index],
+                  fit: BoxFit.fill,
+                ),
+              )),
+          onTap: (){
+            List imgList = [];
+            mediaList.forEach((item){
+              if(item.toString().contains("jpg")){
+                imgList.add(item);
+              }
+            });
+            final i = imgList.indexOf(mediaList[index]);
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context)=>new PhotoViewGalleryScreen(
+                images: imgList,
+                index: i,
+                heroTag: mediaList[index],
+              )
+            ));
+          },
+        );
       }  else {
         return InkWell(
           onTap: (){
@@ -211,7 +230,11 @@ class _PutThreadState extends State<PutThread> {
     }
   }
 
-  //  上传图片
+  void _jumpToGallery(index, list) {
+    
+  }
+
+    //  上传图片
   Future getImage() async {
     try {
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);

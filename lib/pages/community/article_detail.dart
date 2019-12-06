@@ -20,164 +20,230 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
         ),
         centerTitle: true,
       ),
-      body: ListView(
+      body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(ScreenUtil().setSp(28.0)),
-            child: Column(
+          //帖子正文
+          Expanded(
+            child: ListView(
               children: <Widget>[
-                //标题
-                Text(
-                  '机器人第一次上电开机报警50296, SMB内存数据差异”怎么办? ',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(34.0),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                //浏览和回帖
                 Container(
-                  padding: EdgeInsets.only(
-                      top: ScreenUtil().setSp(15.0),
-                      bottom: ScreenUtil().setHeight(20.0)),
-                  child: Row(
+                  padding: EdgeInsets.all(ScreenUtil().setSp(28.0)),
+                  child: Column(
                     children: <Widget>[
+                      //标题
                       Text(
-                        "123",
+                        '机器人第一次上电开机报警50296, SMB内存数据差异”怎么办? ',
                         style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
+                          fontSize: ScreenUtil().setSp(34.0),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      Text(
-                        "浏览  ·  ",
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
+                      //浏览和回帖
+                      Container(
+                        padding: EdgeInsets.only(
+                            top: ScreenUtil().setSp(15.0),
+                            bottom: ScreenUtil().setHeight(20.0)),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "123",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "浏览  ·  ",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "12",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "回帖  ·  ",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "20",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "点赞",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "12",
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
-                      ),
-                      Text(
-                        "回帖",
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
 
 //
-                Row(
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/image/hd.png',
-//                      fit: BoxFit.none,
-                      width: ScreenUtil().setWidth(64.0),
-                      height: ScreenUtil().setHeight(64.0),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: ScreenUtil().setSp(30.0)),
-                      child: Column(
+                      Row(
                         children: <Widget>[
-                          Text(
-                            "指南车",
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setSp(28.0),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                          Image.asset(
+                            'assets/image/hd.png',
+//                      fit: BoxFit.none,
+                            width: ScreenUtil().setWidth(64.0),
+                            height: ScreenUtil().setHeight(64.0),
                           ),
-                          Text(
-                            "楼主",
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setSp(28.0),
-                                color: Colors.grey[600]),
+                          Container(
+                            padding:
+                                EdgeInsets.only(left: ScreenUtil().setSp(30.0)),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  "指南车",
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(28.0),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  "楼主",
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(28.0),
+                                      color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
 //                帖子正文
-                Container(
-                  padding: EdgeInsets.only(
-                      top: ScreenUtil().setSp(25.0),
-                      bottom: ScreenUtil().setSp(15.0)),
-                  child: Text(
-                      '机器人第一次上电开机报警50296,  SMB内存数据差异”怎么办? SMB内存数据差异”怎么办? SMB内存数据差异”怎么办?SMB内存数据差异”怎么办?'),
-                ),
+                      Container(
+                        padding: EdgeInsets.only(
+                            top: ScreenUtil().setSp(25.0),
+                            bottom: ScreenUtil().setSp(15.0)),
+                        child: Text(
+                            '机器人第一次上电开机报警50296,  SMB内存数据差异”怎么办? SMB内存数据差异”怎么办? SMB内存数据差异”怎么办?SMB内存数据差异”怎么办?'),
+                      ),
 //             帖子图片
-                Container(
-                  height: ScreenUtil().setSp(200.0),
-                  child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: ScreenUtil().setSp(15.0),
-                        crossAxisSpacing: ScreenUtil().setSp(15.0),
-                        childAspectRatio: 1),
-                    children: <Widget>[
-                      Image.asset(
-                        'assets/image/threabg.png',
-                        fit: BoxFit.cover,
-                        width: ScreenUtil().setWidth(64.0),
-                        height: ScreenUtil().setHeight(64.0),
+                      Container(
+                        height: ScreenUtil().setHeight(212.0),
+                        child: GridView(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: ScreenUtil().setSp(15.0),
+                                  crossAxisSpacing: ScreenUtil().setSp(15.0),
+                                  childAspectRatio: 1),
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/image/threabg.png',
+                              fit: BoxFit.cover,
+                              width: ScreenUtil().setWidth(64.0),
+                              height: ScreenUtil().setHeight(64.0),
+                            ),
+                            Image.asset(
+                              'assets/image/threabg.png',
+                              fit: BoxFit.cover,
+                              width: ScreenUtil().setWidth(64.0),
+                              height: ScreenUtil().setHeight(64.0),
+                            ),
+                            Image.asset(
+                              'assets/image/threabg.png',
+                              fit: BoxFit.cover,
+                              width: ScreenUtil().setWidth(64.0),
+                              height: ScreenUtil().setHeight(64.0),
+                            ),
+                          ],
+                        ),
                       ),
-                      Image.asset(
-                        'assets/image/threabg.png',
-                        fit: BoxFit.cover,
-                        width: ScreenUtil().setWidth(64.0),
-                        height: ScreenUtil().setHeight(64.0),
-                      ),
-                      Image.asset(
-                        'assets/image/threabg.png',
-                        fit: BoxFit.cover,
-                        width: ScreenUtil().setWidth(64.0),
-                        height: ScreenUtil().setHeight(64.0),
+                      //    帖子标记，暂时不做
+                      Container(
+                        padding: EdgeInsets.only(
+                            top: ScreenUtil().setSp(15.0),
+                            bottom: ScreenUtil().setHeight(5.0)),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "帖子标记：",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "PLC",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                            Text(
+                              "  机器人",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                //    帖子标记，暂时不做
                 Container(
-                  padding: EdgeInsets.only(
-                      top: ScreenUtil().setSp(15.0),
-                      bottom: ScreenUtil().setHeight(5.0)),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "帖子标记：",
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
-                      ),
-                      Text(
-                        "PLC",
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
-                      ),
-                      Text(
-                        "  机器人",
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24.0),
-                            color: Colors.grey[600]),
-                      ),
-                    ],
+                  width: ScreenUtil().setWidth(750),
+                  height: 10.0,
+                  color: Color.fromRGBO(238, 238, 238, 1),
+                ),
+//          回复内容框
+                ReplyView(),
+                ReplyView(),
+              ],
+            ),
+          ),
+          //底部回复框架
+          Divider(
+            height: ScreenUtil().setSp(1.0),
+            color: Colors.grey[300],
+
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(
+              ScreenUtil().setSp(20.0),
+              ScreenUtil().setSp(15.0),
+              ScreenUtil().setSp(0.0),
+              ScreenUtil().setSp(15.0),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: (TextField(
+
+                    decoration:InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100),
+                          borderSide: BorderSide.none),
+                      fillColor: Colors.grey[150],
+                      filled: true,
+                      contentPadding: EdgeInsets.all(ScreenUtil().setSp(12.0)),
+                      hintText: '写评论...',
+//                      border: InputBorder.none,
+                    ),
+                  )),
+                ),
+                InkWell(
+                  onTap: (){},
+                  child: Padding(
+                    padding: EdgeInsets.only(left: ScreenUtil().setSp(55.0),
+                    right: ScreenUtil().setSp((45.0))),
+                    child: Icon(
+                      Icons.thumb_up,
+                      color: Colors.pinkAccent,
+                      size: 18.0,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          Container(
-            width: ScreenUtil().setWidth(750),
-            height: 10.0,
-            color: Color.fromRGBO(238, 238, 238, 1),
-          ),
-//          回复内容框
-          ReplyView(),
-          ReplyView(),
         ],
       ),
     );

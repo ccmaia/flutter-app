@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:chewie/chewie.dart';
+import 'package:flutter/cupertino.dart';
+
+///播放视频
+
 class VideoAutoPlayWhenReady extends StatefulWidget {
   String url;
+
   VideoAutoPlayWhenReady(this.url);
+
   @override
   State<StatefulWidget> createState() {
     return _VideoState();
@@ -12,12 +19,20 @@ class VideoAutoPlayWhenReady extends StatefulWidget {
 
 class _VideoState extends State<VideoAutoPlayWhenReady> {
   VideoPlayerController controller;
+  ChewieController chewieController;
   bool _isInit = false;
+
   @override
   void initState() {
     super.initState();
     print("url is ${widget.url}");
-    controller=VideoPlayerController.network(widget.url);
+    controller = VideoPlayerController.network(widget.url);
+    chewieController = ChewieController(
+        videoPlayerController: controller,
+        aspectRatio: 3 / 2,
+        autoInitialize: true,
+        autoPlay: true,
+        looping: true);
     controller.setLooping(true);
     controller.setVolume(0.0);
     controller.addListener(() {
@@ -26,10 +41,9 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
       }
     });
     controller.play();
-    controller.initialize().then((value){
+    controller.initialize().then((value) {
       setState(() {
         _isInit = controller.value.initialized;
-
       });
     });
   }
@@ -37,14 +51,16 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
   @override
   void dispose() {
     controller.dispose();
+    chewieController.dispose();
     super.dispose();
   }
+
   ///创建播放中的视频界面
-  Widget _buildPlayingWidget(){
+  Widget _buildPlayingWidget() {
     return AspectRatio(
         aspectRatio: 3 / 2,
-        child:  GestureDetector(
-          onTap: (){
+        child: GestureDetector(
+          onTap: () {
             if (controller.value.isPlaying) {
               controller.pause();
             } else {
@@ -56,7 +72,7 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
   }
 
   ///视频正在加载的界面
-  Widget _buildInitingWidget(){
+  Widget _buildInitingWidget() {
     return AspectRatio(
       aspectRatio: 3 / 2,
       child: Stack(
@@ -73,15 +89,24 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('视频播放'),
+        title: const Text('点击视频可暂停和播放'),
       ),
-      body:  Center(
-          child:
-          _isInit
-              ? _buildPlayingWidget()
-              :_buildInitingWidget()
-      ),
-    );
+      body: Center(
+          child: _isInit
+              ?  new Chewie(controller: chewieController,)
+              : _buildInitingWidget()),
+      //            new Chewie(controller: chewieController,)    _buildPlayingWidget()
 
+//      floatingActionButton: FloatingActionButton(
+//        onPressed: () {
+//          setState(() {
+//            controller.value.isPlaying ? controller.pause() : controller.play();
+//          });
+//        },
+//        child: Icon(
+//          controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+//        ),
+//      ),
+    );
   }
 }

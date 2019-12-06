@@ -14,7 +14,9 @@ import '../pages/user/update.dart';
 import '../pages/community/choose_thread_type.dart';
 import '../pages/community/put_thread.dart';
 import '../pages/community/article_detail.dart';
-import '../pages/community/play_video.dart';
+import '../pages/community/personal_center.dart';
+import '../pages/community/my_article.dart';
+import '../pages/community/my_reply.dart';
 
 Handler AboutUsPageHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -88,5 +90,20 @@ Handler putthreadPageHanderl =Handler(
 Handler articleDetailHanderl =Handler(
     handlerFunc: (BuildContext context,Map<String,List<String>> params){
       return ArticleDetailPage();
+    }
+);
+Handler personalCenterHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return PersonalCenterPage();
+    }
+);
+Handler myArticlePageHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return MyArticlePage();
+    }
+);
+Handler myReplyPageHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return MyReplyPage();
     }
 );
