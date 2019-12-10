@@ -95,11 +95,12 @@ class TextFieldItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Text(title,
-                style: TextStyle(fontSize: 16.0, color: Color(0xFF5C6784))),
+                style: TextStyle(fontSize: 16.0, color: Color(0xFF5C6784),)),
           ),
           Expanded(
             flex: 1,
             child: TextField(
+                textAlign: TextAlign.right,
                 focusNode: focusNode,
                 keyboardType: keyboardType,
                 inputFormatters: _getInputFormatters(),
@@ -112,10 +113,16 @@ class TextFieldItem extends StatelessWidget {
                   //hintStyle: TextStyles.textGrayC14
                 )),
           ),
-          Image.asset(
-            "assets/image/go_last.png",
-            width: 10.0,
-            height: 15.0,
+          Container(
+            margin: EdgeInsets.only(
+              left: 10.0,
+            ),
+            child:
+            Image.asset(
+              "assets/image/go_last.png",
+              width: 10.0,
+              height: 15.0,
+            ),
           )
         ],
       ),

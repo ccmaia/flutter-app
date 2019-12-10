@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 ///播放视频
 
@@ -32,7 +32,7 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
         aspectRatio: 3 / 2,
         autoInitialize: true,
         autoPlay: true,
-        looping: true);
+        looping: false);
     controller.setLooping(true);
     controller.setVolume(0.0);
     controller.addListener(() {
@@ -78,7 +78,9 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
       child: Stack(
         children: <Widget>[
           VideoPlayer(controller),
-          const Center(child: CircularProgressIndicator()),
+          const Center(
+              child: CircularProgressIndicator()
+          ),
         ],
         fit: StackFit.expand,
       ),
@@ -89,7 +91,7 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('点击视频可暂停和播放'),
+        title: const Text('播放视频'),
       ),
       body: Center(
           child: _isInit

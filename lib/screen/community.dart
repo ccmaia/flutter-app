@@ -1,11 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
+import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import '../public/base.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../routers/application.dart'; //路由
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../service/service_method.dart';
 
 class Community extends StatefulWidget {
@@ -13,9 +17,7 @@ class Community extends StatefulWidget {
 }
 
 class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
-
-//  GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
-
+  ScrollController _controller = new ScrollController();
 
   int _page = 1;
   List<Map> threadList = [
@@ -80,11 +82,21 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true; //保持页面状态不刷新
 
-
   @override
   void initState() {
     super.initState();
     print('页面初始化------');
+    getCommunityList();
+    _controller.addListener(() {
+      print(_controller.offset);
+    });
+  }
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用_controller.dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -99,20 +111,24 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
-        body: SafeArea(
+        appBar: AppBar(
+          title: searchWidgrt(),
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          elevation: 1.0,
+        ),
+        body: Scrollbar(
           child: Column(
             children: <Widget>[
-              searchWidgrt(),
               Container(
                 color: Colors.white,
-                child: FutureBuilder(
+                child: _page>1?Text(""):FutureBuilder(
                   future: getBannerInfo(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       var data = snapshot.data['data']['list'];
                       List<Map> swiperDataList =
-                          (data as List).cast(); // 顶部轮播组件数
+                      (data as List).cast(); // 顶部轮播组件数
                       return Column(
                         children: <Widget>[
                           SwiperDiy(swiperDataList: swiperDataList), //页面顶部轮播组件
@@ -122,7 +138,16 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                       return Container(
                           height: ScreenUtil().setHeight(245.0),
                           child: Center(
-                            child: Text('loding'),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                SpinKitCircle(
+                                  color: Colors.blueAccent,
+                                  size: 30.0,
+                                ),
+                                Text('正在加载')
+                              ],
+                            ),
                           ));
                     }
                   },
@@ -130,23 +155,27 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
               ),
               Expanded(
                 flex: 1,
-                child: Container(
-                    padding:
-                        EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                    child: EasyRefresh(
-                        onRefresh: _refreshData,
-                        onLoad: _addMoreData,
-                        child: StaggeredGridView.countBuilder(
-                          itemCount: threadList.length,
-                          primary: false,
-                          crossAxisCount: 4,
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
-                          itemBuilder: (context, index) => Container(
-                            child: threadWrap(threadList[index]),
-                          ),
-                          staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-                        ))),
+                child:
+                Container(
+                      padding: EdgeInsets.only(
+                          left: 10.0, right: 10.0, bottom: 10.0),
+                      child: EasyRefresh(
+                          header: BallPulseHeader(),
+                          footer: BallPulseFooter(),
+                          onRefresh: _refreshData,
+                          onLoad: _addMoreData,
+                          child: StaggeredGridView.countBuilder(
+                            itemCount: threadList.length,
+                            primary: false,
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 10.0,
+                            itemBuilder: (context, index) => Container(
+                              child: threadWrap(threadList[index]),
+                            ),
+                            staggeredTileBuilder: (index) =>
+                                StaggeredTile.fit(2),
+                          ))),
               )
             ],
           ),
@@ -155,12 +184,13 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
   getBannerInfo() {
 //    getNet("getbannerList").then((res){
-//      print(res);
+////      print('banner is ${res}');
 //    });
   }
 
 //  上拉刷新数据
   Future<Null> _refreshData() async {
+    getCommunityList();
     _page = 1;
     setState(() {
       threadList = [
@@ -170,12 +200,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "1",
           "tag": [],
           "image":
-          "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
+              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
           "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
           "userName": "张三三"
         },
         {
@@ -184,12 +214,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "2",
           "tag": ["问答", "ABB"],
           "image":
-          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
+              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
           "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
           "userName": "张三三"
         },
         {
@@ -198,12 +228,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "1",
           "tag": [],
           "image":
-          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
+              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
           "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
           "userName": "张三三"
         },
         {
@@ -212,17 +242,16 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           "groups": "2",
           "tag": ["兼职"],
           "image":
-          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
+              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
           "data": "",
           "like_count": "32",
           "replay_count": "25",
           "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
+              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
           "userName": "张三三"
         },
       ];
     });
-    print("刷新");
   }
 
   //下拉加载更多
@@ -319,68 +348,91 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
     print(_page);
   }
 
+
+//  Future getCommunityList() async{
+//    try{
+//      Response response;
+//      var data={'_b':1,'_e':10};
+//      response = await Dio().get(
+//          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
+//          queryParameters:data
+//      );
+//      print(response.data);
+//      return response.data;
+//    }catch(e){
+//      return print(e);
+//    }
+//  }
   void getCommunityList() {
-    getNet("getthreadList").then((res) {
-      print(res);
+    var data={'_b':1,'_e':10};
+    getNet("getthreadList",data: {data}).then((res) {
+      print("帖子${res}");
     });
   }
 
   //顶部搜索widget
   Widget searchWidgrt() {
-    return new Container(
-      padding: EdgeInsets.fromLTRB(10.0,10.0,0,10.0),
-      height: ScreenUtil().setHeight(120.0),
-      decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-          borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
-          color: Colors.white),
-      child: new Row(
-        children: <Widget>[
-          new Expanded(
-              child: Container(
-                  decoration: new BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.all(const Radius.circular(5.0)),
-                    color: GlobalConfig.searchBackgroundColor,
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      print('search');
-                      Application.router.navigateTo(context, '/searchPage');
-                    },
-                    child: Container(
-                      height: 36.0,
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Image.asset(
-                            "assets/image/search.png",
-                            width: 22.0,
-                            height: 20.0,
+    return Row(
+//        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            //修饰黑色背景与圆角
+            decoration: new BoxDecoration(
+//          border: Border.all(color: Colors.grey, width: 1.0), //灰色的一层边框
+              color: Color(0xFFEEEEEE),
+              borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+            ),
+            alignment: Alignment.center,
+            height: 36,
+            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+            child: Container(
+                decoration: new BoxDecoration(
+                  borderRadius:
+                      const BorderRadius.all(const Radius.circular(5.0)),
+                  color: GlobalConfig.searchBackgroundColor,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    print('search');
+                    Application.router.navigateTo(context, '/searchPage');
+                  },
+                  child: Container(
+                    height: 36.0,
+                    padding: EdgeInsets.only(left: 5.0),
+//                    padding: EdgeInsets.only(left: 5.0),
+                    child: Row(
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/image/search.png",
+                          width: 22.0,
+                          height: 20.0,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text(
+                            '请输入您想搜索的内容',
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 14),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: Text(
-                              '请输入您想搜索的内容',
-                              style: TextStyle(color: Colors.black54),
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  ))),
-          new Container(
-//              width: 45.0,
-              child: IconButton(
-                onPressed: () {
-                  Application.router.navigateTo(context, '/personalCenterPage');
-                },
-                icon: Image.asset('assets/image/user.png',
-                    height: 36.0,),
-                color: Colors.black54,
-              ))
-        ],
-      ),
+                  ),
+                )),
+          ),
+        ),
+        Container(
+            margin: EdgeInsets.only(left: 20.0),
+            child: InkWell(
+              onTap: () {
+                Application.router.navigateTo(context, '/personalCenterPage');
+              },
+              child: Image.asset(
+                'assets/image/user.png',width: 24,
+              ),
+            ))
+      ],
     );
   }
 
@@ -395,9 +447,10 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           width: ScreenUtil().setWidth(335),
 //          margin: EdgeInsets.only(bottom: 10.0),
           decoration: BoxDecoration(
-              border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
-              color: Colors.white,),
+            border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.white,
+          ),
           child: Column(
             children: <Widget>[
               ClipRRect(
@@ -475,15 +528,18 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
       );
     } else {
       return InkWell(
-        onTap: () {},
+        onTap: () {
+          Application.router.navigateTo(context, '/articleDetailPage');
+        },
         child: Container(
           width: ScreenUtil().setWidth(335),
 //          margin: EdgeInsets.only(bottom: 10.0),
           padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
           decoration: BoxDecoration(
-              border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white,),
+            border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.white,
+          ),
           child: Column(
             children: <Widget>[
               Row(
@@ -551,6 +607,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   }
 }
 
+//轮播tu
 class SwiperDiy extends StatelessWidget {
   final List swiperDataList;
 

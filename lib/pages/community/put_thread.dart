@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_test/routers/application.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 import '../../public/public_select_input.dart';
 import 'dart:io';
@@ -21,33 +22,40 @@ class PutThread extends StatefulWidget {
 }
 
 class _PutThreadState extends State<PutThread> {
-  String tag = "0";
-  List mediaList = ["http://a-image-demo.oss-cn-qingdao.aliyuncs.com/demo.mp4","http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4","https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=239239410,1444805449&fm=15&gp=0.jpg","https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3043523035,3452980811&fm=15&gp=0.jpg","", ""];
+  String plate = "";
+  List mediaList = [
+    "http://a-image-demo.oss-cn-qingdao.aliyuncs.com/demo.mp4",
+    "http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4",
+    "https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=239239410,1444805449&fm=15&gp=0.jpg",
+    "https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3043523035,3452980811&fm=15&gp=0.jpg",
+    "",
+    ""
+  ];
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
   VideoPlayerController controller;
+  List plateList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-//    widgetsBinding=WidgetsBinding.instance;
-//    widgetsBinding.addPostFrameCallback((callback){
-//      print("addPostFrameCallback be invoke");
-//    });
+    getNet("getThreadPlate").then((res){
+      print("板块是${res}");
+      plateList = res['data'];
+      print(plateList);
+    });
     mediaList.map((item) {});
   }
 
-//  Future getImage async{
-//  String thumb = await Thumbnails.getThumbnail(thumbnailFolder:'[FOLDER PATH TO STORE THUMBNAILS]'
-//// creates the specified path if it doesnt exist videoFile: '[VIDEO PATH HERE]', imageType: ThumbFormat.PNG, quality: 30);
-//  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.groups == "1" ? "发布帖子" : "发布问题"),
+        elevation: 1.0,
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: <Widget>[
@@ -55,11 +63,7 @@ class _PutThreadState extends State<PutThread> {
             color: Colors.white,
             child: StoreSelectTextItem(
                 title: "请选择类型",
-                content: tag == "0"
-                    ? ""
-                    : tag == "1"
-                        ? "ABB"
-                        : tag == "2" ? "西门子" : tag == "3" ? "库卡" : "安川",
+                content: plate==""?"":plate=='204'?'Abb':'发那科',
                 onTap: () {
                   _showBottomSheet();
                 }),
@@ -82,7 +86,9 @@ class _PutThreadState extends State<PutThread> {
                     decoration: InputDecoration(
                         labelText: "请输入你的描述",
                         border: OutlineInputBorder(),
-                        fillColor: Color(0xFFEBEBEB)),
+                        fillColor: Color(0xFFEBEBEB),
+                      focusColor: Colors.grey
+                    ),
                     controller: content,
                   ),
                   SizedBox(height: 20),
@@ -181,60 +187,104 @@ class _PutThreadState extends State<PutThread> {
       );
     } else {
       if (mediaList[index].toString().contains("jpg")) {
-        return InkWell(
-          child: Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.elliptical(5, 5)),
-                child: Image.network(
-                  mediaList[index],
-                  fit: BoxFit.fill,
+        return Stack(
+          children: <Widget>[
+            InkWell(
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    image: DecorationImage(
+                        image: NetworkImage(mediaList[index]),
+                        fit: BoxFit.fill)),
+              ),
+              onTap: () {
+                List imgList = [];
+                mediaList.forEach((item) {
+                  if (item.toString().contains("jpg")) {
+                    imgList.add(item);
+                  }
+                });
+                final i = imgList.indexOf(mediaList[index]);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => new PhotoViewGalleryScreen(
+                              images: imgList,
+                              index: i,
+                              heroTag: mediaList[index],
+                            )));
+              },
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: InkWell(
+                onTap: () {
+                  print('1');
+                  setState(() {
+                    mediaList.removeAt(index);
+                  });
+                },
+                child: Icon(
+                  Icons.highlight_off,
+                  color: Colors.grey,
+//                  size: 30,
+                ),
+              ),
+            )
+          ],
+        );
+      } else {
+        return Stack(
+          overflow: Overflow.visible,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          "${mediaList[index]}?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast"),
+                      fit: BoxFit.fill)),
+              child: Center(
+                  child: InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return VideoAutoPlayWhenReady(mediaList[index]);
+                  }));
+                },
+                child: Icon(
+                  Icons.play_circle_outline,
+                  color: Colors.grey,
+                  size: 35,
                 ),
               )),
-          onTap: (){
-            List imgList = [];
-            mediaList.forEach((item){
-              if(item.toString().contains("jpg")){
-                imgList.add(item);
-              }
-            });
-            final i = imgList.indexOf(mediaList[index]);
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context)=>new PhotoViewGalleryScreen(
-                images: imgList,
-                index: i,
-                heroTag: mediaList[index],
-              )
-            ));
-          },
-        );
-      }  else {
-        return InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-              return VideoAutoPlayWhenReady(mediaList[index]);
-            }));
-          },
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                image: DecorationImage(
-                    image: NetworkImage("${mediaList[index]}?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast"),
-                    fit: BoxFit.fill
-                )
             ),
-            child:  Center(
-              child: Icon(Icons.play_circle_outline ,color: Colors.grey,size: 35,),
-            ),),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: InkWell(
+                onTap: () {
+                  print('1');
+                  setState(() {
+                    mediaList.removeAt(index);
+                  });
+                },
+                child: Icon(
+                  Icons.highlight_off,
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          ],
         );
       }
     }
   }
 
-  void _jumpToGallery(index, list) {
-    
-  }
+  void _jumpToGallery(index, list) {}
 
-    //  上传图片
+  //  上传图片
   Future getImage() async {
     try {
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -285,68 +335,81 @@ class _PutThreadState extends State<PutThread> {
 
 //  发布
   void _saveThread() {
-
     if (title.text.isEmpty || content.text.isEmpty) {
       Toast.show("请填写标题和内容");
     } else {
-      FormData formData = new FormData.from({
-        "title": title,
-        "desc": content,
-        "groups": widget.groups,
-        "tag": "",
-        "image": "",
-        "video": ""
+      List image = [];
+      List video = [];
+      mediaList.forEach((item){
+        if(item!=''){
+          if (item.toString().contains("mp4")) {
+            video.add(item);
+          }else{
+            image.add(item);
+          }
+        }
       });
-//      postNet('upLoadThread')
+      FormData formData = new FormData.from({
+        "title": title.text,
+        "describe": content.text,
+        "groups": widget.groups,
+        "plate":plate,
+        "image": image.length>0?image.join(','):'',
+        "video": video.length>0?video.join(','):'',
+      });
+      print(formData.toString());
+//      getHttp(formData);
+//      return;
+      postNet('upLoadThread',formData: formData).then((res){
+        if(res['result']==1){
+          Toast.show('发布成功');
+        }
+        print(res);
+      });
+      print(formData);
     }
-    print(title.text.isEmpty);
   }
 
-  List tagList = [
-    {
-      "id": "1",
-      "tag": "ABB",
-    },
-    {
-      "id": "2",
-      "tag": "西门子",
-    },
-    {
-      "id": "3",
-      "tag": "库卡",
-    },
-    {
-      "id": "4",
-      "tag": "安川",
-    },
-  ];
+//  Future getHttp(data) async{
+//    try{
+//      Response response;
+//      Dio dio = Dio();
+//      dio.options.headers['token'] = "D1772DBCF683C7553F6C35C8866B8DF95954375639B539412461B66077555F5FFBFB7CC9CDDC89E02FCEB01DF3043846";
+//      response = await dio.post(
+//          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
+//          queryParameters:data
+//      );
+//      return response.data;
+//    }catch(e){
+//      return print(e);
+//    }
+//  }
 
   void _showBottomSheet() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return SizedBox(
-            height: 300,
+          return Container(
+            height: 200,
             child: ListView.builder(
               key: const Key('tag'),
-              itemExtent: 48.0,
+              itemExtent: 46.0,
               itemBuilder: (_, index) {
                 return InkWell(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     alignment: Alignment.centerLeft,
-                    child: Text(tagList[index]["tag"]),
+                    child: Text(plateList[index]["name"]),
                   ),
                   onTap: () {
                     setState(() {
-                      tag = tagList[index]["id"];
+                      plate = plateList[index]["id"].toString();
                     });
-//                NavigatorUtils.goBack(context);
                     Navigator.pop(context);
                   },
                 );
               },
-              itemCount: tagList.length,
+              itemCount: plateList.length,
             ),
           );
         });

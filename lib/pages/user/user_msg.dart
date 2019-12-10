@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../public/public_select_input.dart';
 import '../../service/service_method.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class UserMsgPage extends StatefulWidget {
   Map userMsg;
@@ -23,6 +24,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
   String phone;
   String name;
   int sex;
+  bool img = false;
 
   TextEditingController userName = TextEditingController();
   TextEditingController userPhone = TextEditingController();
@@ -31,7 +33,6 @@ class _UserMsgPageState extends State<UserMsgPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
 
     setState(() {
       header_img = widget.userMsg['header_img'];
@@ -44,6 +45,9 @@ class _UserMsgPageState extends State<UserMsgPage> {
   //  上传图片
   Future getImage() async {
     try {
+      setState(() {
+        img = true;
+      });
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
       String path = image.path;
       var fileName = DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
@@ -58,6 +62,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
 //          Toast.show("")
           setState(() {
             header_img = res['data'].toString();
+            img = false;
           });
         }
       });
@@ -66,7 +71,6 @@ class _UserMsgPageState extends State<UserMsgPage> {
       Toast.show("没有权限，无法打开相册！");
     }
   }
-
 
   String _sortName = "";
   var sexList = ["男", "女"];
@@ -99,36 +103,40 @@ class _UserMsgPageState extends State<UserMsgPage> {
                             fontSize: 16.0, color: Color(0xFF5C6784))),
                   ),
                   InkWell(
-                    child: header_img == null
-                        ? Image.asset(
-                            'assets/image/not_login.png',
-                            width: 50,
+                    child: Container(
+                      width: 50,
                       height: 50,
-                          )
-                        : Image.network(
-                      header_img,
-                            width: 50, height: 50,
-                          ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                          image: DecorationImage(
+                              image: header_img == null
+                                  ? AssetImage("assets/image/not_login.png")
+                                  : NetworkImage(
+                                      header_img,
+                                    ),
+                              fit: BoxFit.cover)),
+                      child: !img?Text(''):SpinKitCircle(color: Colors.blueAccent, size: 30.0,),
+                    ),
+
                     onTap: getImage,
                   )
                 ],
               ),
             ),
             TextFieldItem(
-              focusNode: FocusNode(),
-              title: "昵称",
-              controller: userName,
-                hintText:name
-            ),
+                focusNode: FocusNode(),
+                title: "昵称",
+                controller: userName,
+                hintText: name),
             StoreSelectTextItem(
                 title: "性别",
-                content: sex==1?'女':'男',
+                content: sex == 1 ? '女' : '男',
                 onTap: () {
                   _showBottomSheet();
                 }),
             InkWell(
               onTap: () {
-                  Application.router.navigateTo(context, "/choosePhonePage");
+                Application.router.navigateTo(context, "/choosePhonePage");
               },
               child: Container(
                 height: 65.0,
@@ -153,7 +161,6 @@ class _UserMsgPageState extends State<UserMsgPage> {
                                 style: TextStyle(
                                     fontSize: 16.0, color: Color(0xFF5C6784))),
                             Container(
-
                               margin: const EdgeInsets.only(
                                 left: 10.0,
                               ),
@@ -190,7 +197,8 @@ class _UserMsgPageState extends State<UserMsgPage> {
               onTap: () {
                 print(widget.userMsg['phone'].toString());
 //                return;
-                Application.router.navigateTo(context, "/choosePassPage?phone=${Uri.encodeComponent(widget.userMsg["phone"].toString())}");
+                Application.router.navigateTo(context,
+                    "/choosePassPage?phone=${Uri.encodeComponent(widget.userMsg["phone"].toString())}");
               },
               child: Container(
                 height: 65.0,
@@ -202,7 +210,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
                 decoration: BoxDecoration(
                     border: Border(
                         bottom:
-                        BorderSide(width: 1, color: Color(0xFFE5E5E5)))),
+                            BorderSide(width: 1, color: Color(0xFFE5E5E5)))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -240,116 +248,82 @@ class _UserMsgPageState extends State<UserMsgPage> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 50.0),
-              child: Container(
-                width: 220,
-                height: 45,
+              child:Center(
+                child: Container(
+                  width: 225,
+                  height: 45,
 //                margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF36A4F2), Color(0xFF2A5CF6)]),
-                ),
-                child: RaisedButton(
-                    color: Colors.transparent,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFF36A4F2), Color(0xFF2A5CF6)]),
+                  ),
+                  child: RaisedButton(
+                      color: Colors.transparent,
 //                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
-                    child: Text("保存信息",
-                        style: TextStyle(fontSize: 20)),
-                    textColor: Colors.white,
-                    elevation: 0.0,
-                    highlightElevation: 0.0,
-                    onPressed: _chooseMsg),
+                      child: Text("保存信息", style: TextStyle(fontSize: 20)),
+                      textColor: Colors.white,
+                      elevation: 0.0,
+                      highlightElevation: 0.0,
+                      onPressed: _chooseMsg),
 //                    alignment: Alignment.center,
-              ),
+                ),
+              )
             )
           ],
         ));
   }
-  void _chooseMsg(){
+
+  void _chooseMsg() {
     print("name is ${userName.text},Sex is ${sex}，header_img is ${header_img}");
-    if(userName.text.length>0){
+    if (userName.text.length > 0) {
       name = userName.text;
-    };
-    if(name==null){
+    }
+    ;
+    if (name == null) {
       Toast.show("请填写昵称");
-    }else{
-      FormData formData = new FormData.from({
-        "name":name,
-        "sex":sex,
-        "head_img":header_img
-      });
-      putNet("chooseUserMsg",formData: formData).then((res){
-        if(res["result"]==1){
+    } else {
+      FormData formData =
+          new FormData.from({"name": name, "sex": sex, "head_img": header_img});
+      putNet("chooseUserMsg", formData: formData).then((res) {
+        if (res["result"] == 1) {
           Toast.show('修改成功');
           Navigator.pop(context);
         }
       });
     }
   }
+
   void _showBottomSheet() {
-    showModalBottomSheet(context: context, builder: (BuildContext context){
-      return SizedBox(
-        height: 100,
-        child: ListView.builder(
-          key: const Key('sex'),
-          itemExtent: 48.0,
-          itemBuilder: (_, index){
-            return InkWell(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                alignment: Alignment.centerLeft,
-                child: Text(sexList[index]),
-              ),
-              onTap: (){
-                setState(() {
-                  sex = index;
-                });
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 100,
+            child: ListView.builder(
+              key: const Key('sex'),
+              itemExtent: 48.0,
+              itemBuilder: (_, index) {
+                return InkWell(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    alignment: Alignment.centerLeft,
+                    child: Text(sexList[index]),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      sex = index;
+                    });
 //                NavigatorUtils.goBack(context);
-              Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                );
               },
-            );
-          },
-          itemCount: sexList.length,
-        ),
-      );
-    });
+              itemCount: sexList.length,
+            ),
+          );
+        });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../provider/base_list_provider.dart'; //状态管理器
 import 'package:shared_preferences/shared_preferences.dart';
 import '../service/http.dart';
-import '../service/api.dart';
+//import '../service/api.dart';
 import '../index-page.dart';
 import 'dart:convert';
 import '../service/service_method.dart';
@@ -82,8 +82,7 @@ class _MyPage extends State<MyPage> {
                 child: Container(
                   height: ScreenUtil().setHeight(117.0),
                   padding: EdgeInsets.only(left: ScreenUtil().setWidth(38.0)),
-                  child: Center(
-                    child: Row(
+                  child: Row(
                       children: <Widget>[
                         Container(
                           width: ScreenUtil().setWidth(120),
@@ -176,7 +175,7 @@ class _MyPage extends State<MyPage> {
                         ),
                       ],
                     ),
-                  ),
+
                 ),
               ),
               Positioned(
@@ -420,9 +419,20 @@ class _UserTopState extends State<UserTop> {
               Expanded(
                   child: InkWell(
                       onTap: () {
+                        print('aa');
                         if (widget.isLogin) {
-//                          Application.router.navigateTo(context,
-//                              '/userMsgPage?userMsg=${Uri.encodeComponent(widget.userMsg.toString())}');
+                          print('user');
+                          dynamic userDtat = {
+                            "id": widget.userMsg["id"],
+                            "header_img": widget.userMsg['head_img'],
+                            "name": widget.userMsg["name"],
+                            "sex": widget.userMsg['sex'],
+                            "phone": widget.userMsg['phone']
+                          };
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UserMsgPage(userDtat)));
                         } else {
                           print('jump');
                           Application.router.navigateTo(context, '/loginPage');

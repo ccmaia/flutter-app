@@ -16,11 +16,12 @@ class _ChoosePhoneState extends State<ChoosePhone> {
   TextEditingController code = new TextEditingController();
   TextEditingController surePass = new TextEditingController();
   TextEditingController oldPass = new TextEditingController();
-  GlobalKey _formKey = new GlobalKey<FormState>();
+  GlobalKey _formKeyPhone = new GlobalKey<FormState>();
 
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
     return Scaffold(
       body: Container(
         child: ListView(
@@ -56,7 +57,6 @@ class _ChoosePhoneState extends State<ChoosePhone> {
                           color: Colors.white,
                         ),
                         padding: EdgeInsets.all(20),
-//                    margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
                         width: ScreenUtil().setWidth(640),
                         child: forgetPass(),
                       ))
@@ -66,7 +66,7 @@ class _ChoosePhoneState extends State<ChoosePhone> {
 //            Stack(
 //              children: <Widget>[
 //                Container(
-//                  width: ScreenUtil().setWidth(750.0),
+//                  width: ScreenUtil().setWidth(720.0),
 //                  height: ScreenUtil().setHeight(402.0),
 //                  decoration: BoxDecoration(
 //                      image: DecorationImage(
@@ -79,8 +79,8 @@ class _ChoosePhoneState extends State<ChoosePhone> {
 //                    width: ScreenUtil().setWidth(334),
 //                    height: ScreenUtil().setHeight(61),
 //                  ),
-//                  top: ScreenUtil().setHeight(197),
-//                  left: ScreenUtil().setWidth(208),
+//                  top: ScreenUtil().setHeight(160),
+//                  left: ScreenUtil().setWidth(193),
 ////                left: 208,
 //                )
 //              ],
@@ -101,7 +101,7 @@ class _ChoosePhoneState extends State<ChoosePhone> {
 
   Widget  forgetPass(){
     return Form(
-        key: _formKey,
+        key: _formKeyPhone,
         autovalidate: true,
         child: Column(
           children: <Widget>[
@@ -187,7 +187,7 @@ class _ChoosePhoneState extends State<ChoosePhone> {
                         elevation: 0.0,
                         highlightElevation: 0.0,
                         onPressed: (){
-                          if ((_formKey.currentState as FormState).validate()) {
+                          if ((_formKeyPhone.currentState as FormState).validate()) {
 //                              print('a');
                             putNet("choosePhone",formData: new FormData.from({
                               "username": phone.text,

@@ -95,6 +95,9 @@ class MyApp extends StatelessWidget {
     _getLoginInfo();
     print('build start');
     return OKToast(
+      radius: 8.0,
+      textStyle: TextStyle(fontSize: 16.0,color: Colors.white),
+      backgroundColor: Colors.grey..withAlpha(200),
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(

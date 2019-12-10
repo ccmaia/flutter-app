@@ -2,7 +2,7 @@ import 'dart:io';
 
 //import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import './api.dart';
+//import './api.dart';
 
 class HttpUtil {
   static HttpUtil instance;

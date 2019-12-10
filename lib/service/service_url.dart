@@ -13,9 +13,10 @@ const servicePath = {
   "forgertPass": baseUrl+ "/zhinanche-main/user/password/re",    //忘记密码找回   put
   "choosePass" : baseUrl + "/zhinanche-main/user/password",  //修改密码   put
   "choosePhone": baseUrl + "/zhinanche-main/user/username",   //修改手机号码   put
-  "getbannerList": baseUrl+"/common/banner/20",    //获取社区banner图  get
-  "getthreadList": baseUrl+"/thread",               //获取帖子列表    get
-  "upLoadThread": baseUrl + "/thread",              //发布帖子   post
-  "replyThread": baseUrl + "/thread" ,              //回复帖子   post
+  "getbannerList": baseUrl+"/zhinanche-main/common/banner/20",    //获取社区banner图  get
+  "getthreadList": baseUrl+"zhinanche-app/thread",               //获取帖子列表    get
+  "upLoadThread": baseUrl + "/zhinanche-app/thread",              //发布帖子   post
+  "replyThread": baseUrl + "/zhinanche-app/thread" ,              //回复帖子   post
+  "getThreadPlate": baseUrl+"/zhinanche-app/common/dict/thread/plate",         //帖子板块  get
 
 };
