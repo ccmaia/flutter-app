@@ -20,64 +20,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   ScrollController _controller = new ScrollController();
 
   int _page = 1;
-  List<Map> threadList = [
-    {
-      "id": "1",
-      "title": "ABB机器人常见故障",
-      "groups": "1",
-      "tag": [],
-      "image":
-          "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
-      "data": "",
-      "like_count": "32",
-      "replay_count": "25",
-      "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-      "userName": "张三三"
-    },
-    {
-      "id": "2",
-      "title": "机器人第一次上电机报 警502，这是为什么？",
-      "groups": "2",
-      "tag": ["问答", "ABB"],
-      "image":
-          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-      "data": "",
-      "like_count": "32",
-      "replay_count": "25",
-      "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-      "userName": "张三三"
-    },
-    {
-      "id": "3",
-      "title": "ABB机器人常见故障",
-      "groups": "1",
-      "tag": [],
-      "image":
-          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-      "data": "",
-      "like_count": "32",
-      "replay_count": "25",
-      "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-      "userName": "张三三"
-    },
-    {
-      "id": "3",
-      "title": "ABB机器人常见故障如何解决处理干货 ",
-      "groups": "2",
-      "tag": ["兼职"],
-      "image":
-          "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-      "data": "",
-      "like_count": "32",
-      "replay_count": "25",
-      "logo":
-          "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-      "userName": "张三三"
-    },
-  ];
+  List threadList = [];
 
   @override
   bool get wantKeepAlive => true; //保持页面状态不刷新
@@ -86,7 +29,15 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     print('页面初始化------');
-    getCommunityList();
+    setState(() {
+      _page = 1;
+      getCommunityList().then((res) {
+        if (res['result'] == 1) {
+          threadList = res['data'];
+//          print(threadList);
+        }
+      });
+    });
     _controller.addListener(() {
       print(_controller.offset);
     });
@@ -122,7 +73,8 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
             children: <Widget>[
               Container(
                 color: Colors.white,
-                child: _page>1?Text(""):FutureBuilder(
+//              _page>1?Text(""):
+                child: FutureBuilder(
                   future: getBannerInfo(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -190,67 +142,14 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
 //  上拉刷新数据
   Future<Null> _refreshData() async {
-    getCommunityList();
-    _page = 1;
     setState(() {
-      threadList = [
-        {
-          "id": "1",
-          "title": "ABB机器人常见故障",
-          "groups": "1",
-          "tag": [],
-          "image":
-              "https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2389301591,2689380380&fm=85&s=F486BC1E45434D4D1476B07C0300407F",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "2",
-          "title": "机器人第一次上电机报 警502，这是为什么？",
-          "groups": "2",
-          "tag": ["问答", "ABB"],
-          "image":
-              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "3",
-          "title": "ABB机器人常见故障",
-          "groups": "1",
-          "tag": [],
-          "image":
-              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "3",
-          "title": "ABB机器人常见故障如何解决处理干货 ",
-          "groups": "2",
-          "tag": ["兼职"],
-          "image":
-              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-      ];
+      _page = 1;
+      getCommunityList().then((res) {
+        if (res['result'] == 1) {
+          threadList = res['data'];
+          print(threadList);
+        }
+      });
     });
   }
 
@@ -258,117 +157,33 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   Future<Null> _addMoreData() async {
     _page++;
     setState(() {
-      threadList.addAll([
-        {
-          "id": "1",
-          "title": "ABB机器人常见故障",
-          "groups": "1",
-          "tag": [],
-          "image":
-              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "2",
-          "title": "机器人第一次上电机报 警502，这是为什么？",
-          "groups": "2",
-          "tag": ["问答", "ABB"],
-          "image":
-              "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2350302849,3323337377&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webpg",
-          "userName": "张三三"
-        },
-        {
-          "id": "3",
-          "title": "ABB机器人常见故障",
-          "groups": "1",
-          "tag": [],
-          "image":
-              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "3",
-          "title": "ABB机器人常见故障如何解决处理干货 ",
-          "groups": "2",
-          "tag": ["兼职"],
-          "image":
-              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "3",
-          "title": "ABB机器人常见故障",
-          "groups": "1",
-          "tag": [],
-          "image":
-              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-        {
-          "id": "3",
-          "title": "ABB机器人常见故障",
-          "groups": "1",
-          "tag": [],
-          "image":
-              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg",
-          "data": "",
-          "like_count": "32",
-          "replay_count": "25",
-          "logo":
-              "https://upload.jianshu.io/users/upload_avatars/995581/b6541e1a-d5ac-4d54-aa77-a0c8a575431a.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp",
-          "userName": "张三三"
-        },
-      ]);
+      getCommunityList().then((res){
+        if(res['result']==1){
+          threadList.addAll(res['data']);
+        }
+      });
     });
-    print(_page);
   }
 
-
-//  Future getCommunityList() async{
-//    try{
-//      Response response;
-//      var data={'_b':1,'_e':10};
-//      response = await Dio().get(
-//          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
-//          queryParameters:data
-//      );
-//      print(response.data);
-//      return response.data;
-//    }catch(e){
-//      return print(e);
-//    }
+  Future getCommunityList() async{
+    try{
+      Response response;
+      var data={'_b':(_page-1)*10+1,'_e':_page*10};
+      response = await Dio().get(
+          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
+          queryParameters:data
+      );
+      return response.data;
+    }catch(e){
+      return print(e);
+    }
+  }
+//  void getCommunityList() {
+//    var data={'_b':1,'_e':10};
+//    getNet("getthreadList",data: {data}).then((res) {
+//      print("帖子${res}");
+//    });
 //  }
-  void getCommunityList() {
-    var data={'_b':1,'_e':10};
-    getNet("getthreadList",data: {data}).then((res) {
-      print("帖子${res}");
-    });
-  }
 
   //顶部搜索widget
   Widget searchWidgrt() {
@@ -438,171 +253,181 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
   //帖子部分
   Widget threadWrap(item) {
-    if (item["groups"] == "1") {
-      return InkWell(
-        onTap: () {
-          Application.router.navigateTo(context, '/articleDetailPage');
-        },
-        child: Container(
-          width: ScreenUtil().setWidth(335),
+    if(item['groups']!=null){
+
+      if (item["groups"].toString() == '1') {
+        return InkWell(
+          onTap: () {
+            Application.router.navigateTo(context, '/articleDetailPage');
+          },
+          child: Container(
+            width: ScreenUtil().setWidth(335),
 //          margin: EdgeInsets.only(bottom: 10.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-            borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.elliptical(10, 10)),
-                child: Image.network(
-                  item['image'],
-                  fit: BoxFit.fill,
-                  width: ScreenUtil().setWidth(335),
-                ),
-              ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                        margin: EdgeInsets.only(bottom: 5.0),
-                        child: Text(
-                          item['title'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Color(0xFF4C5772), fontSize: 16.0),
-                        )),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            ClipOval(
-                              child: Image.network(
-                                item['logo'],
-                                width: 28.0,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 5.0),
-                              child: Text(
-                                item['userName'],
-                                style: TextStyle(
-                                    color: Color(0xFFB3B3B3), fontSize: 14.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () {},
-                              child: Image.asset(
-                                "assets/image/zan.png",
-                                width: 16,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 5.0),
-                              child: Text(
-                                item['like_count'],
-                                style: TextStyle(
-                                    color: Color(0xFF999999), fontSize: 14),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return InkWell(
-        onTap: () {
-          Application.router.navigateTo(context, '/articleDetailPage');
-        },
-        child: Container(
-          width: ScreenUtil().setWidth(335),
-//          margin: EdgeInsets.only(bottom: 10.0),
-          padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-            borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(3.0, 0.0, 3.0, 0.0),
-                    color: Color(0xFF7DB2F3),
-                    child: Text(
-                      item['tag'][0],
-                      style: TextStyle(color: Colors.white, fontSize: 14.0),
-                    ),
-                  )
-                ],
-              ),
-              Container(
-                child: Text(
-                  item['title'],
-                  style: TextStyle(
-                    color: Color(0xFF4C5772),
-                    fontSize: 16.0,
+            decoration: BoxDecoration(
+              border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius:
+                  BorderRadius.vertical(top: Radius.elliptical(10, 10)),
+                  child: item['image'].toString()==null?Image.asset('assets/image/threambg.png',
+                    fit: BoxFit.fill,
+                    width: ScreenUtil().setWidth(335),):
+                  Image.network(
+                    item['image'].toString(),
+                    fit: BoxFit.fill,
+                    width: ScreenUtil().setWidth(335),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        ClipOval(
-                          child: Image.network(
-                            item['logo'],
-                            width: 28.0,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5.0),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.only(bottom: 5.0),
                           child: Text(
-                            item['userName'],
+                            item['title'].toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
                             style: TextStyle(
-                                color: Color(0xFFB3B3B3), fontSize: 14.0),
+                                color: Color(0xFF4C5772), fontSize: 16.0),
+                          )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              ClipOval(
+                                child: item['logo']==null?Image.asset('assets/image/not_login.png',width: 28.0,):
+                                Image.network(
+                                  item['logo'].toString(),
+                                  width: 28.0,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 5.0),
+                                child: Text(
+                                  item['userName'].toString(),
+                                  style: TextStyle(
+                                      color: Color(0xFFB3B3B3), fontSize: 14.0),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
+                          Row(
+//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {},
+                                child: Image.asset(
+                                  "assets/image/zan.png",
+                                  width: 16,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 5.0),
+                                child: Text(
+                                  item['like_count'].toString(),
+                                  style: TextStyle(
+                                      color: Color(0xFF999999), fontSize: 14),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else {
+        return InkWell(
+          onTap: () {
+            Application.router.navigateTo(context, '/articleDetailPage');
+          },
+          child: Container(
+            width: ScreenUtil().setWidth(335),
+//          margin: EdgeInsets.only(bottom: 10.0),
+            padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          border:
-                              Border.all(color: Color(0xFFB9B9B9), width: 0.5)),
-                      child: Text("去解答",
-                          style: TextStyle(
-                              color: Color(0xFFB9B9B9), fontSize: 12.0)),
+                      padding: EdgeInsets.fromLTRB(3.0, 0.0, 3.0, 0.0),
+                      color: Color(0xFF7DB2F3),
+                      child: Text(
+                        item['tag'][0],
+                        style: TextStyle(color: Colors.white, fontSize: 14.0),
+                      ),
                     )
                   ],
                 ),
-              )
-            ],
+                Container(
+                  child: Text(
+                    item['title'].toString(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Color(0xFF4C5772),
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          ClipOval(
+                            child:  item['logo']==null?Image.asset('assets/image/not_login.png',width: 28.0,):Image.network(
+                              item['logo'],
+                              width: 28.0,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 5.0),
+                            child: Text(
+                              item['userName'].toString(),
+                              style: TextStyle(
+                                  color: Color(0xFFB3B3B3), fontSize: 14.0),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border:
+                            Border.all(color: Color(0xFFB9B9B9), width: 0.5)),
+                        child: Text("去解答",
+                            style: TextStyle(
+                                color: Color(0xFFB9B9B9), fontSize: 12.0)),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 }

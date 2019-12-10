@@ -50,7 +50,7 @@ class _ChoosethreadTypeState extends State<ChoosethreadType> {
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(100)),
                     child: InkWell(
                       onTap: (){
-                        Application.router.navigateTo(context, "/putThreadPage?groups='2");
+                        Application.router.navigateTo(context, "/putThreadPage?groups=2");
                       },
                       child: Column(
                         children: <Widget>[

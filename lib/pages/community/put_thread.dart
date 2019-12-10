@@ -24,10 +24,6 @@ class PutThread extends StatefulWidget {
 class _PutThreadState extends State<PutThread> {
   String plate = "";
   List mediaList = [
-    "http://a-image-demo.oss-cn-qingdao.aliyuncs.com/demo.mp4",
-    "http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4",
-    "https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=239239410,1444805449&fm=15&gp=0.jpg",
-    "https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3043523035,3452980811&fm=15&gp=0.jpg",
     "",
     ""
   ];
@@ -354,36 +350,31 @@ class _PutThreadState extends State<PutThread> {
         "describe": content.text,
         "groups": widget.groups,
         "plate":plate,
-        "image": image.length>0?image.join(','):'',
-        "video": video.length>0?video.join(','):'',
+        "image": image.length>0?image.join(',').toString():'',
+        "video": video.length>0?video.join(',').toString():'',
       });
-      print(formData.toString());
-//      getHttp(formData);
-//      return;
       postNet('upLoadThread',formData: formData).then((res){
         if(res['result']==1){
           Toast.show('发布成功');
+          print(res);
         }
-        print(res);
       });
-      print(formData);
     }
   }
-
-//  Future getHttp(data) async{
-//    try{
-//      Response response;
-//      Dio dio = Dio();
-//      dio.options.headers['token'] = "D1772DBCF683C7553F6C35C8866B8DF95954375639B539412461B66077555F5FFBFB7CC9CDDC89E02FCEB01DF3043846";
-//      response = await dio.post(
-//          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
-//          queryParameters:data
-//      );
-//      return response.data;
-//    }catch(e){
-//      return print(e);
-//    }
-//  }
+  Future getHttp(data) async{
+    try{
+      Response response;
+      Dio dio = Dio();
+      dio.options.headers['token'] = "61E77508527256A12A72A8961EAAA5DB401AF5908072783C6B350145644BF73EA3652C07360447CFDB2DC2AE14D1756B";
+      response = await dio.post(
+          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
+          data:data
+      );
+      return response.data;
+    }catch(e){
+      print(e);
+    }
+  }
 
   void _showBottomSheet() {
     showModalBottomSheet(

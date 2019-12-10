@@ -66,12 +66,10 @@ Future putNet(url, {formData, options}) async {
       dio.options.headers['token'] = token;
     }
 
-    print(formData);
-    print(dio.options.headers);
+//    print(formData);
+//    print(dio.options.headers);
 
     if (options != null) {
-      print('_____');
-      print(options);
       dio.options.headers = options["hearder"];
     }
     if (formData == null) {
