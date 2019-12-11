@@ -23,10 +23,7 @@ class PutThread extends StatefulWidget {
 
 class _PutThreadState extends State<PutThread> {
   String plate = "";
-  List mediaList = [
-    "",
-    ""
-  ];
+  List mediaList = ["", ""];
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
   VideoPlayerController controller;
@@ -36,7 +33,7 @@ class _PutThreadState extends State<PutThread> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getNet("getThreadPlate").then((res){
+    getNet("getThreadPlate").then((res) {
       print("板块是${res}");
       plateList = res['data'];
       print(plateList);
@@ -44,10 +41,10 @@ class _PutThreadState extends State<PutThread> {
     mediaList.map((item) {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(widget.groups == "1" ? "发布帖子" : "发布问题"),
         elevation: 1.0,
@@ -55,11 +52,12 @@ class _PutThreadState extends State<PutThread> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
+//          widget.groups.toString()=='1'?Container():
+         Container(
             color: Colors.white,
             child: StoreSelectTextItem(
                 title: "请选择类型",
-                content: plate==""?"":plate=='204'?'Abb':'发那科',
+                content: plate == "" ? "" : plate == '204' ? 'Abb' : '发那科',
                 onTap: () {
                   _showBottomSheet();
                 }),
@@ -72,7 +70,7 @@ class _PutThreadState extends State<PutThread> {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "请输入你的标题", //占位文字
+                        hintText: "请输入你的标题",
                     ),
                     controller: title,
                   ),
@@ -80,11 +78,12 @@ class _PutThreadState extends State<PutThread> {
                   TextField(
                     maxLines: 3, //设置此参数可以将文本框改为多行文本框
                     decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
                         labelText: "请输入你的描述",
-                        border: OutlineInputBorder(),
                         fillColor: Color(0xFFEBEBEB),
-                      focusColor: Colors.grey
-                    ),
+                        focusColor: Colors.grey),
                     controller: content,
                   ),
                   SizedBox(height: 20),
@@ -102,7 +101,7 @@ class _PutThreadState extends State<PutThread> {
                         }),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    padding: EdgeInsets.only(left: 50, right: 50, top: 10),
                     child: Container(
                       width: 220,
                       height: 45,
@@ -283,6 +282,7 @@ class _PutThreadState extends State<PutThread> {
   //  上传图片
   Future getImage() async {
     try {
+      Toast.showLong("上传中");
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
       String path = image.path;
       var fileName = DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
@@ -295,6 +295,7 @@ class _PutThreadState extends State<PutThread> {
         if (res['result'] == 1) {
           setState(() {
             mediaList.insert(0, res['data'].toString());
+            Toast.cancelToast();
             print(mediaList);
           });
         }
@@ -308,17 +309,19 @@ class _PutThreadState extends State<PutThread> {
 //  上传视频
   Future getVideo() async {
     try {
+      Toast.showLong("上传中");
       var video = await ImagePicker.pickVideo(source: ImageSource.gallery);
       print("选取视频：${video}");
       String path = video.path;
       var fileName = DateTime.now().millisecondsSinceEpoch.toString() + ".mp4";
       FormData formData =
-          new FormData.from({"file_name": fileName, "file": video});
+          new FormData.from({"file_name": fileName, "file": new UploadFileInfo(new File(path), fileName)});
       postNet('uploadVideo', formData: formData).then((res) {
         print("返回结果${res}");
         if (res['result'] == 1) {
           setState(() {
             mediaList.insert(0, res['data'].toString());
+            Toast.cancelToast();
             print(mediaList);
           });
         }
@@ -331,16 +334,20 @@ class _PutThreadState extends State<PutThread> {
 
 //  发布
   void _saveThread() {
+    if(plate==""){
+      Toast.show("请选择类型");
+      return;
+    }
     if (title.text.isEmpty || content.text.isEmpty) {
       Toast.show("请填写标题和内容");
     } else {
       List image = [];
       List video = [];
-      mediaList.forEach((item){
-        if(item!=''){
+      mediaList.forEach((item) {
+        if (item != '') {
           if (item.toString().contains("mp4")) {
             video.add(item);
-          }else{
+          } else {
             image.add(item);
           }
         }
@@ -349,29 +356,31 @@ class _PutThreadState extends State<PutThread> {
         "title": title.text,
         "describe": content.text,
         "groups": widget.groups,
-        "plate":plate,
-        "image": image.length>0?image.join(',').toString():'',
-        "video": video.length>0?video.join(',').toString():'',
+        "plate": plate,
+        "image": image.length > 0 ? image.join(',').toString() : '',
+        "video": video.length > 0 ? video.join(',').toString() : '',
       });
-      postNet('upLoadThread',formData: formData).then((res){
-        if(res['result']==1){
+      postNet('upLoadThread', formData: formData).then((res) {
+        if (res['result'] == 1) {
           Toast.show('发布成功');
+          Application.router.navigateTo(context, '/articleDetailPage?id=${res['data']}');
           print(res);
         }
       });
     }
   }
-  Future getHttp(data) async{
-    try{
+
+  Future getHttp(data) async {
+    try {
       Response response;
       Dio dio = Dio();
-      dio.options.headers['token'] = "61E77508527256A12A72A8961EAAA5DB401AF5908072783C6B350145644BF73EA3652C07360447CFDB2DC2AE14D1756B";
+      dio.options.headers['token'] =
+          "61E77508527256A12A72A8961EAAA5DB401AF5908072783C6B350145644BF73EA3652C07360447CFDB2DC2AE14D1756B";
       response = await dio.post(
           "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
-          data:data
-      );
+          data: data);
       return response.data;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }

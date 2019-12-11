@@ -32,7 +32,8 @@ class _VideoState extends State<VideoAutoPlayWhenReady> {
         aspectRatio: 3 / 2,
         autoInitialize: true,
         autoPlay: true,
-        looping: false);
+//        looping: false
+    );
     controller.setLooping(true);
     controller.setVolume(0.0);
     controller.addListener(() {

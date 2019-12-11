@@ -10,6 +10,15 @@ class Toast {
         duration: Duration(milliseconds: duration), dismissOtherToast: true);
   }
 
+  static showLong(String msg, {duration = 20000}) {
+    if (msg == null) {
+      return;
+    }
+    showToast(msg,
+        duration: Duration(milliseconds: duration), dismissOtherToast: true);
+  }
+
+
   static cancelToast() {
     dismissAllToast();
   }

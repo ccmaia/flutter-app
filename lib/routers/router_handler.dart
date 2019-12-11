@@ -89,7 +89,8 @@ Handler putthreadPageHanderl =Handler(
 
 Handler articleDetailHanderl =Handler(
     handlerFunc: (BuildContext context,Map<String,List<String>> params){
-      return ArticleDetailPage();
+      String id = params['id'].first.toString();
+      return ArticleDetailPage(id);
     }
 );
 Handler personalCenterHanderl =Handler(

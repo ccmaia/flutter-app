@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import '../public/ToastUtil.dart';
 import './service_url.dart';
 
-Future postNet(url, {formData, options}) async {
+Future postNet(url, {formData, options, path}) async {
   try {
-    print('状态1');
+    print('开始请求……');
     Dio dio = Dio();
     dio.options.baseUrl = baseUrl;
     dio.options.connectTimeout = 10000;
@@ -24,11 +24,26 @@ Future postNet(url, {formData, options}) async {
     if (options != null) {
       dio.options.headers = options["hearder"];
     }
-    if (formData == null) {
-      response = await dio.post(servicePath[url]);
+
+    if (path == null) {
+      if (formData == null) {
+        print(servicePath[url]);
+        response = await dio.post(servicePath[url]);
+      } else {
+        response = await dio.post(servicePath[url], data: formData);
+        print(response);
+      }
     } else {
-      response = await dio.post(servicePath[url], data: formData);
+      if (formData == null) {
+        print((servicePath[url] + '/' + path));
+        response = await dio.post((servicePath[url] + '/' + path));
+      } else {
+        response = await dio.post((servicePath[url] + '/' + path), data: formData);
+        print(response);
+      }
+
     }
+
     if (response.statusCode == 200) {
       var responseData = json.decode(response.toString());
       debugPrint('${responseData}返回数据');
@@ -37,7 +52,6 @@ Future postNet(url, {formData, options}) async {
       throw Exception('后端接口出现异常，请检测代码和服务器情况.........');
     }
   } catch (e) {
-    print('状态2');
     errorMsg(e);
     if (url.toString() == 'login') {
       Toast.show("登陆失败，检查账户或密码");
@@ -100,7 +114,7 @@ Future putNet(url, {formData, options}) async {
 }
 
 //get请求
-Future getNet(url, {data}) async {
+Future getNet(url, {data, path}) async {
   try {
     Dio dio = Dio();
     dio.options.baseUrl = baseUrl;
@@ -117,13 +131,25 @@ Future getNet(url, {data}) async {
     } else {
       dio.options.headers['token'] = token;
     }
-
-    if (data == null) {
-      response = await dio.get((servicePath[url]));
+    if (path == null) {
+      print((servicePath[url]));
+      if (data == null) {
+        response = await dio.get((servicePath[url]));
+      } else {
+        response = await dio.get((servicePath[url]), queryParameters: data);
+        print(response);
+      }
     } else {
-      response = await dio.get((servicePath[url]), queryParameters: data);
-      print(response);
+      print((servicePath[url] + '/' + path));
+
+      if (data == null) {
+        response = await dio.get((servicePath[url] + '/' + path));
+      } else {
+        response = await dio.get((servicePath[url] + '/' + path), queryParameters: data);
+        print(response);
+      }
     }
+
     if (response.statusCode == 200) {
       //防止打印日志不全。
       var responseData = json.decode(response.toString());
@@ -138,8 +164,7 @@ Future getNet(url, {data}) async {
   }
 }
 
-
-void errorMsg (e){
+void errorMsg(e) {
   if (e.type == DioErrorType.CONNECT_TIMEOUT) {
     // It occurs when url is opened timeout.
     print("连接超时${e.type}");

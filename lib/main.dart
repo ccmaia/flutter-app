@@ -57,6 +57,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'index-page.dart';
 import './pages/user/login.dart';
 import './routers/routes.dart';
@@ -105,6 +106,14 @@ class MyApp extends StatelessWidget {
           )
         ],
         child: MaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('zh', 'CN'),
+            const Locale('en', 'US'),
+          ],
           debugShowCheckedModeBanner: false,
           title: '指南车',
           onGenerateRoute: Application.router.generator,

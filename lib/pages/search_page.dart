@@ -1,4 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_test/public/ToastUtil.dart';
+import '../service/service_method.dart';
+import '../public/threaData.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -8,7 +12,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
 
   TextEditingController _searchContent = new TextEditingController();
-  String content = '';
+  List searchThreamList = [];
 
 
   @override
@@ -22,17 +26,87 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: SafeArea(
         child: ListView.builder(
-//          padding: EdgeInsets.all(5.0),
-            itemCount: 10,
+            itemCount: searchThreamList.length,
+//            itemExtent: 100,
             itemBuilder: (BuildContext context,int index){
-              return Text(content);
+              return InkWell(
+                child: itemThream(searchThreamList[index]),
+              );
         }),
       ),
     );
   }
 
+  void searchthream(){
+    if(!_searchContent.text.isEmpty){
+      var params = {
+        "key": _searchContent.text,
+        "_b":1,
+        "_e":100
+      };
+      getNet('searchThrem',data: params).then((res){
+        threamData list = threamData.formJson(res['data']);
+        searchThreamList = list.data;
+//        searchThreamList.forEach((item){
+//          item.time = DateTime.fromMicrosecondsSinceEpoch(1575978721025);//转换日期
+//        });
+        print(searchThreamList.length);
+      });
+    }else{
+      Toast.show('请输入搜索内容');
+    }
+  }
 
-
+  Widget itemThream(item){
+    return Container(
+      margin: EdgeInsets.only(top: 8.0),
+      padding: EdgeInsets.fromLTRB(15.0,10.0,15.0,10.0),
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    child: item.userHeadImg == ''
+                        ? Image.asset(
+                      'assets/image/not_login.png',
+                      width: 28.0,
+                    )
+                        : Image.network(
+                      item.userHeadImg,
+                      width: 28.0,
+                    ),
+                    margin: EdgeInsets.only(right: 10.0),
+                  ),
+                  Text(
+                    item.userName,
+                    style: TextStyle(
+                        color: Color(0xFFB3B3B3), fontSize: 14.0),
+                  ),
+                ],
+              ),
+              Text(
+                '${DateTime.fromMillisecondsSinceEpoch(item.date).toString().split(' ')[0]}',
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Color(0xFFB3B3B3), fontSize: 14.0),
+              ),
+            ],
+          ),
+          Container(
+            child: Text(item.title,textAlign: TextAlign.left,),
+            margin: EdgeInsets.only(top: 8.0),
+          )
+        ],
+      ),
+    );
+  }
 
   //appbar搜索栏输入框
   Widget buildTextField() {
@@ -93,8 +167,9 @@ class _SearchPageState extends State<SearchPage> {
           child: Center(
             child: InkWell(
               onTap: (){
+                FocusScope.of(context).requestFocus(FocusNode());  //隐藏键盘
                 setState(() {
-                  content = _searchContent.text;
+                  searchthream();
                 });
               },
               child: Text(
@@ -107,6 +182,9 @@ class _SearchPageState extends State<SearchPage> {
       ],
     );
   }
+
+
+
 }
 
 

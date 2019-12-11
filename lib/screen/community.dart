@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_test/public/ToastUtil.dart';
+import 'package:flutter_app_test/public/threaData.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import '../public/base.dart';
@@ -11,6 +14,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../service/service_method.dart';
+import '../public/plateData.dart';
+import '../public/threaData.dart';
 
 class Community extends StatefulWidget {
   _HomeScreen createState() => _HomeScreen();
@@ -21,6 +26,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
   int _page = 1;
   List threadList = [];
+  List plateList = [];
 
   @override
   bool get wantKeepAlive => true; //保持页面状态不刷新
@@ -29,13 +35,13 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     print('页面初始化------');
+
     setState(() {
-      _page = 1;
-      getCommunityList().then((res) {
-        if (res['result'] == 1) {
-          threadList = res['data'];
-//          print(threadList);
-        }
+      getNet("getThreadPlate").then((res) {
+        print(res['data']);
+        plateData list = plateData.formJson(res['data']);
+        plateList = list.data;
+        getThreams();
       });
     });
     _controller.addListener(() {
@@ -73,117 +79,107 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
             children: <Widget>[
               Container(
                 color: Colors.white,
-//              _page>1?Text(""):
-                child: FutureBuilder(
-                  future: getBannerInfo(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var data = snapshot.data['data']['list'];
-                      List<Map> swiperDataList =
-                      (data as List).cast(); // 顶部轮播组件数
-                      return Column(
-                        children: <Widget>[
-                          SwiperDiy(swiperDataList: swiperDataList), //页面顶部轮播组件
-                        ],
-                      );
-                    } else {
-                      return Container(
-                          height: ScreenUtil().setHeight(245.0),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
+                child: _page > 1
+                    ? null
+                    : FutureBuilder(
+                        future: getNet("getbannerList"),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            var data = snapshot.data['data'];
+                            List<Map> swiperDataList =
+                                (data as List).cast(); // 顶部轮播组件数
+                            return Column(
                               children: <Widget>[
-                                SpinKitCircle(
-                                  color: Colors.blueAccent,
-                                  size: 30.0,
-                                ),
-                                Text('正在加载')
+                                SwiperDiy(
+                                    swiperDataList: swiperDataList), //页面顶部轮播组件
                               ],
-                            ),
-                          ));
-                    }
-                  },
-                ),
+                            );
+                          } else {
+                            return Container(
+                                height: ScreenUtil().setHeight(245.0),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SpinKitCircle(
+                                        color: Colors.blueAccent,
+                                        size: 30.0,
+                                      ),
+                                      Text('正在加载')
+                                    ],
+                                  ),
+                                ));
+                          }
+                        },
+                      ),
               ),
               Expanded(
                 flex: 1,
-                child:
-                Container(
-                      padding: EdgeInsets.only(
-                          left: 10.0, right: 10.0, bottom: 10.0),
-                      child: EasyRefresh(
-                          header: BallPulseHeader(),
-                          footer: BallPulseFooter(),
-                          onRefresh: _refreshData,
-                          onLoad: _addMoreData,
-                          child: StaggeredGridView.countBuilder(
-                            itemCount: threadList.length,
-                            primary: false,
-                            crossAxisCount: 4,
-                            mainAxisSpacing: 10.0,
-                            crossAxisSpacing: 10.0,
-                            itemBuilder: (context, index) => Container(
-                              child: threadWrap(threadList[index]),
-                            ),
-                            staggeredTileBuilder: (index) =>
-                                StaggeredTile.fit(2),
-                          ))),
+                child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: EasyRefresh(
+                        header: BallPulseHeader(),
+                        footer: BallPulseFooter(),
+                        onRefresh: _refreshData,
+                        onLoad: _addMoreData,
+                        child: StaggeredGridView.countBuilder(
+                          itemCount: threadList.length,
+                          primary: false,
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          itemBuilder: (context, index) => Container(
+                            child: threadWrap(threadList[index]),
+                          ),
+                          staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+                        ))),
               )
             ],
           ),
         ));
   }
 
-  getBannerInfo() {
-//    getNet("getbannerList").then((res){
-////      print('banner is ${res}');
-//    });
-  }
-
 //  上拉刷新数据
   Future<Null> _refreshData() async {
-    setState(() {
-      _page = 1;
-      getCommunityList().then((res) {
-        if (res['result'] == 1) {
-          threadList = res['data'];
-          print(threadList);
-        }
-      });
-    });
+    _page = 1;
+//    getThream();
+    getThreams();
   }
 
   //下拉加载更多
   Future<Null> _addMoreData() async {
     _page++;
-    setState(() {
-      getCommunityList().then((res){
-        if(res['result']==1){
-          threadList.addAll(res['data']);
-        }
-      });
-    });
+    getThreams();
   }
 
-  Future getCommunityList() async{
-    try{
-      Response response;
-      var data={'_b':(_page-1)*10+1,'_e':_page*10};
-      response = await Dio().get(
-          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
-          queryParameters:data
-      );
-      return response.data;
-    }catch(e){
-      return print(e);
-    }
+//  获取帖子列表
+  void getThreams() {
+    var data = {'_b': (_page - 1) * 10 + 1, '_e': _page * 10};
+    getNet("getthreadList", data: data).then((res) {
+      if (res['result'] == 1) {
+        setState(() {
+          if (_page == 1) {
+            threamData list = threamData.formJson(res['data']);
+            threadList = list.data;
+          } else {
+            threamData list = threamData.formJson(res['data']);
+            if (list.data.length == 0) {
+              Toast.show('没有更多了');
+            } else {
+              threadList.addAll(list.data);
+            }
+          }
+          threadList.forEach((item) {
+            plateList.forEach((type) {
+              if (type.id == item.plate) {
+                item.plateName = type.name;
+              }
+            });
+          });
+        });
+      }
+    });
   }
-//  void getCommunityList() {
-//    var data={'_b':1,'_e':10};
-//    getNet("getthreadList",data: {data}).then((res) {
-//      print("帖子${res}");
-//    });
-//  }
 
   //顶部搜索widget
   Widget searchWidgrt() {
@@ -244,7 +240,8 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                 Application.router.navigateTo(context, '/personalCenterPage');
               },
               child: Image.asset(
-                'assets/image/user.png',width: 24,
+                'assets/image/user.png',
+                width: 24,
               ),
             ))
       ],
@@ -253,12 +250,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
   //帖子部分
   Widget threadWrap(item) {
-    if(item['groups']!=null){
-
-      if (item["groups"].toString() == '1') {
+    if (item.groups.toString() != null) {
+      if (item.groups == 1) {
         return InkWell(
           onTap: () {
-            Application.router.navigateTo(context, '/articleDetailPage');
+            Application.router
+                .navigateTo(context, '/articleDetailPage?id=${item.id}');
           },
           child: Container(
             width: ScreenUtil().setWidth(335),
@@ -272,15 +269,19 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
               children: <Widget>[
                 ClipRRect(
                   borderRadius:
-                  BorderRadius.vertical(top: Radius.elliptical(10, 10)),
-                  child: item['image'].toString()==null?Image.asset('assets/image/threambg.png',
-                    fit: BoxFit.fill,
-                    width: ScreenUtil().setWidth(335),):
-                  Image.network(
-                    item['image'].toString(),
-                    fit: BoxFit.fill,
-                    width: ScreenUtil().setWidth(335),
-                  ),
+                      BorderRadius.vertical(top: Radius.elliptical(10, 10)),
+                  child: item.image.length == 0
+                      ? Image.asset(
+                          'assets/image/threabg.png',
+                          fit: BoxFit.cover,
+                          width: ScreenUtil().setWidth(335),
+                        )
+                      : Image.network(
+                          item.image[0],
+                          fit: BoxFit.cover,
+                          width: ScreenUtil().setWidth(335),
+                          height: ScreenUtil().setHeight(210),
+                        ),
                 ),
                 Container(
                   child: Column(
@@ -288,7 +289,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                       Container(
                           margin: EdgeInsets.only(bottom: 5.0),
                           child: Text(
-                            item['title'].toString(),
+                            item.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
@@ -301,16 +302,20 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                           Row(
                             children: <Widget>[
                               ClipOval(
-                                child: item['logo']==null?Image.asset('assets/image/not_login.png',width: 28.0,):
-                                Image.network(
-                                  item['logo'].toString(),
-                                  width: 28.0,
-                                ),
+                                child: item.userHeadImg == ''
+                                    ? Image.asset(
+                                        'assets/image/not_login.png',
+                                        width: 28.0,
+                                      )
+                                    : Image.network(
+                                        item.userHeadImg,
+                                        width: 28.0,
+                                      ),
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  item['userName'].toString(),
+                                  item.userName,
                                   style: TextStyle(
                                       color: Color(0xFFB3B3B3), fontSize: 14.0),
                                 ),
@@ -330,7 +335,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                               Container(
                                 margin: EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  item['like_count'].toString(),
+                                  item.likeCount.toString(),
                                   style: TextStyle(
                                       color: Color(0xFF999999), fontSize: 14),
                                 ),
@@ -350,11 +355,10 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
       } else {
         return InkWell(
           onTap: () {
-            Application.router.navigateTo(context, '/articleDetailPage');
+            Application.router.navigateTo(context, '/articleDetailPage?id=${item.id}');
           },
           child: Container(
             width: ScreenUtil().setWidth(335),
-//          margin: EdgeInsets.only(bottom: 10.0),
             padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
             decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
@@ -366,18 +370,28 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(3.0, 0.0, 3.0, 0.0),
+                      padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
                       color: Color(0xFF7DB2F3),
                       child: Text(
-                        item['tag'][0],
+                        '问答',
+                        style: TextStyle(color: Colors.white, fontSize: 14.0),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 5.0),
+                      padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
+                      color: Color(0xFF3AAC4F),
+                      child: Text(
+                        item.plateName,
                         style: TextStyle(color: Colors.white, fontSize: 14.0),
                       ),
                     )
                   ],
                 ),
                 Container(
+                  margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
                   child: Text(
-                    item['title'].toString(),
+                    item.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
@@ -395,15 +409,20 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                       Row(
                         children: <Widget>[
                           ClipOval(
-                            child:  item['logo']==null?Image.asset('assets/image/not_login.png',width: 28.0,):Image.network(
-                              item['logo'],
-                              width: 28.0,
-                            ),
+                            child: item.userHeadImg == ''
+                                ? Image.asset(
+                                    'assets/image/not_login.png',
+                                    width: 28.0,
+                                  )
+                                : Image.network(
+                                    item.userHeadImg,
+                                    width: 28.0,
+                                  ),
                           ),
                           Container(
                             margin: EdgeInsets.only(left: 5.0),
                             child: Text(
-                              item['userName'].toString(),
+                              item.userName,
                               style: TextStyle(
                                   color: Color(0xFFB3B3B3), fontSize: 14.0),
                             ),
@@ -414,8 +433,8 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                         padding: EdgeInsets.only(left: 5.0, right: 5.0),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
-                            border:
-                            Border.all(color: Color(0xFFB9B9B9), width: 0.5)),
+                            border: Border.all(
+                                color: Color(0xFFB9B9B9), width: 0.5)),
                         child: Text("去解答",
                             style: TextStyle(
                                 color: Color(0xFFB9B9B9), fontSize: 12.0)),
@@ -449,7 +468,7 @@ class SwiperDiy extends StatelessWidget {
       height: ScreenUtil().setHeight(245),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
-          return Image.network("${swiperDataList[index]['banner_cover']}",
+          return Image.network("${swiperDataList[index]['img']}",
               fit: BoxFit.fill);
         },
         itemCount: swiperDataList.length,
