@@ -27,6 +27,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   int _page = 1;
   List threadList = [];
   List plateList = [];
+  var token;
 
   @override
   bool get wantKeepAlive => true; //保持页面状态不刷新
@@ -58,13 +59,19 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+
+    _getLoginInfo();
     ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
     return Scaffold(
         floatingActionButton: InkWell(
           child: Image.asset("assets/image/add.png",
-              width: ScreenUtil().setWidth(120)),
+              width: ScreenUtil().setWidth(100)),
           onTap: () {
-            Application.router.navigateTo(context, "/choosethreadTypePage");
+            if (token == null) {
+              Toast.show("请先登录");
+            } else {
+              Application.router.navigateTo(context, "/choosethreadTypePage");
+            }
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -72,57 +79,56 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           title: searchWidgrt(),
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          elevation: 1.0,
+          elevation: 0.5,
         ),
         body: Scrollbar(
-          child: Column(
-            children: <Widget>[
-              Container(
-                color: Colors.white,
-                child: _page > 1
-                    ? null
-                    : FutureBuilder(
-                        future: getNet("getbannerList"),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            var data = snapshot.data['data'];
-                            List<Map> swiperDataList =
-                                (data as List).cast(); // 顶部轮播组件数
-                            return Column(
-                              children: <Widget>[
-                                SwiperDiy(
-                                    swiperDataList: swiperDataList), //页面顶部轮播组件
-                              ],
-                            );
-                          } else {
-                            return Container(
-                                height: ScreenUtil().setHeight(245.0),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      SpinKitCircle(
-                                        color: Colors.blueAccent,
-                                        size: 30.0,
-                                      ),
-                                      Text('正在加载')
-                                    ],
-                                  ),
-                                ));
-                          }
-                        },
-                      ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: EasyRefresh(
-                        header: BallPulseHeader(),
-                        footer: BallPulseFooter(),
-                        onRefresh: _refreshData,
-                        onLoad: _addMoreData,
+            child: EasyRefresh(
+                header: BallPulseHeader(),
+                footer: BallPulseFooter(),
+                onRefresh: _refreshData,
+                onLoad: _addMoreData,
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverToBoxAdapter(
+                        child: Column(
+                      children: <Widget>[
+                        FutureBuilder(
+                          future: getNet("getbannerList"),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var data = snapshot.data['data'];
+                              List<Map> swiperDataList =
+                                  (data as List).cast(); // 顶部轮播组件数
+                              return Container(
+                                child:
+                                    SwiperDiy(swiperDataList: swiperDataList),
+                              );
+                            } else {
+                              return Container(
+                                  height: ScreenUtil().setHeight(245.0),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        SpinKitCircle(
+                                          color: Colors.blueAccent,
+                                          size: 30.0,
+                                        ),
+                                        Text('正在加载')
+                                      ],
+                                    ),
+                                  ));
+                            }
+                          },
+                        ),
+                      ],
+                    )),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
                         child: StaggeredGridView.countBuilder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
                           itemCount: threadList.length,
                           primary: false,
                           crossAxisCount: 4,
@@ -132,11 +138,13 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                             child: threadWrap(threadList[index]),
                           ),
                           staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-                        ))),
-              )
-            ],
-          ),
-        ));
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+
+            ));
   }
 
 //  上拉刷新数据
@@ -150,6 +158,13 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   Future<Null> _addMoreData() async {
     _page++;
     getThreams();
+  }
+
+  //
+  _getLoginInfo() async {
+    if (SpUtil.getSp() != null) {
+      token = SpUtil.getSp().get('token');
+    }
   }
 
 //  获取帖子列表
@@ -184,18 +199,18 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   //顶部搜索widget
   Widget searchWidgrt() {
     return Row(
-//        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Expanded(
-          child: Container(
+          child:
+          Container(
             //修饰黑色背景与圆角
             decoration: new BoxDecoration(
-//          border: Border.all(color: Colors.grey, width: 1.0), //灰色的一层边框
               color: Color(0xFFEEEEEE),
               borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
             ),
             alignment: Alignment.center,
-            height: 36,
+            height: 34,
             padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
             child: Container(
                 decoration: new BoxDecoration(
@@ -205,8 +220,13 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                 ),
                 child: InkWell(
                   onTap: () {
-                    print('search');
-                    Application.router.navigateTo(context, '/searchPage');
+                    if (token == null) {
+                      Toast.show("请先登录");
+                    } else {
+                      Application.router.navigateTo(context, '/searchPage');
+                    }
+//                    var data = SpUtil.isLogin();
+//                    print(data);
                   },
                   child: Container(
                     height: 36.0,
@@ -216,8 +236,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                       children: <Widget>[
                         Image.asset(
                           "assets/image/search.png",
-                          width: 22.0,
-                          height: 20.0,
+                          width: 16.0,
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 10),
@@ -237,10 +256,14 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
             margin: EdgeInsets.only(left: 20.0),
             child: InkWell(
               onTap: () {
-                Application.router.navigateTo(context, '/personalCenterPage');
+                if (token == null) {
+                  Toast.show("请先登录");
+                } else {
+                  Application.router.navigateTo(context, '/personalCenterPage');
+                }
               },
               child: Image.asset(
-                'assets/image/user.png',
+                'assets/image/userthream.png',
                 width: 24,
               ),
             ))
@@ -262,32 +285,37 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 //          margin: EdgeInsets.only(bottom: 10.0),
             decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(6.0),
               color: Colors.white,
             ),
             child: Column(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.elliptical(10, 10)),
-                  child: item.image.length == 0
-                      ? Image.asset(
-                          'assets/image/threabg.png',
-                          fit: BoxFit.cover,
-                          width: ScreenUtil().setWidth(335),
-                        )
-                      : Image.network(
-                          item.image[0],
-                          fit: BoxFit.cover,
-                          width: ScreenUtil().setWidth(335),
-                          height: ScreenUtil().setHeight(210),
-                        ),
+                Container(
+                  height: ScreenUtil().setHeight(210),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.vertical(top: Radius.elliptical(6, 6)),
+                    image: DecorationImage(
+                      image: item.image.length == 0
+                          ? AssetImage(
+                        'assets/image/threabg.png',
+                      )
+                          : item.image[0].toString().contains('mp4')
+                          ? NetworkImage(
+                        '${item.image[0]}?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast',
+                      )
+                          : NetworkImage(
+                        item.image[0],
+                      ),fit: BoxFit.cover
+                    ),
+                  ),
                 ),
                 Container(
                   child: Column(
                     children: <Widget>[
                       Container(
-                          margin: EdgeInsets.only(bottom: 5.0),
+                          alignment: Alignment(-1, -1),
+                          margin: EdgeInsets.only(bottom: 10.0),
                           child: Text(
                             item.title,
                             maxLines: 1,
@@ -304,43 +332,48 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                               ClipOval(
                                 child: item.userHeadImg == ''
                                     ? Image.asset(
-                                        'assets/image/not_login.png',
-                                        width: 28.0,
+                                        'assets/image/hd.png',
+                                        width: 22.0,height: 22.0,
+                                  fit: BoxFit.cover,
                                       )
                                     : Image.network(
                                         item.userHeadImg,
-                                        width: 28.0,
+                                        width: 22.0,height: 22.0,
+                                  fit: BoxFit.cover,
                                       ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(left: 5.0),
+                                margin: EdgeInsets.only(left: 4.0),
                                 child: Text(
-                                  item.userName,
+                                  '${item.userName}',
                                   style: TextStyle(
                                       color: Color(0xFFB3B3B3), fontSize: 14.0),
                                 ),
                               ),
                             ],
                           ),
-                          Row(
-//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              InkWell(
-                                onTap: () {},
-                                child: Image.asset(
-                                  "assets/image/zan.png",
-                                  width: 16,
+                          Container(
+                            width: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                InkWell(
+                                  onTap: () {},
+                                  child: Image.asset(
+                                    "assets/image/iszan.png",
+                                    width: 12,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 5.0),
-                                child: Text(
-                                  item.likeCount.toString(),
-                                  style: TextStyle(
-                                      color: Color(0xFF999999), fontSize: 14),
-                                ),
-                              )
-                            ],
+                                Container(
+                                  margin: EdgeInsets.only(left: 5.0),
+                                  child: Text(
+                                    item.likeCount.toString(),
+                                    style: TextStyle(
+                                        color: Color(0xFF999999), fontSize: 12),
+                                  ),
+                                )
+                              ],
+                            ),
                           )
                         ],
                       )
@@ -355,93 +388,115 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
       } else {
         return InkWell(
           onTap: () {
-            Application.router.navigateTo(context, '/articleDetailPage?id=${item.id}');
+            Application.router
+                .navigateTo(context, '/articleDetailPage?id=${item.id}');
           },
           child: Container(
             width: ScreenUtil().setWidth(335),
-            padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+//            padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
             decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(6.0),
               color: Colors.white,
             ),
-            child: Column(
+            child: Stack(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
-                      color: Color(0xFF7DB2F3),
-                      child: Text(
-                        '问答',
-                        style: TextStyle(color: Colors.white, fontSize: 14.0),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 5.0),
-                      padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
-                      color: Color(0xFF3AAC4F),
-                      child: Text(
-                        item.plateName,
-                        style: TextStyle(color: Colors.white, fontSize: 14.0),
-                      ),
-                    )
-                  ],
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Image.asset('assets/image/question.png',width: 40,),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
-                  child: Text(
-                    item.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Color(0xFF4C5772),
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          ClipOval(
-                            child: item.userHeadImg == ''
-                                ? Image.asset(
-                                    'assets/image/not_login.png',
-                                    width: 28.0,
-                                  )
-                                : Image.network(
-                                    item.userHeadImg,
-                                    width: 28.0,
-                                  ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 5.0),
-                            child: Text(
-                              item.userName,
-                              style: TextStyle(
-                                  color: Color(0xFFB3B3B3), fontSize: 14.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all(
-                                color: Color(0xFFB9B9B9), width: 0.5)),
-                        child: Text("去解答",
-                            style: TextStyle(
-                                color: Color(0xFFB9B9B9), fontSize: 12.0)),
-                      )
-                    ],
-                  ),
-                )
+               Container(
+                 padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                 child:  Column(
+                   children: <Widget>[
+                     Row(
+                       children: <Widget>[
+                         Container(
+                           padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
+                           decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(2.0),
+                             color: Color(0xFF7DB2F3),
+                           ),
+                           child: Text(
+                             '问答',
+                             style: TextStyle(color: Colors.white, fontSize: 12.0),
+                           ),
+                         ),
+                         Container(
+                           margin: EdgeInsets.only(left: 5.0),
+                           padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
+                           decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(2.0),
+                             color: Color(0xFF3AAC4F),
+                           ),
+                           child: Text(
+                             item.plateName,
+                             style: TextStyle(color: Colors.white, fontSize: 12.0),
+                           ),
+                         )
+                       ],
+                     ),
+                     Container(
+                       alignment: Alignment(-1, -1),
+                       margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                       child: Text(
+                         item.title,
+                         maxLines: 1,
+                         overflow: TextOverflow.ellipsis,
+                         textAlign: TextAlign.left,
+                         style: TextStyle(
+                           color: Color(0xFF4C5772),
+                           fontSize: 16.0,
+                         ),
+                       ),
+                     ),
+                     Container(
+                       margin: EdgeInsets.only(top: 5.0),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: <Widget>[
+                           Row(
+                             children: <Widget>[
+                               ClipOval(
+                                 child: item.userHeadImg == ''
+                                     ? Image.asset(
+                                   'assets/image/hd.png',
+                                   width: 22.0,height: 22.0,
+                                   fit: BoxFit.cover,
+                                 )
+                                     : Image.network(
+                                   item.userHeadImg,
+                                   width: 22.0,height: 22.0,
+                                   fit: BoxFit.cover,
+                                 ),
+                               ),
+                               Container(
+                                 margin: EdgeInsets.only(left: 4.0),
+                                 child: Text(
+                                   item.userName,
+                                   style: TextStyle(
+                                       color: Color(0xFFB3B3B3), fontSize: 14.0),
+                                 ),
+                               ),
+                             ],
+                           ),
+                           Container(
+                             padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(15.0),
+                                 border: Border.all(
+                                     color: Color(0xFFB9B9B9), width: 0.5)),
+                             child: Text("去解答",
+                                 style: TextStyle(
+                                     color: Color(0xFFB9B9B9), fontSize: 12.0)),
+                           )
+                         ],
+                       ),
+                     )
+                   ],
+                 ),
+               )
               ],
             ),
           ),
@@ -460,19 +515,23 @@ class SwiperDiy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 5.0, right: 5.0),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
-        color: Colors.white,
-      ),
+      margin: EdgeInsets.only(top: 10.0),
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
       height: ScreenUtil().setHeight(245),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
-          return Image.network("${swiperDataList[index]['img']}",
-              fit: BoxFit.fill);
+          return Container(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
+              image: DecorationImage(
+                image: NetworkImage("${swiperDataList[index]['img']}",
+                    ),fit: BoxFit.fill
+              )
+            ),
+          );
         },
         itemCount: swiperDataList.length,
-        pagination: new SwiperPagination(),
+//        pagination: new SwiperPagination(),
         autoplay: true,
       ),
     );

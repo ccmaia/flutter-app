@@ -41,9 +41,7 @@ Future postNet(url, {formData, options, path}) async {
         response = await dio.post((servicePath[url] + '/' + path), data: formData);
         print(response);
       }
-
     }
-
     if (response.statusCode == 200) {
       var responseData = json.decode(response.toString());
       debugPrint('${responseData}返回数据');

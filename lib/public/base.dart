@@ -6,9 +6,16 @@ class SpUtil{
     preferences = await SharedPreferences.getInstance();
     return true;
   }
-
   static SharedPreferences getSp(){
     return preferences;
+  }
+  static Future isLogin() async{
+    var token;
+    if(SpUtil.getSp()!=null){
+      token = SpUtil.getSp().get('token');
+    }
+    print('token is ${token}');
+    return token;
   }
 
 }
@@ -18,9 +25,12 @@ class GlobalConfig {
   static Color cardBackgroundColor = Colors.white;
   static Color fontColor = Colors.black54;
 }
-
+//  判断是否有token是否登录
 Future getString() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   var token = sharedPreferences.get('token');
   return token;
 }
+
+
+

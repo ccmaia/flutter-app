@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_test/public/ToastUtil.dart';
+import 'package:flutter_app_test/routers/application.dart';
 import '../service/service_method.dart';
 import '../public/threaData.dart';
 
@@ -30,6 +31,9 @@ class _SearchPageState extends State<SearchPage> {
 //            itemExtent: 100,
             itemBuilder: (BuildContext context,int index){
               return InkWell(
+                onTap: (){
+                  Application.router.navigateTo(context, '/articleDetailPage?id=${searchThreamList[index].id}');
+                },
                 child: itemThream(searchThreamList[index]),
               );
         }),
@@ -45,18 +49,22 @@ class _SearchPageState extends State<SearchPage> {
         "_e":100
       };
       getNet('searchThrem',data: params).then((res){
-        threamData list = threamData.formJson(res['data']);
-        searchThreamList = list.data;
-//        searchThreamList.forEach((item){
-//          item.time = DateTime.fromMicrosecondsSinceEpoch(1575978721025);//转换日期
-//        });
-        print(searchThreamList.length);
+        setState(() {
+          threamData list = threamData.formJson(res['data']);
+          searchThreamList = list.data;
+          print(searchThreamList.length);
+          if(searchThreamList.length==0){
+            Toast.show('暂无信息');
+          }
+        });
       });
     }else{
       Toast.show('请输入搜索内容');
     }
   }
 
+
+//  帖子列表
   Widget itemThream(item){
     return Container(
       margin: EdgeInsets.only(top: 8.0),
@@ -71,23 +79,27 @@ class _SearchPageState extends State<SearchPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Container(
+                  ClipOval(
                     child: item.userHeadImg == ''
                         ? Image.asset(
-                      'assets/image/not_login.png',
-                      width: 28.0,
+                      'assets/image/hd.png',
+                      width: 22.0,height: 22.0,
+                      fit: BoxFit.cover,
                     )
                         : Image.network(
                       item.userHeadImg,
-                      width: 28.0,
+                      width: 22.0,height: 22.0,
+                      fit: BoxFit.cover,
                     ),
-                    margin: EdgeInsets.only(right: 10.0),
                   ),
-                  Text(
-                    item.userName,
-                    style: TextStyle(
-                        color: Color(0xFFB3B3B3), fontSize: 14.0),
-                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 6),
+                    child: Text(
+                      item.userName,
+                      style: TextStyle(
+                          color: Color(0xFFB3B3B3), fontSize: 14.0),
+                    ),
+                  )
                 ],
               ),
               Text(
@@ -168,9 +180,7 @@ class _SearchPageState extends State<SearchPage> {
             child: InkWell(
               onTap: (){
                 FocusScope.of(context).requestFocus(FocusNode());  //隐藏键盘
-                setState(() {
                   searchthream();
-                });
               },
               child: Text(
                 "确定",

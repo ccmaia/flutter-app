@@ -17,7 +17,7 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
 
   int _currentIndex = 2;
   final _bottomNavigationIconColor = Colors.grey; // 导航默认图标颜色
-  final _bottomNavigationActiveIconColor = Colors.blue; // 导航选中图标颜色
+  final _bottomNavigationActiveIconColor = Color(0xFF333333); // 导航选中图标颜色
   var currentPage;
   List<StatefulWidget> PageList = [
     Course(),
@@ -51,10 +51,12 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
 
     final List<BottomNavigationBarItem> _bottomBar = [
       BottomNavigationBarItem(
-          icon: Image.asset("assets/image/coursepage.png",width: 25,),
+          icon: Image.asset("assets/image/course.png",width: 25,),
+          activeIcon: Image.asset("assets/image/coursepage.png",width: 25,),
           title: Text('课程', style: TextStyle(color: getColor(0)))),
       BottomNavigationBarItem(
-          icon: Image.asset("assets/image/putworkpage.png",width: 25,),
+          icon: Image.asset("assets/image/putwork.png",width: 25,),
+          activeIcon: Image.asset("assets/image/putworkpage.png",width: 25,),
           title: Text('兼职', style: TextStyle(color: getColor(1)))),
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
@@ -64,10 +66,12 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
           ),
           title: Text('社区', style: TextStyle(color: getColor(2)))),
       BottomNavigationBarItem(
-          icon: Image.asset("assets/image/fondWorkpage.png",width: 25,),
+          icon: Image.asset("assets/image/fondword.png",width: 25,),
+          activeIcon: Image.asset("assets/image/fondWorkpage.png",width: 25,),
           title: Text('求职', style: TextStyle(color: getColor(3)))),
       BottomNavigationBarItem(
-          icon: Image.asset("assets/image/userpage.png",width: 25,),
+          icon: Image.asset("assets/image/userno.png",width: 25,),
+          activeIcon: Image.asset("assets/image/userpage.png",width: 25,),
           title: Text('我的', style: TextStyle(color: getColor(4)))),
     ];
 
@@ -100,7 +104,7 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
                 _currentIndex = 2;
               });
             },
-            child: Image.asset('assets/image/community.png')
+            child: _currentIndex==2?Image.asset('assets/image/community.png'):Image.asset('assets/image/homepage.png')
             ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -363,6 +363,7 @@ class _PutThreadState extends State<PutThread> {
       postNet('upLoadThread', formData: formData).then((res) {
         if (res['result'] == 1) {
           Toast.show('发布成功');
+          Navigator.pop(context);
           Application.router.navigateTo(context, '/articleDetailPage?id=${res['data']}');
           print(res);
         }

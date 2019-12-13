@@ -27,10 +27,8 @@ class _ChoosethreadTypeState extends State<ChoosethreadType> {
                 children: <Widget>[
                   InkWell(
                     onTap: (){
+                      Navigator.pop(context);
                       Application.router.navigateTo(context, "/putThreadPage?groups=1");
-//                    Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (BuildContext context){
-//                      return  PutThread('1');
-//                    }), (route)=>route == null);
                     },
                     child: Column(
                       children: <Widget>[
@@ -50,6 +48,7 @@ class _ChoosethreadTypeState extends State<ChoosethreadType> {
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(100)),
                     child: InkWell(
                       onTap: (){
+                        Navigator.pop(context);
                         Application.router.navigateTo(context, "/putThreadPage?groups=2");
                       },
                       child: Column(

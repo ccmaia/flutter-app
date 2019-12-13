@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
+import '../../routers/application.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../service/service_method.dart';
 
 class NewsCenterPage extends StatefulWidget {
   @override
@@ -6,6 +11,39 @@ class NewsCenterPage extends StatefulWidget {
 }
 
 class _NewsCenterPageState extends State<NewsCenterPage> {
+  List formList=[];
+  var token = null;
+  bool isLogin = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getInteractive();
+  }
+
+  Future getInteractive() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      token = sharedPreferences.get('token');
+//      print('token is ${token}');
+      isLogin = token == null ? false : true;
+      if (isLogin) {
+        getNet('getInteractive').then((res) {
+//          print(res);
+          if (res['result'] == 1) {
+            setState(() {
+//              userInfo = res['data'];
+              formList = res['data'].toList();
+              print(formList);
+//              print(userInfo);
+            });
+          }
+        });
+      }
+    });
+  }
+
   List _messageList = [
     {
       "title": "帖子互动",
@@ -44,8 +82,8 @@ class _NewsCenterPageState extends State<NewsCenterPage> {
           itemCount: _messageList.length,
           itemBuilder: (context, index) {
 //            setState(() {
-              _messageList[index]['time'] = DateTime.fromMicrosecondsSinceEpoch(int.parse(_messageList[index]['time'])).toString().split(' ')[0].toString();
-              print(_messageList[index]['time']);
+//              _messageList[index]['time'] = DateTime.fromMicrosecondsSinceEpoch(int.parse(_messageList[index]['time'])).toString().split(' ')[0].toString();
+//              print(_messageList[index]['time']);
 //            });
             return _messageView(index);
           }),

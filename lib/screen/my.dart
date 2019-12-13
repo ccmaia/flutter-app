@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_test/public/ToastUtil.dart';
 import '../routers/application.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +13,14 @@ import '../index-page.dart';
 import 'dart:convert';
 import '../service/service_method.dart';
 import '../pages/user/user_msg.dart';
+import '../public/base.dart';
 
 class MyPage extends StatefulWidget {
   _MyPage createState() => _MyPage();
 }
 
 class _MyPage extends State<MyPage> {
-  var token = null;
+  var token;
   bool isLogin = false;
   var usermsg;
 
@@ -63,6 +65,7 @@ class _MyPage extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
+    _getLoginInfo();
     ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
     return Scaffold(
         body: ListView(
@@ -195,7 +198,11 @@ class _MyPage extends State<MyPage> {
               bottom: ScreenUtil().setHeight(20)),
           child: InkWell(
             onTap: () {
-              Application.router.navigateTo(context, '/inviteFriendPage');
+              if(token==null){
+                Toast.show("请先登录");
+              }else{
+                Application.router.navigateTo(context, '/inviteFriendPage');
+              }
             },
             child: Image.asset(
               'assets/image/invite.png',
@@ -249,21 +256,25 @@ class _MyPage extends State<MyPage> {
 //      width: ScreenUtil().setWidth(150.0),
       child: InkWell(
           onTap: () {
-            print('click');
-            if (route == "/userMsgPage") {
-              dynamic userDtat = {
-                "id": usermsg["id"],
-                "header_img": usermsg['head_img'],
-                "name": usermsg["name"],
-                "sex": usermsg['sex'],
-                "phone": usermsg['phone']
-              };
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserMsgPage(userDtat)));
-            } else {
-              Application.router.navigateTo(context, route);
+            if(token==null){
+              Toast.show("请先登录");
+            }else{
+              print('click');
+              if (route == "/userMsgPage") {
+                dynamic userDtat = {
+                  "id": usermsg["id"],
+                  "header_img": usermsg['head_img'],
+                  "name": usermsg["name"],
+                  "sex": usermsg['sex'],
+                  "phone": usermsg['phone']
+                };
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserMsgPage(userDtat)));
+              } else {
+                Application.router.navigateTo(context, route);
+              }
             }
           },
           child: Column(
@@ -365,6 +376,12 @@ class _MyPage extends State<MyPage> {
         );
       },
     );
+  }
+
+  _getLoginInfo() async {
+    if (SpUtil.getSp() != null) {
+      token = SpUtil.getSp().get('token');
+    }
   }
 }
 

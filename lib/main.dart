@@ -65,10 +65,8 @@ import './routers/application.dart';
 import 'package:provider/provider.dart';
 import './provider/base_list_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import './screen/community.dart';
 import 'package:oktoast/oktoast.dart';
-
 import 'public/base.dart';
 void main() {
   runRealApp();
@@ -124,7 +122,8 @@ class MyApp extends StatelessWidget {
             buttonColor: Colors.transparent,
 
           ),
-          home: token==null?LoginPage():ZncIndexPage(),
+//            token==null?LoginPage():
+          home: ZncIndexPage(),
           routes: <String,WidgetBuilder>{
             'homePage':(BuildContext context) => new Community(),//社区
           },

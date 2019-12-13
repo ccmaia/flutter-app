@@ -28,6 +28,7 @@ class Data {
   String tag;
   List<String> image;
   int date;
+  int like;
   int likeCount;
   int replyCount;
   int userId;
@@ -44,6 +45,7 @@ class Data {
         this.tag,
         this.image,
         this.date,
+        this.like,
         this.likeCount,
         this.replyCount,
         this.userId,
@@ -60,6 +62,7 @@ class Data {
     tag = json['tag'];
     image = json['image'].cast<String>();
     date = json['date'];
+    like = json['like'];
     likeCount = json['like_count'];
     replyCount = json['reply_count'];
     userId = json['user_id'];
@@ -83,6 +86,7 @@ class Data {
     data['tag'] = this.tag;
     data['image'] = this.image;
     data['date'] = this.date;
+    data['like'] = this.like;
     data['like_count'] = this.likeCount;
     data['reply_count'] = this.replyCount;
     data['user_id'] = this.userId;
@@ -102,6 +106,7 @@ class ThreadReplyResp {
   String userName;
   String userHeadImg;
   int date;
+  int like;
   int likeCount;
   String describe;
 
@@ -111,6 +116,7 @@ class ThreadReplyResp {
         this.userName,
         this.userHeadImg,
         this.date,
+        this.like,
         this.likeCount,
         this.describe});
 
@@ -120,6 +126,7 @@ class ThreadReplyResp {
     userName = json['user_name'];
     userHeadImg = json['user_head_img'];
     date = json['date'];
+    like = json['like'];
     likeCount = json['like_count'];
     describe = json['describe'];
   }
@@ -131,6 +138,7 @@ class ThreadReplyResp {
     data['user_name'] = this.userName;
     data['user_head_img'] = this.userHeadImg;
     data['date'] = this.date;
+    data['like'] = this.like;
     data['like_count'] = this.likeCount;
     data['describe'] = this.describe;
     return data;
