@@ -7,18 +7,21 @@ class AboutUsPage extends StatelessWidget {
     ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        backgroundColor: Colors.white,
+      title: Text(
           '关于我们',
         ),
+        centerTitle: true,
       ),
-      body: Column(
+      body:
+      ListView(
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(45.0)),
             child: Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.fromLTRB(70.0, 20.0, 70.0, 27.0),
+                  margin: EdgeInsets.fromLTRB(70.0, 20.0, 70.0, 10.0),
                   child: Image.asset(
                     'assets/image/logo1.png',
                     alignment: Alignment.center,

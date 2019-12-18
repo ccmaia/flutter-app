@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import '../../routers/application.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../service/service_method.dart';
 
 class InviteFriendPage extends StatefulWidget {
   @override
@@ -10,6 +13,37 @@ class InviteFriendPage extends StatefulWidget {
 }
 
 class _InviteFriendPageState extends State<InviteFriendPage> {
+  List formList=[];
+  var token = null;
+  bool isLogin = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getInviteNum();
+  }
+
+  Future getInviteNum() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      token = sharedPreferences.get('token');
+//      print('token is ${token}');
+      isLogin = token == null ? false : true;
+      if (isLogin) {
+        getNet('getInviteNum').then((res) {
+//          print(res);
+          if (res['result'] == 1) {
+            setState(() {
+              formList = res['data'].toList();
+              print(formList);
+            });
+          }
+        });
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
     return Stack(

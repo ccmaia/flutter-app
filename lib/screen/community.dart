@@ -22,7 +22,6 @@ class Community extends StatefulWidget {
 }
 
 class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
-  ScrollController _controller = new ScrollController();
 
   int _page = 1;
   List threadList = [];
@@ -36,8 +35,8 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     print('页面初始化------');
-
     setState(() {
+      //获取帖子类型
       getNet("getThreadPlate").then((res) {
         print(res['data']);
         plateData list = plateData.formJson(res['data']);
@@ -45,15 +44,10 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
         getThreams();
       });
     });
-    _controller.addListener(() {
-      print(_controller.offset);
-    });
   }
 
   @override
   void dispose() {
-    //为了避免内存泄露，需要调用_controller.dispose
-    _controller.dispose();
     super.dispose();
   }
 
@@ -105,7 +99,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                               );
                             } else {
                               return Container(
-                                  height: ScreenUtil().setHeight(245.0),
+                                  height: ScreenUtil().setHeight(255.0),
                                   child: Center(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -147,10 +141,9 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
             ));
   }
 
-//  上拉刷新数据
+//上拉刷新数据
   Future<Null> _refreshData() async {
     _page = 1;
-//    getThream();
     getThreams();
   }
 
@@ -199,24 +192,20 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
   //顶部搜索widget
   Widget searchWidgrt() {
     return Row(
-    mainAxisSize: MainAxisSize.min,
+    mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
           child:
           Container(
             //修饰黑色背景与圆角
             decoration: new BoxDecoration(
-              color: Color(0xFFEEEEEE),
-              borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              color: Color(0xFFEAEDF0),
+              borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
             ),
-            alignment: Alignment.center,
-            height: 34,
-            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+            height: 32,
             child: Container(
                 decoration: new BoxDecoration(
-                  borderRadius:
-                      const BorderRadius.all(const Radius.circular(5.0)),
-                  color: GlobalConfig.searchBackgroundColor,
+                  color: Colors.transparent,
                 ),
                 child: InkWell(
                   onTap: () {
@@ -229,9 +218,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
 //                    print(data);
                   },
                   child: Container(
-                    height: 36.0,
-                    padding: EdgeInsets.only(left: 5.0),
-//                    padding: EdgeInsets.only(left: 5.0),
+                    padding: EdgeInsets.only(left: 15.0),
                     child: Row(
                       children: <Widget>[
                         Image.asset(
@@ -243,7 +230,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                           child: Text(
                             '请输入您想搜索的内容',
                             style:
-                                TextStyle(color: Colors.black54, fontSize: 14),
+                                TextStyle(color: Colors.black38, fontSize: 14),
                           ),
                         )
                       ],
@@ -253,7 +240,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           ),
         ),
         Container(
-            margin: EdgeInsets.only(left: 20.0),
+            margin: EdgeInsets.only(left: 10.0),
             child: InkWell(
               onTap: () {
                 if (token == null) {
@@ -282,19 +269,18 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           },
           child: Container(
             width: ScreenUtil().setWidth(335),
-//          margin: EdgeInsets.only(bottom: 10.0),
             decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: BorderRadius.circular(5.0),
               color: Colors.white,
             ),
             child: Column(
               children: <Widget>[
                 Container(
-                  height: ScreenUtil().setHeight(210),
+                  height: ScreenUtil().setHeight(201),
                   decoration: BoxDecoration(
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.elliptical(6, 6)),
+                    BorderRadius.vertical(top: Radius.elliptical(5, 5)),
                     image: DecorationImage(
                       image: item.image.length == 0
                           ? AssetImage(
@@ -315,14 +301,11 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                     children: <Widget>[
                       Container(
                           alignment: Alignment(-1, -1),
-                          margin: EdgeInsets.only(bottom: 10.0),
+                          margin: EdgeInsets.only(bottom: 7.0),
                           child: Text(
                             item.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
                             style: TextStyle(
-                                color: Color(0xFF4C5772), fontSize: 16.0),
+                                color: Color(0xFF4C5772), fontSize: 14.0),
                           )),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -333,12 +316,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                                 child: item.userHeadImg == ''
                                     ? Image.asset(
                                         'assets/image/hd.png',
-                                        width: 22.0,height: 22.0,
+                                        width: 16.0,height: 16.0,
                                   fit: BoxFit.cover,
                                       )
                                     : Image.network(
                                         item.userHeadImg,
-                                        width: 22.0,height: 22.0,
+                                        width: 16.0,height: 16.0,
                                   fit: BoxFit.cover,
                                       ),
                               ),
@@ -347,13 +330,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                                 child: Text(
                                   '${item.userName}',
                                   style: TextStyle(
-                                      color: Color(0xFFB3B3B3), fontSize: 14.0),
+                                      color: Colors.black54, fontSize: 12.0),
                                 ),
                               ),
                             ],
                           ),
                           Container(
-                            width: 50,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -361,15 +343,15 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                                   onTap: () {},
                                   child: Image.asset(
                                     "assets/image/iszan.png",
-                                    width: 12,
+                                    width: 13,
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(left: 5.0),
+                                  margin: EdgeInsets.only(left: 4.0),
                                   child: Text(
                                     item.likeCount.toString(),
                                     style: TextStyle(
-                                        color: Color(0xFF999999), fontSize: 12),
+                                        color: Color(0xFF3394F2), fontSize: 12),
                                   ),
                                 )
                               ],
@@ -379,7 +361,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                       )
                     ],
                   ),
-                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                  padding: EdgeInsets.fromLTRB(7.0,10.0,7.0,10.0),
                 ),
               ],
             ),
@@ -393,10 +375,9 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
           },
           child: Container(
             width: ScreenUtil().setWidth(335),
-//            padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
             decoration: BoxDecoration(
               border: Border.all(color: Color(0xFFEEEEEE), width: 1.0),
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: BorderRadius.circular(5.0),
               color: Colors.white,
             ),
             child: Stack(
@@ -407,16 +388,16 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                   child: Image.asset('assets/image/question.png',width: 40,),
                 ),
                Container(
-                 padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                 padding: EdgeInsets.fromLTRB(7.0,11.0,7.0,11.0),
                  child:  Column(
                    children: <Widget>[
                      Row(
                        children: <Widget>[
                          Container(
-                           padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
+                           padding: EdgeInsets.fromLTRB(2.0, 0, 2.0, 1.0),
                            decoration: BoxDecoration(
                              borderRadius: BorderRadius.circular(2.0),
-                             color: Color(0xFF7DB2F3),
+                             color: Color(0xFF5FAAFF),
                            ),
                            child: Text(
                              '问答',
@@ -424,14 +405,14 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                            ),
                          ),
                          Container(
-                           margin: EdgeInsets.only(left: 5.0),
-                           padding: EdgeInsets.fromLTRB(3.0, 1.0, 3.0, 1.0),
+                           margin: EdgeInsets.only(left: 7.0),
+                           padding: EdgeInsets.fromLTRB(2.0, 0, 2.0, 1.0),
                            decoration: BoxDecoration(
                              borderRadius: BorderRadius.circular(2.0),
-                             color: Color(0xFF3AAC4F),
+                             color: Color(0xFF4BC95F),
                            ),
                            child: Text(
-                             item.plateName,
+                             item.plateName.toString(),
                              style: TextStyle(color: Colors.white, fontSize: 12.0),
                            ),
                          )
@@ -439,7 +420,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                      ),
                      Container(
                        alignment: Alignment(-1, -1),
-                       margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                       margin: EdgeInsets.only(bottom: 13.0, top: 8.0),
                        child: Text(
                          item.title,
                          maxLines: 1,
@@ -447,12 +428,11 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                          textAlign: TextAlign.left,
                          style: TextStyle(
                            color: Color(0xFF4C5772),
-                           fontSize: 16.0,
+                           fontSize: 14.0,
                          ),
                        ),
                      ),
                      Container(
-                       margin: EdgeInsets.only(top: 5.0),
                        child: Row(
                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: <Widget>[
@@ -462,12 +442,12 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                                  child: item.userHeadImg == ''
                                      ? Image.asset(
                                    'assets/image/hd.png',
-                                   width: 22.0,height: 22.0,
+                                   width: 16.0,height: 16.0,
                                    fit: BoxFit.cover,
                                  )
                                      : Image.network(
                                    item.userHeadImg,
-                                   width: 22.0,height: 22.0,
+                                   width: 16.0,height: 16.0,
                                    fit: BoxFit.cover,
                                  ),
                                ),
@@ -476,20 +456,20 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
                                  child: Text(
                                    item.userName,
                                    style: TextStyle(
-                                       color: Color(0xFFB3B3B3), fontSize: 14.0),
+                                       color: Colors.black54, fontSize: 12.0),
                                  ),
                                ),
                              ],
                            ),
                            Container(
-                             padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                             padding: EdgeInsets.only(left: 5.0, right: 5.0,bottom: 1.0),
                              decoration: BoxDecoration(
                                  borderRadius: BorderRadius.circular(15.0),
                                  border: Border.all(
-                                     color: Color(0xFFB9B9B9), width: 0.5)),
+                                     color: Color(0xFF9381E0), width: 0.5)),
                              child: Text("去解答",
                                  style: TextStyle(
-                                     color: Color(0xFFB9B9B9), fontSize: 12.0)),
+                                     color: Color(0xFF9381E0), fontSize: 12.0)),
                            )
                          ],
                        ),
@@ -505,8 +485,7 @@ class _HomeScreen extends State<Community> with AutomaticKeepAliveClientMixin {
     }
   }
 }
-
-//轮播tu
+//轮播图
 class SwiperDiy extends StatelessWidget {
   final List swiperDataList;
 
@@ -514,26 +493,33 @@ class SwiperDiy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.0),
-      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-      height: ScreenUtil().setHeight(245),
-      child: Swiper(
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
-              image: DecorationImage(
-                image: NetworkImage("${swiperDataList[index]['img']}",
-                    ),fit: BoxFit.fill
-              )
-            ),
-          );
-        },
-        itemCount: swiperDataList.length,
+    return
+      Container(
+        margin: EdgeInsets.only(top: 11.0,left: 11.0, right: 11.0),
+        height: ScreenUtil().setHeight(255),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5.0),
+          child: Container(
+            child: Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  decoration: BoxDecoration(
+//                      borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
+                      image: DecorationImage(
+                        image: NetworkImage("${swiperDataList[index]['img']}",
+                        ),
+                        fit: BoxFit.fill,
+                      )
+                  ),
+                );
+              },
+              itemCount: swiperDataList.length,
 //        pagination: new SwiperPagination(),
-        autoplay: true,
-      ),
-    );
+              autoplay: true,
+            ),
+          ),
+        ),
+
+      );
   }
 }

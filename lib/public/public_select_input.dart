@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../public/base.dart';
+
 
 ///选择框
 class StoreSelectTextItem extends StatelessWidget {
@@ -22,18 +24,18 @@ class StoreSelectTextItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 55.0,
-        margin: const EdgeInsets.only(right: 8.0, left: 16.0),
+        height: 50.0,
+        margin: const EdgeInsets.only(right: 16.0, left: 16.0),
         width: double.infinity,
         decoration: BoxDecoration(
             border: Border(
-          bottom: Divider.createBorderSide(context, width: 1),
+          bottom: Divider.createBorderSide(context, color:Color(0xFFb5b5b5),width: 1),
         )),
         child: Row(
           children: <Widget>[
             Text(
               title,
-              style: TextStyle(fontSize: 16.0, color: Color(0xFF5C6784)),
+              style: TextStyle(fontSize: 16.0, color: Color(0xFF333333)),
             ),
             Expanded(
               flex: 1,
@@ -43,13 +45,13 @@ class StoreSelectTextItem extends StatelessWidget {
                     maxLines: 2,
                     textAlign: textAlign,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 14.0, color: Color(0xFF999999))),
+                    style: TextStyle(fontSize: 16.0, color: Color(0xFF333333))),
               ),
             ),
             Image.asset(
               "assets/image/go_last.png",
-              width: 10.0,
-              height: 15.0,
+              width: 13.0,
+              height: 20.0,
             )
 //            Icon(Icons.keyboard_arrow_right)
 //            Images.LoadAssetImage("ic_arrow_right", height: 16.0, width: 16.0)

@@ -24,6 +24,9 @@ const servicePath = {
   "likethreamOrReply":baseUrl+'/zhinanche-app/thread',          //点赞帖子或评论
   "getMyThread": baseUrl+"/zhinanche-app/user/thread",    //我的帖子   get
   "getMyReply": baseUrl+"/zhinanche-app/user/thread/reply",    //我的回复   get
-  "getUpdate": baseUrl+"/zhinanche-app/apk/update/latest", //更新app
-  "getInteractive": baseUrl+"/zhinanche-app/system/info/interactive", //更新app
+  "getUpdate": baseUrl+"/zhinanche-app/apk/update/latest",                  //更新app
+  "getInteractive": baseUrl+"/zhinanche-app/system/info/interactive",         //更新app
+  "getInviteNum": baseUrl+"/zhinanche-app/login/invite/count" ,       //邀请人数
+  "courseMsg": baseUrl+"/zhinanche-app/course",           //课程详情   get
+  "getCourse": baseUrl+"/zhinanche-app/course" //课程列表
 };

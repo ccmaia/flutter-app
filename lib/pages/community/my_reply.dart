@@ -50,7 +50,8 @@ class _MyReplyPageState extends State<MyReplyPage> {
       tiles.add(
         InkWell(
           onTap: () {
-            Application.router.navigateTo(context, '/articleDetailPage');
+            Application.router.navigateTo(
+                context, '/articleDetailPage?id=${item['thread_id']}');
           },
           child: Container(
             decoration: BoxDecoration(
@@ -58,7 +59,7 @@ class _MyReplyPageState extends State<MyReplyPage> {
                   bottom: BorderSide(width: 1, color: Color(0xFFE5E5E5))),
               color: Colors.white,
             ),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(ScreenUtil().setWidth(28.0)),
 //            color: Colors.white,
 
             child: Column(
@@ -75,45 +76,28 @@ class _MyReplyPageState extends State<MyReplyPage> {
                   ],
                 ),
                 Divider(
-                  height: ScreenUtil().setSp(5.0),
+                  height: ScreenUtil().setSp(7.0),
                   color: Colors.transparent,
                 ),
                 Row(
                   children: <Widget>[
+                    Text(
+                      "${DateTime.fromMillisecondsSinceEpoch(item['date']).toString().split(' ')[0]}  ·  ${item['like_count']}个赞  ·  来自",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: ScreenUtil().setSp(24.0),
+                      ),
+                    ),
                     Container(
+                      width: 170,
                       child: Text(
-                        DateTime.fromMillisecondsSinceEpoch(item['date'])
-                            .toString(),
+                        item['thread_title'].toString(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: Color(0xFF5C6784),
-                            fontSize: ScreenUtil().setSp(24.0)),
-                      ),
-//
-                    ),
-                    Text(
-                      "  ·  ",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                      ),
-                    ),
-                    Text(
-//                      '12',
-                      '${item['like_count']}',
-                      style: TextStyle(
                           fontSize: ScreenUtil().setSp(24.0),
-                          color: Colors.grey[600]),
-                    ),
-                    Text(
-                      "个赞  ·  来自",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                      ),
-                    ),
-                    Text(
-                      item['thread_title'].toString(),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: Colors.lightBlue,
+                          color: Colors.lightBlue,
+                        ),
                       ),
                     )
                   ],

@@ -263,7 +263,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
                   child: RaisedButton(
                       color: Colors.transparent,
 //                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
-                      child: Text("保存信息", style: TextStyle(fontSize: 20)),
+                      child: Text("保存信息", style: TextStyle(fontSize: 16)),
                       textColor: Colors.white,
                       elevation: 0.0,
                       highlightElevation: 0.0,

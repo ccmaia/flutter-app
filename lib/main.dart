@@ -109,18 +109,18 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: [
-            const Locale('zh', 'CN'),
+//            const Locale('zh', 'CN'),
             const Locale('en', 'US'),
           ],
           debugShowCheckedModeBanner: false,
           title: '指南车',
           onGenerateRoute: Application.router.generator,
           theme: ThemeData(
-            primaryColor: Colors.grey[100],
+            primaryColor: Colors.white,
             accentColor: Color(0xFF333333),
             indicatorColor: Color(0xFFCCCCCC),
             buttonColor: Colors.transparent,
-
+            focusColor: GlobalConfig.bgColor1,
           ),
 //            token==null?LoginPage():
           home: ZncIndexPage(),

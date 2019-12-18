@@ -7,13 +7,14 @@ import '../../service/service_method.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+
 class MyArticlePage extends StatefulWidget {
   @override
   _MyArticlePageState createState() => _MyArticlePageState();
 }
 
 class _MyArticlePageState extends State<MyArticlePage> {
-  List formList=[];
+  List formList = [];
   var token = null;
   bool isLogin = false;
 
@@ -55,31 +56,32 @@ class _MyArticlePageState extends State<MyArticlePage> {
           centerTitle: true,
         ),
         body: ListView.builder(
-          itemCount:formList.length,
-          itemBuilder: (context,index){
-            return ListItem(data:formList[index]);
+          itemCount: formList.length,
+          itemBuilder: (context, index) {
+            return ListItem(data: formList[index]);
           },
-        )
-    );
+        ));
   }
 }
 
-
 class ListItem extends StatelessWidget {
   final Map data;
-  const ListItem({Key key,this.data}) : super(key: key);
+  const ListItem({Key key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Application.router.navigateTo(context, '/articleDetailPage');
+        Application.router
+            .navigateTo(context, '/articleDetailPage?id=${data['id']}');
       },
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
+        padding: EdgeInsets.all(
+          ScreenUtil().setWidth(28.0),
+        ),
         decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(width: 1, color: Color(0xFFE5E5E5))),
+          border:
+              Border(bottom: BorderSide(width: 1, color: Color(0xFFE5E5E5))),
           color: Colors.white,
         ),
         child: Column(
@@ -88,39 +90,40 @@ class ListItem extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Container(
-                      child: Text(
-                        data['title'],
-                        style: TextStyle(fontSize: ScreenUtil().setSp(32.0),),
-                      ),
-                    )),
+                  child: Text(
+                    data['title'],
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                      fontSize: ScreenUtil().setSp(32.0),
+                    ),
+                  ),
+                )),
               ],
             ),
             Divider(
-              height: ScreenUtil().setSp(5.0),
+              height: ScreenUtil().setSp(7.0),
               color: Colors.transparent,
             ),
             Row(
               children: <Widget>[
                 Expanded(
                     child: Container(
-                      child: Text(
-//                              '12',
-                        DateTime.fromMillisecondsSinceEpoch(data['date'])
-                          .toString(),
-//                              item['date'],
-                        style: TextStyle(
-                          color: Color(0xFF5C6784),
-                          fontSize: ScreenUtil().setSp(24.0),),
-                      ),
-//                                  margin: EdgeInsets.only(
-//                                      left: ScreenUtil().setWidth(15.0)),
-                    )),
+                  child: Text(
+                    DateTime.fromMillisecondsSinceEpoch(data['date'])
+                        .toString()
+                        .split(' ')[0],
+                    style: TextStyle(
+                      color: Color(0xFF5C6784),
+                      fontSize: ScreenUtil().setSp(24.0),
+                    ),
+                  ),
+                )),
                 Text(
-//                      "12回复",
-                  '${data['reply_count']}回复',
+                  '${data['like_count']}回复  ·  ${data['reply_count']}点赞',
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24.0),
-                    color: Colors.grey[600],),
+                    fontSize: ScreenUtil().setSp(22.0),
+                    color: Colors.grey[600],
+                  ),
                 ),
               ],
             ),

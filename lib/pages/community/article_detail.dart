@@ -47,26 +47,39 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
         ),
         body: FutureBuilder(
           future: getNet('getThreamInfo', path: widget.id),
-          builder: (context, snapshot){
+          builder: (context, snapshot) {
             if (snapshot.hasData) {
               threamDetail list = threamDetail.fromJson(snapshot.data);
+              print(snapshot);
               if (list.result == 1) {
 //                setState(() {
-                  threamInfo = list.data;
+                threamInfo = list.data;
 //                });
                 print(threamInfo.id);
               }
               return threamContent();
-            }else{
-              return Text('正在加载');
+            } else {
+              return Container(
+                  height: ScreenUtil().setHeight(245.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SpinKitCircle(
+                          color: Colors.blueAccent,
+                          size: 30.0,
+                        ),
+                        Text('正在加载')
+                      ],
+                    ),
+                  ));
             }
           },
-        )
-        );
+        ));
   }
 
   //页面布局
-  Widget threamContent(){
+  Widget threamContent() {
     return Column(
       children: <Widget>[
         Expanded(
@@ -79,14 +92,13 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
               SliverFixedExtentList(
                   delegate: new SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                       //创建列表项
-                      return replyModeule(
-                          threamInfo.threadReplyResp[index]);
+                      return replyModeule(threamInfo.threadReplyResp[index]);
                     },
-                    childCount: threamInfo.threadReplyResp.length, //50个列表项
+                    childCount: threamInfo.threadReplyResp.length, //列表项
                   ),
-                  itemExtent: ScreenUtil().setHeight(210))
+                  itemExtent: ScreenUtil().setHeight(220))
             ],
           ),
         ),
@@ -98,7 +110,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           padding: EdgeInsets.fromLTRB(
             ScreenUtil().setSp(20.0),
             ScreenUtil().setSp(15.0),
-            ScreenUtil().setSp(0.0),
+            ScreenUtil().setSp(20.0),
             ScreenUtil().setSp(15.0),
           ),
           child: Row(
@@ -106,14 +118,14 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               Expanded(
                 child: (TextField(
                   controller: _replyContent,
+                  style: TextStyle(fontSize: ScreenUtil().setSp(32.0)),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                         borderSide: BorderSide.none),
-                    fillColor: Colors.grey[150],
+                    fillColor: Color(0xFFEAEDF0),
                     filled: true,
-                    contentPadding:
-                    EdgeInsets.all(ScreenUtil().setSp(12.0)),
+                    contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 9.0, 5.0),
                     hintText: '写评论...',
                   ),
                 )),
@@ -129,8 +141,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: ScreenUtil().setSp(15.0),
-                      right: ScreenUtil().setSp((18.0))),
+                    left: ScreenUtil().setSp(18.0),
+                  ),
                   child: Container(
                     child: Text(
                       '发送',
@@ -138,16 +150,11 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                           color: Colors.white,
                           fontSize: ScreenUtil().setSp(32.0)),
                     ),
-                    padding: EdgeInsets.fromLTRB(
-                      ScreenUtil().setWidth(28.0),
-                      ScreenUtil().setHeight(15.0),
-                      ScreenUtil().setHeight(28.0),
-                      ScreenUtil().setHeight(15.0),
-                    ),
+                    padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 5.0),
                     // height: 50.0,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(25.0),
+                          Radius.circular(100.0),
 //                          bottomLeft: Radius.circular(25.0),
                         ),
                         color: Colors.blue
@@ -158,7 +165,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 //                                      Color(0xFF24B7E5),
 //                                      Color(0xFF24B7E5)
 //                                    ]),
-                    ),
+                        ),
                   ),
                 ),
               ),
@@ -213,7 +220,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   void likeThrean() {
     postNet('likethreamOrReply', path: '${widget.id}/like').then((res) {
       if (res['result'] == 1) {
-        getThreamInfo();
+        setState(() {});
       }
     });
   }
@@ -223,7 +230,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     postNet('likethreamOrReply', path: '${widget.id}/${item.id}/like')
         .then((res) {
       if (res['result'] == 1) {
-        getThreamInfo();
+        setState(() {});
       }
     });
   }
@@ -237,11 +244,13 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           //标题
           Row(
             children: <Widget>[
-              Text(
-                threamInfo.title == null ? '标题' : threamInfo.title,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(34.0),
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  threamInfo.title,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(34.0),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               )
             ],
@@ -254,7 +263,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             child: Row(
               children: <Widget>[
                 Text(
-                  "${threamInfo.replyCount}回帖  ·  ",
+                  "${threamInfo.replyCount}回复  ·  ",
                   style: TextStyle(
                       fontSize: ScreenUtil().setSp(24.0),
                       color: Colors.grey[600]),
@@ -327,10 +336,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     Container(
                         margin: EdgeInsets.only(right: 5),
                         child: Image.asset(
-                          threamInfo.like == 1
+                          threamInfo.like == 0
                               ? 'assets/image/zan.png'
                               : 'assets/image/iszan.png',
-                          width: 14,
+                          width: 16,
                         )),
                     Text(
                       "${threamInfo.likeCount}",
@@ -377,7 +386,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             child: Row(
               children: <Widget>[
                 Text(
-                  "帖子标记：${threamInfo.plate.toString() == null ? '无' : threamInfo.plate.toString() == '204' ? 'Abb' : '发那科'}",
+                  "帖子标记：${threamInfo.plate.toString() == null ? '无' : threamInfo.plate.toString() == '204' ? 'ABB' : '发那科'}",
                   style: TextStyle(
                       fontSize: ScreenUtil().setSp(24.0),
                       color: Colors.grey[600]),
@@ -513,10 +522,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                           Container(
                               margin: EdgeInsets.only(right: 5),
                               child: Image.asset(
-                                threamInfo.like == 1
+                                item.like == 0
                                     ? 'assets/image/zan.png'
                                     : 'assets/image/iszan.png',
-                                width: 14,
+                                width: 16,
                               )),
                           Text(
                             "${item.likeCount}",
@@ -534,45 +543,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                   alignment: Alignment(-1, -1),
                   padding: EdgeInsets.only(left: ScreenUtil().setSp(84.0)),
                   child: Text('${item.describe}')),
-//          Container(
-//            padding: EdgeInsets.only(
-//                top: ScreenUtil().setSp(15.0), left: ScreenUtil().setSp(84.0)),
-//            height: ScreenUtil().setSp(200.0),
-//            child: GridView(
-//              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                  crossAxisCount: 3,
-//                  mainAxisSpacing: ScreenUtil().setSp(15.0),
-//                  crossAxisSpacing: ScreenUtil().setSp(15.0),
-//                  childAspectRatio: 1),
-//              children: <Widget>[
-//                Image.asset(
-//                  'assets/image/3.jpg',
-//                  fit: BoxFit.cover,
-//                  width: ScreenUtil().setWidth(64.0),
-//                  height: ScreenUtil().setHeight(64.0),
-//
-//                ),
-//                Image.asset(
-//                  'assets/image/3.jpg',
-//                  fit: BoxFit.cover,
-//                  width: ScreenUtil().setWidth(64.0),
-//                  height: ScreenUtil().setHeight(64.0),
-//                ),
-//                Image.asset(
-//                  'assets/image/3.jpg',
-//                  fit: BoxFit.cover,
-//                  width: ScreenUtil().setWidth(64.0),
-//                  height: ScreenUtil().setHeight(64.0),
-//                ),
-//                Image.asset(
-//                  'assets/image/3.jpg',
-//                  fit: BoxFit.cover,
-//                  width: ScreenUtil().setWidth(64.0),
-//                  height: ScreenUtil().setHeight(64.0),
-//                ),
-//              ],
-//            ),
-//          ),
               Container(
                 alignment: Alignment.bottomLeft,
                 padding: EdgeInsets.only(

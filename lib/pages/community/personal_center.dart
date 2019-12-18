@@ -13,7 +13,6 @@ class PersonalCenterPage extends StatefulWidget {
 }
 
 class _PersonalCenterPageState extends State<PersonalCenterPage> {
-
   var token = null;
   bool isLogin = false;
   var userInfo;
@@ -43,7 +42,6 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +88,16 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                             borderRadius: BorderRadius.circular(
                                 ScreenUtil().setWidth(70.0)),
                             image: DecorationImage(
-                                image:null!= userInfo ? NetworkImage( userInfo['head_img']):AssetImage('assets/image/not_login.png'),
+                                image: null != userInfo
+                                    ? NetworkImage(userInfo['head_img'])
+                                    : AssetImage('assets/image/not_login.png'),
                                 fit: BoxFit.cover)),
                       ),
                       Container(
                         padding: EdgeInsets.only(
                             bottom: ScreenUtil().setHeight(62.0)),
                         child: Text(
-                           null!=userInfo?'${userInfo['name']}':'机器人',
+                          null != userInfo ? '${userInfo['name']}' : '机器人',
                           style: TextStyle(
                               fontSize: ScreenUtil().setSp(35.0),
                               color: Colors.white,
@@ -108,12 +108,12 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                   ),
                   Expanded(
                     child: Container(
-                      color: Color.fromRGBO(240, 240, 240, 1),
+                      color: Color(0xFFF5F5F5),
                       child: Column(
                         children: <Widget>[
                           Divider(
                             height: ScreenUtil().setSp(20.0),
-                            color: Color.fromRGBO(240, 240, 240, 1),
+                            color: Colors.transparent,
                           ),
                           InkWell(
                             onTap: () {
@@ -142,10 +142,15 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                                         left: ScreenUtil().setWidth(15.0)),
                                   )),
                                   Image.asset('assets/image/go_last.png',
-                                      width: ScreenUtil().setWidth(14.0))
+                                      width: ScreenUtil().setWidth(18.0)),
                                 ],
                               ),
                             ),
+                          ),
+                          Divider(
+                            height: 1.0,
+                            indent: 0.0,
+                            color: Colors.transparent,
                           ),
                           InkWell(
                             onTap: () {
@@ -178,6 +183,11 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                                 ],
                               ),
                             ),
+                          ),
+                          Divider(
+                            height: 1.0,
+                            indent: 0.0,
+                            color: Colors.transparent,
                           ),
                           InkWell(
                             onTap: () {

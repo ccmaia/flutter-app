@@ -24,6 +24,9 @@ class GlobalConfig {
   static Color searchBackgroundColor = Color(0xFFEBEBEB);
   static Color cardBackgroundColor = Colors.white;
   static Color fontColor = Colors.black54;
+  static Color bgColor1 = Color(0xFFF9F9F9);//通用背景颜色
+  static Color bgColor2 = Color(0xFFEFEFEF);
+//  static Color serif1 = Color(0x)
 }
 //  判断是否有token是否登录
 Future getString() async {

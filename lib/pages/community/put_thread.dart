@@ -5,6 +5,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 import '../../public/public_select_input.dart';
 import 'dart:io';
+import '../../public/base.dart';
 import 'package:dio/dio.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../service/service_method.dart';
@@ -28,6 +29,7 @@ class _PutThreadState extends State<PutThread> {
   TextEditingController content = TextEditingController();
   VideoPlayerController controller;
   List plateList = [];
+  String plateName = '';
 
   @override
   void initState() {
@@ -46,18 +48,17 @@ class _PutThreadState extends State<PutThread> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        centerTitle: true,
         title: Text(widget.groups == "1" ? "发布帖子" : "发布问题"),
         elevation: 1.0,
-        backgroundColor: Colors.white,
       ),
       body: Column(
         children: <Widget>[
-//          widget.groups.toString()=='1'?Container():
-         Container(
+          Container(
             color: Colors.white,
             child: StoreSelectTextItem(
                 title: "请选择类型",
-                content: plate == "" ? "" : plate == '204' ? 'Abb' : '发那科',
+                content: plateName.toString(),
                 onTap: () {
                   _showBottomSheet();
                 }),
@@ -65,28 +66,29 @@ class _PutThreadState extends State<PutThread> {
           Expanded(
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
+              padding: EdgeInsets.fromLTRB(16.0, 9.0, 16.0, 9.0),
               child: ListView(
                 children: <Widget>[
                   TextField(
+                    style: TextStyle(textBaseline: TextBaseline.alphabetic),
                     decoration: InputDecoration(
-                        hintText: "请输入你的标题",
+                      hintText: "请输入标题",
+                      border: InputBorder.none,
                     ),
                     controller: title,
                   ),
-                  SizedBox(height: 20),
                   TextField(
-                    maxLines: 3, //设置此参数可以将文本框改为多行文本框
+                    style: TextStyle(textBaseline: TextBaseline.alphabetic),
+                    //设置此参数让TextField光标和hint在中文环境下对齐，原理未知
+                    maxLines: 4, //设置此参数可以将文本框改为多行文本框
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        labelText: "请输入你的描述",
+                        hintText: "请输入正文",
+                        border: InputBorder.none,
                         fillColor: Color(0xFFEBEBEB),
                         focusColor: Colors.grey),
                     controller: content,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   Container(
                     height: 200,
                     child: GridView.builder(
@@ -101,13 +103,13 @@ class _PutThreadState extends State<PutThread> {
                         }),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 50, right: 50, top: 10),
+                    padding: EdgeInsets.only(left: 70, right: 70, top: 60),
                     child: Container(
-                      width: 220,
-                      height: 45,
+                      width: 120,
+                      height: 40,
 //                margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -116,7 +118,7 @@ class _PutThreadState extends State<PutThread> {
                       child: RaisedButton(
                           color: Colors.transparent,
 //                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
-                          child: Text("发布", style: TextStyle(fontSize: 20)),
+                          child: Text("发   布", style: TextStyle(fontSize: 18)),
                           textColor: Colors.white,
                           elevation: 0.0,
                           highlightElevation: 0.0,
@@ -314,8 +316,10 @@ class _PutThreadState extends State<PutThread> {
       print("选取视频：${video}");
       String path = video.path;
       var fileName = DateTime.now().millisecondsSinceEpoch.toString() + ".mp4";
-      FormData formData =
-          new FormData.from({"file_name": fileName, "file": new UploadFileInfo(new File(path), fileName)});
+      FormData formData = new FormData.from({
+        "file_name": fileName,
+        "file": new UploadFileInfo(new File(path), fileName)
+      });
       postNet('uploadVideo', formData: formData).then((res) {
         print("返回结果${res}");
         if (res['result'] == 1) {
@@ -334,7 +338,7 @@ class _PutThreadState extends State<PutThread> {
 
 //  发布
   void _saveThread() {
-    if(plate==""){
+    if (plate == "") {
       Toast.show("请选择类型");
       return;
     }
@@ -364,28 +368,14 @@ class _PutThreadState extends State<PutThread> {
         if (res['result'] == 1) {
           Toast.show('发布成功');
           Navigator.pop(context);
-          Application.router.navigateTo(context, '/articleDetailPage?id=${res['data']}');
+          Application.router
+              .navigateTo(context, '/articleDetailPage?id=${res['data']}');
           print(res);
         }
       });
     }
   }
-
-  Future getHttp(data) async {
-    try {
-      Response response;
-      Dio dio = Dio();
-      dio.options.headers['token'] =
-          "61E77508527256A12A72A8961EAAA5DB401AF5908072783C6B350145644BF73EA3652C07360447CFDB2DC2AE14D1756B";
-      response = await dio.post(
-          "https://test.zhinanche.com/api/v2/zhinanche-app/thread",
-          data: data);
-      return response.data;
-    } catch (e) {
-      print(e);
-    }
-  }
-
+//底部弹出框
   void _showBottomSheet() {
     showModalBottomSheet(
         context: context,
@@ -405,6 +395,7 @@ class _PutThreadState extends State<PutThread> {
                   onTap: () {
                     setState(() {
                       plate = plateList[index]["id"].toString();
+                      plateName = plateList[index]["name"];
                     });
                     Navigator.pop(context);
                   },
