@@ -109,8 +109,8 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: [
-//            const Locale('zh', 'CN'),
-            const Locale('en', 'US'),
+            const Locale('zh', 'CN'),
+//            const Locale('en', 'US'),
           ],
           debugShowCheckedModeBanner: false,
           title: '指南车',

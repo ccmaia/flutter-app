@@ -123,7 +123,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _bottonLogin() async {
-    print(visible);
     if (visible) {
       //登录
       if ((_formKey.currentState as FormState).validate()) {
@@ -164,11 +163,66 @@ class _LoginPageState extends State<LoginPage> {
           }).then((res) {
         if (res['result'] == 1) {
           Toast.show("注册成功");
-          setState(() {
-            visible = true;
-            btnText = "登录";
-            bottomText = "立即注册";
+          print('注册成功——————————————————————————');
+
+
+          FormData formData = new FormData.from({
+            'username': unameController.text,
+            'password': pwdController.text,
+            'status': 2
           });
+          if(!shareCode.text.isEmpty){
+            postNet('login', formData: formData).then((val) {
+              if (val['result'] == 1) {
+                _saveLoginStatus(val['data']);
+                FormData formData1 = FormData.from({
+                  "key":shareCode.text
+                });
+
+                print('邀请码——————————————————————');
+                postNet('loginInvite',formData:formData1,).then((res){
+                  print(res);
+                });
+                print('成功');
+                Toast.show('登录成功');
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => ZncIndexPage()),
+                      (route) => route == null,
+                ).then((data) {
+                  setState(() {});
+                });
+              } else {
+                Application.router.navigateTo(context, '');
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(title: Text('登录失败，请重新登录')));
+              }
+            });
+
+          }else{
+            postNet('login', formData: formData).then((val) {
+              if (val['result'] == 1) {
+                Toast.show('登录成功');
+                _saveLoginStatus(val['data']);
+                FormData formData1 = FormData.from({
+                  "key":shareCode.text
+                });
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => ZncIndexPage()),
+                      (route) => route == null,
+                ).then((data) {
+                  setState(() {});
+                });
+              } else {
+                Application.router.navigateTo(context, '');
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(title: Text('登录失败，请重新登录')));
+              }
+            });
+          }
         }
 //        code.
       });
@@ -320,7 +374,7 @@ class _LoginPageState extends State<LoginPage> {
             )),
             TextFormField(
               autofocus: false,
-              obscureText: false,
+              obscureText: true,
               keyboardType: TextInputType.number,
               //键盘回车键的样式
               textInputAction: TextInputAction.next,

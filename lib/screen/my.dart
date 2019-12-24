@@ -65,162 +65,160 @@ class _MyPage extends State<MyPage> {
   Widget build(BuildContext context) {
     _getLoginInfo();
     ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
-    return Column(
-      children: <Widget>[
-        Container(
-          width: ScreenUtil().setWidth(720.0),
-          height: ScreenUtil().setHeight(500.0),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                width: ScreenUtil().setWidth(720.0),
-                height: ScreenUtil().setHeight(383.0),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/image/user_bg.png'),
-                        fit: BoxFit.cover)),
-                child: Container(
-                  height: ScreenUtil().setHeight(117.0),
-                  padding: EdgeInsets.only(left: ScreenUtil().setWidth(38.0)),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: ScreenUtil().setWidth(120),
-                        height: ScreenUtil().setWidth(120),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                ScreenUtil().setWidth(60.0)),
-                            image: DecorationImage(
-                                image: isLogin
-                                    ? usermsg['head_img'] != null
-                                    ? NetworkImage(usermsg['head_img'])
-                                    : AssetImage(
-                                    'assets/image/not_login.png')
-                                    : AssetImage(
-                                    'assets/image/not_login.png'),
-                                fit: BoxFit.cover)),
-                      ),
-                      Expanded(
-                          child: InkWell(
-                              onTap: () {
-                                if (isLogin) {
+    return Container(
+      color: GlobalConfig.bgColor1,
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: ScreenUtil().setWidth(720.0),
+            height: ScreenUtil().setHeight(490.0),
+            margin: EdgeInsets.only(bottom: 10),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  width: ScreenUtil().setWidth(720.0),
+                  height: ScreenUtil().setHeight(383.0),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/image/user_bg.png'),
+                          fit: BoxFit.cover)),
+                  child: Container(
+                    height: ScreenUtil().setHeight(117.0),
+                    padding: EdgeInsets.only(left: ScreenUtil().setWidth(38.0)),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: ScreenUtil().setWidth(120),
+                          height: ScreenUtil().setWidth(120),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  ScreenUtil().setWidth(60.0)),
+                              image: DecorationImage(
+                                  image: isLogin
+                                      ? usermsg['head_img'] != null
+                                          ? NetworkImage(usermsg['head_img'])
+                                          : AssetImage(
+                                              'assets/image/not_login.png')
+                                      : AssetImage('assets/image/not_login.png'),
+                                  fit: BoxFit.cover)),
+                        ),
+                        Expanded(
+                            child: InkWell(
+                                onTap: () {
+                                  if (isLogin) {
 //                          Application.router.navigateTo(context,
 //                              '/userMsgPage?userMsg=${Uri.encodeComponent(widget.userMsg.toString())}');
-                                } else {
-                                  print('jump');
-                                  Application.router
-                                      .navigateTo(context, '/loginPage');
-                                }
-                              },
-                              child: Container(
-                                height: ScreenUtil().setHeight(135.0),
-                                margin: EdgeInsets.only(
-                                    left: ScreenUtil().setWidth(20.0)),
-                                padding: EdgeInsets.only(
-                                    top: ScreenUtil().setHeight(10.0),
-                                    bottom: ScreenUtil().setHeight(10.0)),
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      isLogin
-                                          ? usermsg['name'] == null
-                                          ? '指南车'
-                                          : usermsg['name']
-                                          : '登录/注册',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(38.0)),
-                                    ),
-                                    Text(
+                                  } else {
+                                    print('jump');
+                                    Application.router
+                                        .navigateTo(context, '/loginPage');
+                                  }
+                                },
+                                child: Container(
+                                  height: ScreenUtil().setHeight(135.0),
+                                  margin: EdgeInsets.only(
+                                      left: ScreenUtil().setWidth(20.0)),
+                                  padding: EdgeInsets.only(
+                                      top: ScreenUtil().setHeight(10.0),
+                                      bottom: ScreenUtil().setHeight(10.0)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
                                         isLogin
-                                            ? usermsg['phone'] == null
-                                            ? '手机号码'
-                                            : usermsg['phone']
-                                            : '请先登录或注册',
+                                            ? usermsg['name'] == null
+                                                ? '指南车'
+                                                : usermsg['name']
+                                            : '登录/注册',
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize:
-                                            ScreenUtil().setSp(32.0)))
-                                  ],
-                                ),
-                              ))),
-                      Container(
-                        child: Text(
-                          '邀请好友',
-                          style: TextStyle(
-                              color: Color(0xFFB48403),
-                              fontSize: ScreenUtil().setSp(28.0)),
-                        ),
-                        padding: EdgeInsets.fromLTRB(
-                          ScreenUtil().setWidth(24.0),
-                          ScreenUtil().setHeight(8.0),
-                          ScreenUtil().setHeight(24.0),
-                          ScreenUtil().setHeight(8.0),
-                        ),
-                        // height: 50.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25.0),
-                            bottomLeft: Radius.circular(25.0),
+                                            fontSize: ScreenUtil().setSp(38.0)),
+                                      ),
+                                      Text(
+                                          isLogin
+                                              ? usermsg['phone'] == null
+                                                  ? '手机号码'
+                                                  : usermsg['phone']
+                                              : '请先登录或注册',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: ScreenUtil().setSp(32.0)))
+                                    ],
+                                  ),
+                                ))),
+                        Container(
+                          child: Text(
+                            '邀请好友',
+                            style: TextStyle(
+                                color: Color(0xFFB48403),
+                                fontSize: ScreenUtil().setSp(28.0)),
                           ),
-                          gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFFFFF26E), Color(0xFFFFD025)]),
+                          padding: EdgeInsets.fromLTRB(
+                            ScreenUtil().setWidth(24.0),
+                            ScreenUtil().setHeight(8.0),
+                            ScreenUtil().setHeight(24.0),
+                            ScreenUtil().setHeight(8.0),
+                          ),
+                          // height: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              bottomLeft: Radius.circular(25.0),
+                            ),
+                            gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFFFFF26E), Color(0xFFFFD025)]),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-
                 ),
-              ),
-              Positioned(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  child: _btnGroup(),
-                ),
-                top: ScreenUtil().setHeight(304),
-              )
-            ],
-          ),
-        ),
-        Container(
-//          height: ScreenUtil().setHeight(157.0),
-          margin: EdgeInsets.only(
-              top: ScreenUtil().setHeight(20),
-              bottom: ScreenUtil().setHeight(20)),
-          child: InkWell(
-            onTap: () {
-              if(token==null){
-                Toast.show("请先登录");
-              }else{
-                Application.router.navigateTo(context, '/inviteFriendPage');
-              }
-            },
-            child: Image.asset(
-              'assets/image/invite.png',
-              width: ScreenUtil().setWidth(720),
+                Positioned(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: _btnGroup(),
+                  ),
+                  top: ScreenUtil().setHeight(304),
+                )
+              ],
             ),
           ),
-        ),
-        Expanded(
-         child: Container(
-           padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(30.0)),
-           child: Column(
-             children: <Widget>[
-               _pageStrip('user_znc', '/aboutUsPage', '关于我们'),
-               _pageStrip('user_write', '/feedBackPage', '意见反馈'),
-               _pageStrip('user_up', '/updatePage', '版本更新'),
-               _pageStrip('user_manage', '/aboutUs', '退出登录'),
-             ],
-           ),
-         ),
-        ),
-      ],
+          Container(
+            margin: EdgeInsets.only(
+                bottom: ScreenUtil().setHeight(20)),
+            child: InkWell(
+              onTap: () {
+                if (token == null) {
+                  Toast.show("请先登录");
+                } else {
+                  Application.router.navigateTo(context, '/inviteFriendPage');
+                }
+              },
+              child: Image.asset(
+                'assets/image/invite.png',
+                width: ScreenUtil().setWidth(720),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(30.0)),
+              child: Column(
+                children: <Widget>[
+                  _pageStrip('user_znc', '/aboutUsPage', '关于我们'),
+                  _pageStrip('user_write', '/feedBackPage', '意见反馈'),
+                  _pageStrip('user_up', '/updatePage', '版本更新'),
+                  _pageStrip('user_manage', '/aboutUs', '退出登录'),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -233,7 +231,7 @@ class _MyPage extends State<MyPage> {
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.white,
       ),
-      width: ScreenUtil().setWidth(700.0),
+      width: ScreenUtil().setWidth(680.0),
 //      height: ScreenUtil().setHeight(190),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -243,7 +241,7 @@ class _MyPage extends State<MyPage> {
               '/newsCenterPage', 'assets/image/massage_center.png', '消息中心'),
           _buttonIcon(
               '/inviteFriendPage', 'assets/image/my_visite.png', '我的邀请'),
-          _buttonIcon('aa', 'assets/image/my_cert.png', '我的认证'),
+          _buttonIcon('/certifyIndexPage', 'assets/image/my_cert.png', '我的认证'),
         ],
       ),
     );
@@ -255,9 +253,10 @@ class _MyPage extends State<MyPage> {
 //      width: ScreenUtil().setWidth(150.0),
       child: InkWell(
           onTap: () {
-            if(token==null){
+
+            if (token == null) {
               Toast.show("请先登录");
-            }else{
+            } else {
               print('click');
               if (route == "/userMsgPage") {
                 dynamic userDtat = {
@@ -271,7 +270,7 @@ class _MyPage extends State<MyPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UserMsgPage(userDtat)));
-              } else {
+              }else{
                 Application.router.navigateTo(context, route);
               }
             }
@@ -282,14 +281,14 @@ class _MyPage extends State<MyPage> {
             children: <Widget>[
               Image.asset(
                 img,
-                width: ScreenUtil().setWidth(110),
+                width: ScreenUtil().setWidth(100),
               ),
               Container(
                 child: Text(
                   label,
                   style: TextStyle(
                       color: Color(0xFF5C6784),
-                      fontSize: ScreenUtil().setSp(28.0)),
+                      fontSize: ScreenUtil().setSp(26.0)),
                 ),
                 margin: EdgeInsets.only(top: 5),
               )
@@ -302,7 +301,7 @@ class _MyPage extends State<MyPage> {
   Container _pageStrip(String img, String router, String label) {
     return Container(
       height: 45,
-      margin: EdgeInsets.only(bottom: 5),
+      margin: EdgeInsets.only(bottom: 1),
       child: InkWell(
         onTap: () {
           print('jump');
@@ -318,8 +317,7 @@ class _MyPage extends State<MyPage> {
         child: Row(children: <Widget>[
           Image.asset('assets/image/${img}.png',
               width: ScreenUtil().setWidth(42.0),
-              height: ScreenUtil().setHeight(42.0)
-          ),
+              height: ScreenUtil().setHeight(42.0)),
           Expanded(
               child: Container(
             child: Text(
@@ -327,7 +325,7 @@ class _MyPage extends State<MyPage> {
               style: TextStyle(
                   color: Color(0xFF5C6784), fontSize: ScreenUtil().setSp(30.0)),
             ),
-            margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
+            margin: EdgeInsets.only(left: ScreenUtil().setWidth(15.0)),
           )),
           Image.asset('assets/image/go_last.png',
               width: ScreenUtil().setWidth(14.0))

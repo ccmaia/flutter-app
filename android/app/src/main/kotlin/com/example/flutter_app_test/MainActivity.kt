@@ -1,4 +1,4 @@
-package com.example.flutter_app_test
+package com.zhinanche.app
 
 import android.os.Bundle
 

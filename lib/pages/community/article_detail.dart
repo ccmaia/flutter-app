@@ -24,6 +24,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   Data threamInfo;
   TextEditingController _replyContent = new TextEditingController();
   var token;
+  List plateList = [];
+  List brandList = [];
 
   @override
   void initState() {
@@ -31,8 +33,19 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 
     super.initState();
     _getLoginInfo();
-//    getThreamInfo();
-    print('id is ${widget.id}');
+    getNet('getBrand').then((res) {
+      if (res['result'] == 1) {
+        setState(() {
+          brandList = res['data'];
+        });
+      }
+    });
+    getNet("getThreadPlate").then((res) {
+      setState(() {
+        plateList = res['data'];
+      });
+      print(plateList);
+    });
   }
 
   @override
@@ -50,12 +63,23 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               threamDetail list = threamDetail.fromJson(snapshot.data);
-              print(snapshot);
               if (list.result == 1) {
-//                setState(() {
                 threamInfo = list.data;
-//                });
-                print(threamInfo.id);
+                print(snapshot.data);
+                if(brandList.length>0){
+                  brandList.forEach((item){
+                    if(item['id']== threamInfo.brand){
+                      threamInfo.brandName = item['name'];
+                    }
+                  });
+                }
+                if(plateList.length>0){
+                  plateList.forEach((type) {
+                    if (type['id'] == threamInfo.plate) {
+                      threamInfo.plateName = type['name'];
+                    }
+                  });
+                }
               }
               return threamContent();
             } else {
@@ -118,7 +142,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               Expanded(
                 child: (TextField(
                   controller: _replyContent,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(32.0)),
+                  style: TextStyle(fontSize: ScreenUtil().setSp(28.0)),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
@@ -148,7 +172,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       '发送',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: ScreenUtil().setSp(32.0)),
+                          fontSize: ScreenUtil().setSp(28.0)),
                     ),
                     padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 5.0),
                     // height: 50.0,
@@ -176,17 +200,46 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     );
   }
 
-  //  获取帖子详情
-  void getThreamInfo() {
-    getNet('getThreamInfo', path: widget.id).then((res) {
-      print(res);
-      threamDetail list = threamDetail.fromJson(res);
-      if (list.result == 1) {
-        setState(() {
-          threamInfo = list.data;
-        });
-        print(threamInfo.id);
+//    获取帖子详情
+//  void getThreamInfo() {
+//    getNet('getThreamInfo', path: widget.id).then((res) {
+//      print(res);
+//      threamDetail list = threamDetail.fromJson(res);
+//      if (list.result == 1) {
+//        setState(() {
+//          threamInfo = list.data;
+//        });
+//      }
+//    });
+//  }
+
+
+//  处理板块和品牌
+  void _brandAndplate(){
+    getNet("getThreadPlate").then((res) {
+      plateList = res['data'];
+      print(plateList);
+      plateList.forEach((type) {
+        if (type.id == threamInfo.plate) {
+          setState(() {
+            threamInfo.plateName = type.name;
+          });
+        }
+      });
+    });
+
+    getNet('getBrand').then((res) {
+      if (res['result'] == 1) {
+        brandList = res['data'];
       }
+      brandList.forEach((type) {
+        if (type.id == threamInfo.brand) {
+          setState(() {
+            threamInfo.brandName = type.name;
+          });
+        }
+      });
+      print(threamInfo);
     });
   }
 
@@ -203,7 +256,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
         if (res['result'] == 1) {
           Toast.show('评论成功');
           _replyContent.text = '';
-          getThreamInfo();
+//          getThreamInfo();
+          setState(() {
+
+          });
         }
       });
     }
@@ -238,6 +294,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 //  帖子
   Widget threamTopModeule() {
     return Container(
+      color: Colors.white,
       padding: EdgeInsets.all(ScreenUtil().setSp(28.0)),
       child: Column(
         children: <Widget>[
@@ -378,7 +435,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       itemBuilder: (BuildContext context, int index) {
                         return medioModeule(threamInfo.image[index]);
                       })),
-          //    帖子标记，暂时不做
           Container(
             padding: EdgeInsets.only(
                 top: ScreenUtil().setSp(15.0),
@@ -386,11 +442,20 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             child: Row(
               children: <Widget>[
                 Text(
-                  "帖子标记：${threamInfo.plate.toString() == null ? '无' : threamInfo.plate.toString() == '204' ? 'ABB' : '发那科'}",
-                  style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24.0),
-                      color: Colors.grey[600]),
-                ),
+                        "帖子板块：${threamInfo.plateName}",
+                        style: TextStyle(
+                            fontSize: ScreenUtil().setSp(24.0),
+                            color: Colors.grey[600]),
+                      ),
+                Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: Text(
+                          "帖子品牌：${threamInfo.brandName}",
+                          style: TextStyle(
+                              fontSize: ScreenUtil().setSp(24.0),
+                              color: Colors.grey[600]),
+                        ),
+                      )
               ],
             ),
           ),

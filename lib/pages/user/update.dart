@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
+import '../../routers/application.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../service/service_method.dart';
 
 class UpdatePage extends StatefulWidget {
   @override
@@ -10,6 +14,40 @@ class UpdatePage extends StatefulWidget {
 }
 
 class _UpdatePageState extends State<UpdatePage> {
+
+  List formList = [];
+  var token = null;
+  bool isLogin = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUpdate();
+  }
+
+  Future getUpdate() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      token = sharedPreferences.get('token');
+      print('token is ${token}');
+      isLogin = token == null ? false : true;
+      if (isLogin) {
+        getNet('getUpdate').then((res) {
+//          print(res);
+          if (res['result'] == 1) {
+            setState(() {
+//              userInfo = res['data'];
+              formList = res['data'];
+              print(formList);
+//              print(userInfo);
+            });
+          }
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 720, height: 1280)..init(context);
@@ -31,7 +69,7 @@ class _UpdatePageState extends State<UpdatePage> {
         child: Column(
           children: <Widget>[
             Text(
-              'V1.10',
+              'V0.1.0',
               style: TextStyle(fontSize: ScreenUtil().setSp(50.0), height: 4.5),
             ),
             Text(
@@ -73,7 +111,7 @@ class LinkViewState extends State<LinkView> {
             onPressed: _launchPhone,
             textColor: Colors.white,
             child: Text(
-              "发现新版本，立即更新",
+              "您已经安装最新版本",
               style: TextStyle(fontSize: ScreenUtil().setSp(32.0)),
             )),
         borderRadius: BorderRadius.circular(50.0),

@@ -4,6 +4,7 @@ import 'package:flutter_app_test/public/ToastUtil.dart';
 import 'package:flutter_app_test/routers/application.dart';
 import '../service/service_method.dart';
 import '../public/threaData.dart';
+import '../public/base.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -25,18 +26,22 @@ class _SearchPageState extends State<SearchPage> {
         automaticallyImplyLeading: false,
         elevation: 0.0,
       ),
-      body: SafeArea(
-        child: ListView.builder(
-            itemCount: searchThreamList.length,
+      body: Container(
+        color: GlobalConfig.bgColor1,
+        padding: EdgeInsets.only(top: 5),
+        child: SafeArea(
+          child: ListView.builder(
+              itemCount: searchThreamList.length,
 //            itemExtent: 100,
-            itemBuilder: (BuildContext context,int index){
-              return InkWell(
-                onTap: (){
-                  Application.router.navigateTo(context, '/articleDetailPage?id=${searchThreamList[index].id}');
-                },
-                child: itemThream(searchThreamList[index]),
-              );
-        }),
+              itemBuilder: (BuildContext context,int index){
+                return InkWell(
+                  onTap: (){
+                    Application.router.navigateTo(context, '/articleDetailPage?id=${searchThreamList[index].id}');
+                  },
+                  child: itemThream(searchThreamList[index]),
+                );
+          }),
+        ),
       ),
     );
   }
@@ -67,9 +72,14 @@ class _SearchPageState extends State<SearchPage> {
 //  帖子列表
   Widget itemThream(item){
     return Container(
-      margin: EdgeInsets.only(top: 8.0),
-      padding: EdgeInsets.fromLTRB(15.0,10.0,15.0,10.0),
-      color: Colors.white,
+      margin: EdgeInsets.only(top: 1.0),
+      padding: EdgeInsets.all(14.0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+              top: BorderSide(
+                  width: 5,
+                  color: GlobalConfig.bgColor1))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
                     child: Text(
                       item.userName,
                       style: TextStyle(
-                          color: Color(0xFFB3B3B3), fontSize: 14.0),
+                          color:GlobalConfig.fontColor1, fontSize: 14.0),
                     ),
                   )
                 ],
@@ -107,13 +117,14 @@ class _SearchPageState extends State<SearchPage> {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Color(0xFFB3B3B3), fontSize: 14.0),
+                    color: GlobalConfig.fontColor3, fontSize: 12.0),
               ),
             ],
           ),
           Container(
-            child: Text(item.title,textAlign: TextAlign.left,),
-            margin: EdgeInsets.only(top: 8.0),
+            child: Text(item.title,textAlign: TextAlign.left,
+            style:TextStyle(color:GlobalConfig.fontColor1)),
+            margin: EdgeInsets.only(top: 5.0),
           )
         ],
       ),
@@ -132,14 +143,14 @@ class _SearchPageState extends State<SearchPage> {
           icon: ImageIcon(
             AssetImage(
               "assets/image/search.png",
-            ),size: 20,color: Colors.black54,
+            ),size: 16,color:Colors.black54,
           ),
           hintText: "请输入搜索内容",
-          focusColor: Colors.black54,
+//          focusColor: Colors.black54,
 
-//          hintStyle: new TextStyle(fontSize: 14, color: Colors.black54)
+          hintStyle: new TextStyle(fontSize: 14, color: Colors.black54)
       ),
-      style: new TextStyle(fontSize: 14),
+      style: new TextStyle(fontSize: 14,color: Colors.black38,textBaseline: TextBaseline.alphabetic),
       controller: _searchContent,
     );
   }
@@ -149,10 +160,10 @@ class _SearchPageState extends State<SearchPage> {
       decoration: new BoxDecoration(
 //          border: Border.all(color: Colors.grey, width: 1.0), //灰色的一层边框
         color: Color(0xFFEEEEEE),
-        borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+        borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
       ),
       alignment: Alignment.center,
-      height: 36,
+      height: 32,
       padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
       child: buildTextField(),
     );
@@ -168,14 +179,14 @@ class _SearchPageState extends State<SearchPage> {
           flex: 1,
         ),
         Container(
-          padding: EdgeInsets.only(left: 8,right: 8),
-          margin: EdgeInsets.only(left: 5),
+          padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 5.0),
+          margin: EdgeInsets.only(left: 6),
           decoration: new BoxDecoration(
 //          border: Border.all(color: Colors.grey, width: 1.0), //灰色的一层边框
             color: Colors.blue,
-            borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+            borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
           ),
-          height: 36,
+          height: 32,
           child: Center(
             child: InkWell(
               onTap: (){
@@ -192,8 +203,6 @@ class _SearchPageState extends State<SearchPage> {
       ],
     );
   }
-
-
 
 }
 

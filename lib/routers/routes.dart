@@ -40,7 +40,9 @@ class Routes{
     router.define("/personalCenterPage", handler: personalCenterHanderl);
     router.define("/myArticlePage", handler: myArticlePageHanderl);
     router.define("/myReplyPage", handler: myReplyPageHanderl);
-
+    router.define("/certifyIndexPage", handler: certifyIndexHanderl);
+    router.define("/registerPage", handler: registerHanderl);
+    router.define("/inquirePage", handler: inquireHanderl);
 
 
   }

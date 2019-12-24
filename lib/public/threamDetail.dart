@@ -25,6 +25,9 @@ class Data {
   String describe;
   int groups;
   int plate;
+  int brand;
+  String plateName;
+  String brandName;
   String tag;
   List<String> image;
   int date;
@@ -42,6 +45,9 @@ class Data {
         this.describe,
         this.groups,
         this.plate,
+        this.brand,
+        this.plateName,
+        this.brandName,
         this.tag,
         this.image,
         this.date,
@@ -59,6 +65,9 @@ class Data {
     describe = json['describe'];
     groups = json['groups'];
     plate = json['plate'];
+    brand = json['brand'];
+    plateName = json['plateName'];
+    brandName = json['brandName'];
     tag = json['tag'];
     image = json['image'].cast<String>();
     date = json['date'];
@@ -83,6 +92,9 @@ class Data {
     data['describe'] = this.describe;
     data['groups'] = this.groups;
     data['plate'] = this.plate;
+    data['brand'] = this.brand;
+    data['plateName'] = this.plateName;
+    data['brandName'] = this.brandName;
     data['tag'] = this.tag;
     data['image'] = this.image;
     data['date'] = this.date;

@@ -30,17 +30,25 @@ class _PutThreadState extends State<PutThread> {
   VideoPlayerController controller;
   List plateList = [];
   String plateName = '';
+  List brandList = [];
+  String brandName = '';
+  String brand = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getNet("getThreadPlate").then((res) {
-      print("板块是${res}");
-      plateList = res['data'];
-      print(plateList);
+      if(res['result'] == 1) {
+        plateList = res['data'];
+      }
     });
-    mediaList.map((item) {});
+    getNet('getBrand').then((res){
+      if(res['result'] == 1){
+        brandList = res['data'];
+      }
+      print(brandList);
+    });
   }
 
   @override
@@ -52,84 +60,104 @@ class _PutThreadState extends State<PutThread> {
         title: Text(widget.groups == "1" ? "发布帖子" : "发布问题"),
         elevation: 1.0,
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           Container(
+            padding: EdgeInsets.fromLTRB(16.0, 18.0, 16.0, 0),
             color: Colors.white,
-            child: StoreSelectTextItem(
-                title: "请选择类型",
-                content: plateName.toString(),
-                onTap: () {
-                  _showBottomSheet();
+            child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: mediaList.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 15.0,
+                    crossAxisSpacing: 15.0,
+                    childAspectRatio: 1.0),
+                itemBuilder: (BuildContext context, index) {
+                  return buildItem(index);
                 }),
           ),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.fromLTRB(16.0, 9.0, 16.0, 9.0),
-              child: ListView(
-                children: <Widget>[
-                  TextField(
-                    style: TextStyle(textBaseline: TextBaseline.alphabetic),
+          Container(
+            color: Colors.white,
+            child: ListView(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(16.0, 5.0, 16.0, 0.0),
+                  child: TextField(
+                    style: TextStyle(fontSize:16,textBaseline: TextBaseline.alphabetic),
                     decoration: InputDecoration(
-                      hintText: "请输入标题",
+                      hintText: "加个标题会有更多人赞哦~",
                       border: InputBorder.none,
                     ),
                     controller: title,
                   ),
-                  TextField(
-                    style: TextStyle(textBaseline: TextBaseline.alphabetic),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                  child: TextField(
+                    style: TextStyle(fontSize:14,textBaseline: TextBaseline.alphabetic),
                     //设置此参数让TextField光标和hint在中文环境下对齐，原理未知
-                    maxLines: 4, //设置此参数可以将文本框改为多行文本框
+                    maxLines: 6, //设置此参数可以将文本框改为多行文本框
                     decoration: InputDecoration(
-                        hintText: "请输入正文",
-                        border: InputBorder.none,
+                        hintText: "在此输入你想说的内容吧~",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none
+                        ),
                         fillColor: Color(0xFFEBEBEB),
-                        focusColor: Colors.grey),
+                        filled: true,
+                        focusColor: Colors.grey,),
                     controller: content,
                   ),
-                  SizedBox(height: 30),
-                  Container(
-                    height: 200,
-                    child: GridView.builder(
-                        itemCount: mediaList.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            mainAxisSpacing: 10.0,
-                            crossAxisSpacing: 10.0,
-                            childAspectRatio: 1.0),
-                        itemBuilder: (BuildContext context, index) {
-                          return buildItem(index);
-                        }),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 70, right: 70, top: 60),
-                    child: Container(
-                      width: 120,
-                      height: 40,
-//                margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Color(0xFF36A4F2), Color(0xFF2A5CF6)]),
-                      ),
-                      child: RaisedButton(
-                          color: Colors.transparent,
-//                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
-                          child: Text("发   布", style: TextStyle(fontSize: 18)),
-                          textColor: Colors.white,
-                          elevation: 0.0,
-                          highlightElevation: 0.0,
-                          onPressed: _saveThread),
-//                    alignment: Alignment.center,
+                ),
+                SizedBox(height: 30),
+                Container(
+                  color: Colors.white,
+                  child: StoreSelectTextItem(
+                      title: "关联品牌",
+                      content: brandName.toString(),
+                      onTap: () {
+                        _showBottomSheetBrand();
+                      }),
+                ),
+                Container(
+                  color: Colors.white,
+                  child: StoreSelectTextItem(
+                      title: "添加类型",
+                      content: plateName.toString(),
+                      onTap: () {
+                        _showBottomSheetPlate();
+                      }),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 70, right: 70, top: 80),
+                  child: Container(
+                    width: 120,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF36A4F2), Color(0xFF2A5CF6)]),
                     ),
-                  )
-                ],
-              ),
+                    child: RaisedButton(
+                        color: Colors.transparent,
+//                        padding: EdgeInsets.all(ScreenUtil().setWidth(15.0)),
+                        child: Text("发   布", style: TextStyle(fontSize: 18)),
+                        textColor: Colors.white,
+                        elevation: 0.0,
+                        highlightElevation: 0.0,
+                        onPressed: _saveThread),
+//                    alignment: Alignment.center,
+                  ),
+                )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -279,8 +307,6 @@ class _PutThreadState extends State<PutThread> {
     }
   }
 
-  void _jumpToGallery(index, list) {}
-
   //  上传图片
   Future getImage() async {
     try {
@@ -339,7 +365,11 @@ class _PutThreadState extends State<PutThread> {
 //  发布
   void _saveThread() {
     if (plate == "") {
-      Toast.show("请选择类型");
+      Toast.show("请选择板块");
+      return;
+    }
+    if (brand == "") {
+      Toast.show("请选择品牌");
       return;
     }
     if (title.text.isEmpty || content.text.isEmpty) {
@@ -361,6 +391,7 @@ class _PutThreadState extends State<PutThread> {
         "describe": content.text,
         "groups": widget.groups,
         "plate": plate,
+        "brand":brand,
         "image": image.length > 0 ? image.join(',').toString() : '',
         "video": video.length > 0 ? video.join(',').toString() : '',
       });
@@ -375,8 +406,42 @@ class _PutThreadState extends State<PutThread> {
       });
     }
   }
-//底部弹出框
-  void _showBottomSheet() {
+
+
+//底部弹出品牌框
+  void _showBottomSheetBrand() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 310,
+            child: ListView.builder(
+//              key: const Key('tag'),
+              itemExtent: 44.0,
+              itemBuilder: (_, index) {
+                return InkWell(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    alignment: Alignment.centerLeft,
+                    child: Text(brandList[index]['name'].toString()),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      brand = brandList[index]["id"].toString();
+                      brandName = brandList[index]["name"];
+                    });
+                    Navigator.pop(context);
+                  },
+                );
+              },
+              itemCount: brandList.length,
+            ),
+          );
+        });
+  }
+
+//底部弹出类型框
+  void _showBottomSheetPlate() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -384,7 +449,7 @@ class _PutThreadState extends State<PutThread> {
             height: 200,
             child: ListView.builder(
               key: const Key('tag'),
-              itemExtent: 46.0,
+              itemExtent: 44.0,
               itemBuilder: (_, index) {
                 return InkWell(
                   child: Container(

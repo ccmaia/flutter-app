@@ -17,6 +17,9 @@ import '../pages/community/article_detail.dart';
 import '../pages/community/personal_center.dart';
 import '../pages/community/my_article.dart';
 import '../pages/community/my_reply.dart';
+import '../pages/certify/certify-index.dart';
+import '../pages/certify/register.dart';
+import '../pages/certify/inquiry.dart';
 
 Handler AboutUsPageHanderl = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -106,5 +109,20 @@ Handler myArticlePageHanderl =Handler(
 Handler myReplyPageHanderl =Handler(
     handlerFunc: (BuildContext context,Map<String,List<String>> params){
       return MyReplyPage();
+    }
+);
+Handler certifyIndexHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return certifyIndex();
+    }
+);
+Handler registerHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return Register();
+    }
+);
+Handler inquireHanderl =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      return inquire();
     }
 );

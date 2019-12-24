@@ -58,7 +58,7 @@ class LinkViewState extends State<LinkView> {
             onPressed: _launchPhone,
             textColor: Colors.white,
             child: Text(
-              "联系我们:10086",
+              "联系我们",
               style: TextStyle(fontSize: ScreenUtil().setSp(32.0)),
             )),
         borderRadius: BorderRadius.circular(50.0),
@@ -70,7 +70,7 @@ class LinkViewState extends State<LinkView> {
 }
 
 _launchPhone() async {
-  const url = 'tel:10086';
+  const url = 'tel:4008-616-755';
   if (await canLaunch(url)) {
     await launch(url);
   } else {

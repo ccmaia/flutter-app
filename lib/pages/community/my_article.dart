@@ -113,7 +113,7 @@ class ListItem extends StatelessWidget {
                         .toString()
                         .split(' ')[0],
                     style: TextStyle(
-                      color: Color(0xFF5C6784),
+                      color: Color(0xFF5C6785),
                       fontSize: ScreenUtil().setSp(24.0),
                     ),
                   ),

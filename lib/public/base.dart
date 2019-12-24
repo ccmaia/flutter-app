@@ -24,8 +24,13 @@ class GlobalConfig {
   static Color searchBackgroundColor = Color(0xFFEBEBEB);
   static Color cardBackgroundColor = Colors.white;
   static Color fontColor = Colors.black54;
-  static Color bgColor1 = Color(0xFFF9F9F9);//通用背景颜色
-  static Color bgColor2 = Color(0xFFEFEFEF);
+  static Color fontColor1 = Color(0xFF333333);//通用文字颜色1（深色）
+  static Color fontColor2 = Color(0xFF666666);//通用文字颜色1（中等）
+  static Color fontColor3 = Color(0xFF999999);//通用文字颜色1（浅色）
+  static Color bgColor1 = Color(0xFFF9F9F9);//通用背景颜色 浅
+  static Color bgColor2 = Color(0xFFEFEFEF);//通用背景颜色 深
+  static Color borderColor1 = Color(0xFFE5E5E5);//通用边框衬线颜色
+  static Color primaryColor1 = Color(0xFF2CA0F0);//通用主色调
 //  static Color serif1 = Color(0x)
 }
 //  判断是否有token是否登录

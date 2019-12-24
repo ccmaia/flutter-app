@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import '../../public/public_select_input.dart';
 import '../../service/service_method.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../../public/base.dart';
 
 class UserMsgPage extends StatefulWidget {
   Map userMsg;
@@ -87,12 +88,13 @@ class _UserMsgPageState extends State<UserMsgPage> {
               height: 65.0,
               margin: const EdgeInsets.only(
                 left: 16.0,
-                right: 8.0,
+                right: 16.0,
+                top: 10.0,
               ),
               width: double.infinity,
               decoration: BoxDecoration(
                   border: Border(
-                      bottom: BorderSide(width: 1, color: Color(0xFFE5E5E5)))),
+                      bottom: BorderSide(width: 1, color:GlobalConfig.borderColor1))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -104,8 +106,8 @@ class _UserMsgPageState extends State<UserMsgPage> {
                   ),
                   InkWell(
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 45,
+                      height: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(25)),
                           image: DecorationImage(
@@ -117,7 +119,6 @@ class _UserMsgPageState extends State<UserMsgPage> {
                               fit: BoxFit.cover)),
                       child: !img?Text(''):SpinKitCircle(color: Colors.blueAccent, size: 30.0,),
                     ),
-
                     onTap: getImage,
                   )
                 ],
@@ -142,13 +143,13 @@ class _UserMsgPageState extends State<UserMsgPage> {
                 height: 65.0,
                 margin: const EdgeInsets.only(
                   left: 16.0,
-                  right: 8.0,
+                  right: 16.0,
                 ),
                 width: double.infinity,
                 decoration: BoxDecoration(
                     border: Border(
                         bottom:
-                            BorderSide(width: 1, color: Color(0xFFE5E5E5)))),
+                            BorderSide(width: 1, color: GlobalConfig.borderColor1))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -159,7 +160,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
                           children: <Widget>[
                             Text('手机号',
                                 style: TextStyle(
-                                    fontSize: 16.0, color: Color(0xFF5C6784))),
+                                    fontSize: 16.0, color: GlobalConfig.fontColor2)),
                             Container(
                               margin: const EdgeInsets.only(
                                 left: 10.0,
@@ -167,7 +168,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
                               child: Text("${widget.userMsg['phone']}",
                                   style: TextStyle(
                                       fontSize: 14.0,
-                                      color: Color(0xFF999999))),
+                                      color:  GlobalConfig.fontColor2)),
                             )
                           ],
                         )),
@@ -180,12 +181,12 @@ class _UserMsgPageState extends State<UserMsgPage> {
                           ),
                           child: Text('去修改',
                               style: TextStyle(
-                                  fontSize: 14.0, color: Color(0xFF999999))),
+                                  fontSize: 14.0, color: GlobalConfig.fontColor2)),
                         ),
                         Image.asset(
                           "assets/image/go_last.png",
-                          width: 10.0,
-                          height: 15.0,
+                          width: 13.0,
+                          height: 20.0,
                         )
                       ],
                     )
@@ -204,13 +205,13 @@ class _UserMsgPageState extends State<UserMsgPage> {
                 height: 65.0,
                 margin: const EdgeInsets.only(
                   left: 16.0,
-                  right: 8.0,
+                  right: 16.0,
                 ),
                 width: double.infinity,
                 decoration: BoxDecoration(
                     border: Border(
                         bottom:
-                            BorderSide(width: 1, color: Color(0xFFE5E5E5)))),
+                            BorderSide(width: 1, color: GlobalConfig.borderColor1))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -221,7 +222,7 @@ class _UserMsgPageState extends State<UserMsgPage> {
                           children: <Widget>[
                             Text('修改密码',
                                 style: TextStyle(
-                                    fontSize: 16.0, color: Color(0xFF5C6784))),
+                                    fontSize: 16.0, color: GlobalConfig.fontColor2)),
                           ],
                         )),
                     Row(
@@ -233,12 +234,11 @@ class _UserMsgPageState extends State<UserMsgPage> {
                           ),
                           child: Text('去修改',
                               style: TextStyle(
-                                  fontSize: 14.0, color: Color(0xFF999999))),
+                                  fontSize: 14.0, color: GlobalConfig.fontColor2)),
                         ),
                         Image.asset(
                           "assets/image/go_last.png",
-                          width: 10.0,
-                          height: 15.0,
+                          width: 13.0,
                         )
                       ],
                     )
@@ -250,11 +250,11 @@ class _UserMsgPageState extends State<UserMsgPage> {
               padding: EdgeInsets.only(top: 50.0),
               child:Center(
                 child: Container(
-                  width: 225,
-                  height: 45,
+                  width: 195,
+                  height: 40,
 //                margin: EdgeInsets.only(left: ScreenUtil().setWidth(80.0)),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(50.0)),
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,

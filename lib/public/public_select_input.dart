@@ -29,13 +29,13 @@ class StoreSelectTextItem extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
             border: Border(
-          bottom: Divider.createBorderSide(context, color:Color(0xFFb5b5b5),width: 1),
+          bottom: Divider.createBorderSide(context, color:GlobalConfig.borderColor1,width: 1),
         )),
         child: Row(
           children: <Widget>[
             Text(
               title,
-              style: TextStyle(fontSize: 16.0, color: Color(0xFF333333)),
+              style: TextStyle(fontSize: 16.0, color: GlobalConfig.fontColor2),
             ),
             Expanded(
               flex: 1,
@@ -45,7 +45,7 @@ class StoreSelectTextItem extends StatelessWidget {
                     maxLines: 2,
                     textAlign: textAlign,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16.0, color: Color(0xFF333333))),
+                    style: TextStyle(fontSize: 16.0, color: GlobalConfig.fontColor2)),
               ),
             ),
             Image.asset(
@@ -85,29 +85,28 @@ class TextFieldItem extends StatelessWidget {
       height: 55.0,
       margin: const EdgeInsets.only(
         left: 16.0,
-        right: 8.0,
+        right: 16.0,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
           border: Border(
-        bottom: Divider.createBorderSide(context, width: 1),
-      )),
+              bottom: BorderSide(width: 1, color:GlobalConfig.borderColor1))),
       child: Row(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Text(title,
-                style: TextStyle(fontSize: 16.0, color: Color(0xFF5C6784),)),
+                style: TextStyle(fontSize: 16.0, color: GlobalConfig.fontColor2,)),
           ),
           Expanded(
             flex: 1,
             child: TextField(
-                textAlign: TextAlign.right,
+                textAlign: title=='短信验证：'?TextAlign.left:TextAlign.right,
                 focusNode: focusNode,
                 keyboardType: keyboardType,
                 inputFormatters: _getInputFormatters(),
                 controller: controller,
-                style: TextStyle(fontSize: 14.0, color: Color(0xFF999999)),
+                style: TextStyle(fontSize: 14.0, color: GlobalConfig.fontColor2),
                 //style: TextStyles.textDark14,
                 decoration: InputDecoration(
                   hintText: hintText,
@@ -115,15 +114,15 @@ class TextFieldItem extends StatelessWidget {
                   //hintStyle: TextStyles.textGrayC14
                 )),
           ),
-          Container(
+          title=='短信验证：'?Container():Container(
             margin: EdgeInsets.only(
               left: 10.0,
             ),
             child:
             Image.asset(
               "assets/image/go_last.png",
-              width: 10.0,
-              height: 15.0,
+              width: 13.0,
+              height: 20.0,
             ),
           )
         ],

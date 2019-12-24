@@ -19,17 +19,17 @@ class _NewsCenterPageState extends State<NewsCenterPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCourse();
+    getInteractive();
   }
 
-  Future getCourse() async {
+  Future getInteractive() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       token = sharedPreferences.get('token');
 //      print('token is ${token}');
       isLogin = token == null ? false : true;
       if (isLogin) {
-        getNet('getCourse').then((res) {
+        getNet('getInteractive').then((res) {
 //          print(res);
           if (res['result'] == 1) {
             setState(() {
@@ -95,6 +95,10 @@ class _NewsCenterPageState extends State<NewsCenterPage> {
                       color: Color(0xFF333333),
                       fontSize: ScreenUtil().setSp(32.0),
                     ),
+                  ),
+                  Divider(
+                    height: ScreenUtil().setSp(7.0),
+                    color: Colors.transparent,
                   ),
                   Text(
                     "${_messageList[index]['other_name']}${_messageList[index]['action'] == 1 ? '赞了你的帖子' : _messageList[index]['action'] == 2 ? '评论了你的帖子' : '赞了你的评论'}",

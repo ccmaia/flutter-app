@@ -71,10 +71,13 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
           ),
           title: Text('兼职', style: TextStyle(color: getColor(1)))),
       BottomNavigationBarItem(
-          backgroundColor: Colors.white,
-          icon: Icon(
-            Icons.home,
-            color: Colors.transparent,
+          icon: Image.asset(
+            "assets/image/homepage.png",
+            width: 23,
+          ),
+          activeIcon: Image.asset(
+            "assets/image/community.png",
+            width: 23,
           ),
           title: Text('社区', style: TextStyle(color: getColor(2)))),
       BottomNavigationBarItem(
@@ -106,35 +109,35 @@ class _IndexPageWidgetState extends State<ZncIndexPage> {
       ), //页面是否需要重新加载
 //      currentPage,
       backgroundColor: Colors.white,
-      floatingActionButton: Container(
-        height: 45,
-        width: 45,
-        margin: EdgeInsets.only(top: 12),
-//        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-//          border: Border.all(color: Colors.grey[100],width: 1),
-            color: Colors.white,
-//            boxShadow: [
-//              BoxShadow(color: Colors.grey[300], offset: Offset(0, -0.2))
-//            ]
-            ),
-        child: FloatingActionButton(
-            elevation: 0,
-            highlightElevation: 0,
-            backgroundColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            onPressed: () {
-              setState(() {
-                _currentIndex = 2;
-              });
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(45),
-              child: Image.asset(_currentIndex == 2? 'assets/image/community.png':'assets/image/homepage.png',fit: BoxFit.cover,),
-            )),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+//      floatingActionButton: Container(
+//        height: 45,
+//        width: 45,
+//        margin: EdgeInsets.only(top: 12),
+////        padding: EdgeInsets.all(5),
+//        decoration: BoxDecoration(
+//            borderRadius: BorderRadius.circular(30),
+////          border: Border.all(color: Colors.grey[100],width: 1),
+//            color: Colors.white,
+////            boxShadow: [
+////              BoxShadow(color: Colors.grey[300], offset: Offset(0, -0.2))
+////            ]
+//            ),
+//        child: FloatingActionButton(
+//            elevation: 0,
+//            highlightElevation: 0,
+//            backgroundColor: Colors.transparent,
+//            splashColor: Colors.transparent,
+//            onPressed: () {
+//              setState(() {
+//                _currentIndex = 2;
+//              });
+//            },
+//            child: ClipRRect(
+//              borderRadius: BorderRadius.circular(45),
+//              child: Image.asset(_currentIndex == 2? 'assets/image/community.png':'assets/image/homepage.png',fit: BoxFit.cover,),
+//            )),
+//      ),
+//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         items: _bottomBar,

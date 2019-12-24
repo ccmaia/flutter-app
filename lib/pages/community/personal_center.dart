@@ -112,7 +112,7 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                       child: Column(
                         children: <Widget>[
                           Divider(
-                            height: ScreenUtil().setSp(20.0),
+                            height: ScreenUtil().setSp(15.0),
                             color: Colors.transparent,
                           ),
                           InkWell(
@@ -121,22 +121,23 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                                   .navigateTo(context, '/myArticlePage');
                             },
                             child: Container(
-//                              height: ScreenUtil().setHeight(90.0),
                               padding:
-                                  EdgeInsets.all(ScreenUtil().setWidth(38.0)),
+                                  EdgeInsets.all(ScreenUtil().setWidth(32.0)),
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
                                   Image.asset('assets/image/my_1.png',
-                                      width: ScreenUtil().setWidth(39.0),
-                                      height: ScreenUtil().setHeight(39.0)),
+                                      width: ScreenUtil().setWidth(36.0),
+                                      height: ScreenUtil().setHeight(36.0)),
                                   Expanded(
                                       child: Container(
                                     child: Text(
                                       '我的发帖',
                                       style: TextStyle(
-                                          color: Color(0xFF5C6784),
-                                          fontSize: ScreenUtil().setSp(30.0)),
+                                        color: Color(0xFF5C6784),
+                                        fontSize: ScreenUtil().setSp(30.0),
+                                        height: 1,
+                                      ),
                                     ),
                                     margin: EdgeInsets.only(
                                         left: ScreenUtil().setWidth(15.0)),
@@ -160,20 +161,21 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                             child: Container(
 //                              height: ScreenUtil().setHeight(90.0),
                               padding:
-                                  EdgeInsets.all(ScreenUtil().setWidth(38.0)),
+                                  EdgeInsets.all(ScreenUtil().setWidth(32.0)),
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
                                   Image.asset('assets/image/my_2.png',
-                                      width: ScreenUtil().setWidth(39.0),
-                                      height: ScreenUtil().setHeight(39.0)),
+                                      width: ScreenUtil().setWidth(36.0),
+                                      height: ScreenUtil().setHeight(36.0)),
                                   Expanded(
                                       child: Container(
                                     child: Text(
                                       '我的回帖',
                                       style: TextStyle(
                                           color: Color(0xFF5C6784),
-                                          fontSize: ScreenUtil().setSp(30.0)),
+                                          fontSize: ScreenUtil().setSp(30.0),
+                                      height: 1,),
                                     ),
                                     margin: EdgeInsets.only(
                                         left: ScreenUtil().setWidth(15.0)),
@@ -197,20 +199,21 @@ class _PersonalCenterPageState extends State<PersonalCenterPage> {
                             child: Container(
 //                              height: ScreenUtil().setHeight(90.0),
                               padding:
-                                  EdgeInsets.all(ScreenUtil().setWidth(38.0)),
+                                  EdgeInsets.all(ScreenUtil().setWidth(32.0)),
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
                                   Image.asset('assets/image/my_3.png',
-                                      width: ScreenUtil().setWidth(39.0),
-                                      height: ScreenUtil().setHeight(39.0)),
+                                      width: ScreenUtil().setWidth(36.0),
+                                      height: ScreenUtil().setHeight(36.0)),
                                   Expanded(
                                       child: Container(
                                     child: Text(
                                       '互动消息',
                                       style: TextStyle(
                                           color: Color(0xFF5C6784),
-                                          fontSize: ScreenUtil().setSp(30.0)),
+                                          fontSize: ScreenUtil().setSp(30.0),
+                                      height: 1,),
                                     ),
                                     margin: EdgeInsets.only(
                                         left: ScreenUtil().setWidth(15.0)),

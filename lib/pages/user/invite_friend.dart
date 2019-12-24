@@ -13,7 +13,7 @@ class InviteFriendPage extends StatefulWidget {
 }
 
 class _InviteFriendPageState extends State<InviteFriendPage> {
-  List formList=[];
+  List formList = [];
   var token = null;
   bool isLogin = false;
 
@@ -77,9 +77,9 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
             backgroundColor: Colors.transparent,
             title: new Text(
               "邀请有奖",
-//              style: TextStyle(
-//                color: Colors.white,
-//              ),
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
             centerTitle: true,
             elevation: 0.0,
@@ -92,15 +92,15 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                   Column(
                     children: <Widget>[
                       Text(
-                        '很遗憾',
+                        '邀请好友下载APP',
                         style: TextStyle(
-                            fontSize: ScreenUtil().setSp(46.0),
+                            fontSize: ScreenUtil().setSp(42.0),
                             color: Colors.white),
                       ),
                       Text(
-                        '您还没有邀请好友',
+                        '指南车APP诚邀你体验',
                         style: TextStyle(
-                            fontSize: ScreenUtil().setSp(46.0),
+                            fontSize: ScreenUtil().setSp(42.0),
                             color: Colors.white,
                             height: 2.0),
                       ),
@@ -110,31 +110,38 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                     padding: EdgeInsets.only(top: ScreenUtil().setWidth(210.0)),
                     child: Column(
                       children: <Widget>[
+//                        Text(
+//                          '您的邀请码',
+//                          style: TextStyle(
+//                              fontSize: ScreenUtil().setSp(34.0),
+//                              color: Colors.black,
+//                              height: 3.5),
+//                        ),
+//                        Text(
+//                          '12345678',
+//                          style: TextStyle(
+//                              fontSize: ScreenUtil().setSp(50.0),
+//                              color: Color.fromRGBO(218, 76, 36, 1),
+//                              letterSpacing: 18,
+//                              height: 2.5),
+//                        ),
+//                        Text(
+//                          '邀请的好友也可在注册时直接填写邀请码',
+//                          style: TextStyle(
+//                              fontSize: ScreenUtil().setSp(24.0),
+//                              color: Colors.black,
+//                              height: 3.0),
+//                        ),
                         Text(
-                          '您的邀请码',
+                          '点击下方按钮即可复制下载链接',
                           style: TextStyle(
                               fontSize: ScreenUtil().setSp(34.0),
                               color: Colors.black,
-                              height: 3.5),
-                        ),
-                        Text(
-                          '12345678',
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(50.0),
-                              color: Color.fromRGBO(218, 76, 36, 1),
-                              letterSpacing: 18,
-                              height: 2.5),
-                        ),
-                        Text(
-                          '邀请的好友也可在注册时直接填写邀请码',
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(24.0),
-                              color: Colors.black,
-                              height: 3.0),
+                              height: 6.5),
                         ),
                         Container(
                           padding:
-                              EdgeInsets.only(top: ScreenUtil().setWidth(47.0)),
+                              EdgeInsets.only(top: ScreenUtil().setWidth(67.0)),
                           width: 200,
                           child: Material(
 //                          color: Color.fromRGBO(49, 175, 255, 1),
@@ -160,7 +167,7 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                                   onPressed: copy,
                                   textColor: Colors.white,
                                   child: Text(
-                                    "复制邀请码",
+                                    "复制下载链接",
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,

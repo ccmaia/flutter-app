@@ -24,7 +24,7 @@ Future postNet(url, {formData, options, path}) async {
     if (options != null) {
       dio.options.headers = options["hearder"];
     }
-
+    print(dio.options.headers['token']);
     if (path == null) {
       if (formData == null) {
         print(servicePath[url]);
